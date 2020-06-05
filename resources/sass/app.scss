@@ -1,3 +1,6 @@
+
+@import url('https://fonts.googleapis.com/css?family=Merriweather+Sans|Manrope&display=swap');
+
 @import 'variables';
 @import '~bootstrap/scss/bootstrap';
 @import '~sweetalert2/src/sweetalert2';
@@ -6,3 +9,7 @@
 @import 'elements/navbar';
 @import 'elements/buttons';
 @import 'elements/transitions';
+
+body {
+  font-family: 'Merriweather Sans', sans-serif !important;
+}
