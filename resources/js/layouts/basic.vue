@@ -1,21 +1,12 @@
 <template>
-  <div class="main-layout">
-    <navbar />
-
-    <div class="container-fluid mt-4">
-      <child />
-    </div>
+  <div class="basic-layout d-flex align-items-center justify-content-center m-0 bg-white">
+    <child />
   </div>
 </template>
 
 <script>
-import Navbar from '~/components/Navbar'
-
 export default {
-  name: 'BasicLayout',
-  components: {
-    Navbar
-  }
+  name: 'BasicLayout'
 }
 </script>
 
