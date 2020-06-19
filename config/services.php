@@ -48,4 +48,10 @@ return [
         'client_id' => env('GITHUB_CLIENT_ID'),
         'client_secret' => env('GITHUB_CLIENT_SECRET'),
     ],
+
+    'bitbucket' => [
+        'client_id' => env('BITBUCKET_KEY'),
+        'client_secret' => env('BITBUCKET_SECRET'),
+        'redirect' => env('BITBUCKET_REDIRECT_URI')
+    ],
 ];
