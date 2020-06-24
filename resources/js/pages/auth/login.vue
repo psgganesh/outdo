@@ -44,6 +44,9 @@
 
               <!-- GitHub Login Button -->
               <login-with-github />
+
+              <!-- Bitbucket Login Button -->
+              <login-with-bitbucket />
             </div>
           </div>
         </form>
@@ -55,12 +58,14 @@
 <script>
 import Form from 'vform'
 import LoginWithGithub from '~/components/LoginWithGithub'
+import LoginWithBitbucket from '~/components/LoginWithBitbucket'
 
 export default {
   middleware: 'guest',
 
   components: {
-    LoginWithGithub
+    LoginWithGithub,
+    LoginWithBitbucket
   },
 
   metaInfo () {
