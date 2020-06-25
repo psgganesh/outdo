@@ -14,7 +14,7 @@
       {{ title }}
     </div>
     <div slot="subtitle">
-      {{ subTitle }}
+      {{ subtitle }}
     </div>
   </va-page-header>
 </template>
@@ -25,7 +25,7 @@ export default {
 
   props: {
     title: { type: String, default: 'Unknown Page Title' },
-    subTitle: { type: String, default: 'Unknown subtitle' }
+    subtitle: { type: String, default: 'Unknown subtitle' }
   }
 }
 </script>
