@@ -5,8 +5,8 @@
         <va-breadcrumb-item to="/home">
           Outdo
         </va-breadcrumb-item>
-        <va-breadcrumb-item to="/home">
-          Home
+        <va-breadcrumb-item :to="this.$route.path">
+          {{ this.$route.name }}
         </va-breadcrumb-item>
       </va-breadcrumb>
     </div>

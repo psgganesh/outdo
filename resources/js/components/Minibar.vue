@@ -25,7 +25,7 @@ export default {
           method: this.demoMethod
         },
         {
-          icon: 'bars',
+          icon: 'plus',
           size: '1.25em',
           method: this.demoMethod
         }
@@ -33,6 +33,11 @@ export default {
       minibarBottomItems: [
         {
           icon: 'cog',
+          size: '1.5em',
+          method: this.demoMethod
+        },
+        {
+          icon: 'user-circle',
           size: '1.5em',
           method: this.demoMethod
         }

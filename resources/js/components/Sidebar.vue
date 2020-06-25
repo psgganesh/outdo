@@ -21,9 +21,25 @@ export default {
           iconStyle: 'solid'
         },
         {
-          name: 'Stream',
-          route: '/stream',
-          icon: 'stream',
+          name: 'Projects',
+          route: '/projects',
+          icon: 'folder',
+          iconSize: '18px',
+          iconColor: 'white',
+          iconStyle: 'solid'
+        },
+        {
+          name: 'Team',
+          route: '/team',
+          icon: 'mug-hot',
+          iconSize: '18px',
+          iconColor: 'white',
+          iconStyle: 'solid'
+        },
+        {
+          name: 'Tasks',
+          route: '/tasks',
+          icon: 'tasks',
           iconSize: '18px',
           iconColor: 'white',
           iconStyle: 'solid'
