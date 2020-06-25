@@ -26,9 +26,11 @@ import Topbar from '~/components/Topbar'
 
 export default {
   name: 'BasicLayout',
+
   components: {
     Topbar
   },
+
   data: () => {
     return {
       desktopSidebarWidth: 0,

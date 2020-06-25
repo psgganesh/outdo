@@ -1,5 +1,41 @@
+@import url('https://fonts.googleapis.com/css2?family=Oxygen&family=Roboto&family=Ubuntu&display=swap');
+
 @import '~vue-atlas/dist/vue-atlas.css';
+
+@font-face {
+  font-family: 'Segoe UI';
+  font-style: normal;
+  font-weight: 400;
+  src: url('fonts/Segoe-UI.ttf')  format('truetype');
+}
+
+* {
+  font-family: 'Segoe UI', 'Oxygen', 'Roboto', 'Ubuntu', sans-serif;
+}
 
 .va-dropdown-con .va-dropdown-menu {
   margin-top: 12px;
+}
+
+.va-sidebar-group-item-text a {
+  font-size: 16px;
+}
+
+.va-sidebar-group-item-icon {
+  margin-right: 16px;
+}
+
+.va-sidebar-treenavigation {
+  padding: 0 22px 0 10px;
+}
+
+.va-sidebar--theme-blue .va-sidebar-group-item,
+.va-sidebar--theme-blue .va-sidebar-group-item:hover {
+  height: 40px;
+}
+
+.va-sidebar--theme-blue .va-sidebar-group-title {
+  font-size: 2em;
+  height: 40px;
+  text-transform: none;
 }
