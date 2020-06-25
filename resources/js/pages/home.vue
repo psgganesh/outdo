@@ -1,13 +1,24 @@
 <template>
-  <h1>Testing</h1>
+  <div>
+    <breadcrumb :title="title" :subtitle="subtitle" />
+  </div>
 </template>
 
 <script>
-export default {
-  middleware: 'auth',
+import Breadcrumb from '~/components/Breadcrumb'
 
-  metaInfo () {
-    return { title: this.$t('home') }
+export default {
+  name: 'Home',
+
+  components: {
+    Breadcrumb
+  },
+
+  data: () => {
+    return {
+      title: 'Home',
+      subtitle: 'A dashboard of all activities'
+    }
   }
 }
 </script>

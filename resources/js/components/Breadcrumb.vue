@@ -1,0 +1,31 @@
+<template>
+  <va-page-header>
+    <div slot="breadcrumb">
+      <va-breadcrumb separator="/">
+        <va-breadcrumb-item to="/home">
+          Outdo
+        </va-breadcrumb-item>
+        <va-breadcrumb-item to="/home">
+          Home
+        </va-breadcrumb-item>
+      </va-breadcrumb>
+    </div>
+    <div slot="title">
+      {{ title }}
+    </div>
+    <div slot="subtitle">
+      {{ subTitle }}
+    </div>
+  </va-page-header>
+</template>
+
+<script>
+export default {
+  name: 'Breadcrumb',
+
+  props: {
+    title: { type: String, default: 'Unknown Page Title' },
+    subTitle: { type: String, default: 'Unknown subtitle' }
+  }
+}
+</script>
