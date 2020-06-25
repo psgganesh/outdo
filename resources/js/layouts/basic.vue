@@ -1,20 +1,50 @@
 <template>
-  <div class="main-layout">
-    <navbar />
+  <va-app
+    :desktop-sidebar-width="desktopSidebarWidth"
+    :desktop-minibar-width="desktopMinibarWidth"
+    :desktop-topbar-height="desktopTopbarHeight"
 
-    <div class="container-fluid mt-4">
+    :mobile-sidebar-width="mobileSidebarWidth"
+    :mobile-minibar-width="mobileMinibarWidth"
+    :mobile-topbar-height="mobileTopbarHeight"
+
+    :sidebar-priority="sidebarPriority"
+    :minibar-priority="minibarPriority"
+    :reverse="reverse"
+    :split="split"
+    :rtl="rtl"
+  >
+    <topbar />
+    <va-page size="lg">
       <child />
-    </div>
-  </div>
+    </va-page>
+  </va-app>
 </template>
 
 <script>
-import Navbar from '~/components/Navbar'
+import Topbar from '~/components/Topbar'
 
 export default {
-  name: 'MainLayout',
+  name: 'BasicLayout',
   components: {
-    Navbar
+    Topbar
+  },
+  data: () => {
+    return {
+      desktopSidebarWidth: 0,
+      desktopMinibarWidth: 0,
+      desktopTopbarHeight: 50,
+
+      mobileSidebarWidth: 0,
+      mobileMinibarWidth: 0,
+      mobileTopbarHeight: 50,
+
+      sidebarPriority: false,
+      minibarPriority: false,
+      rtl: false,
+      reverse: false,
+      split: false
+    }
   }
 }
 </script>

@@ -4,7 +4,6 @@ import router from '~/router'
 import i18n from '~/plugins/i18n'
 import App from '~/components/App'
 import Va from 'vue-atlas'
-import 'vue-atlas/dist/vue-atlas.css'
 
 import '~/plugins'
 import '~/components'

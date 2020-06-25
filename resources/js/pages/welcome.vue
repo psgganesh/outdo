@@ -1,11 +1,16 @@
 <template>
   <div>
-    <div class="text-center">
-      <div class="title mb-4">
-        {{ title }}
-      </div>
-      <div class="links">
-        <a href="https://github.com/cretueusebiu/laravel-vue-spa">github.com/cretueusebiu/laravel-vue-spa</a>
+    <div class="va-page-header">
+      <div class="va-page-header-title-wrapper">
+        <div class="va-page-header-title-container">
+          <h1><div>Page</div></h1><h2>
+            <div>
+              A convenience component that serves as a wrapper around
+              <a href="/documentation/pageheader" class="">PageHeader</a>
+              and the rest of your page content.
+            </div>
+          </h2>
+        </div>
       </div>
     </div>
   </div>
@@ -15,7 +20,7 @@
 import { mapGetters } from 'vuex'
 
 export default {
-  layout: 'default',
+  layout: 'basic',
   metaInfo () {
     return { title: this.$t('home') }
   },
@@ -29,7 +34,5 @@ export default {
 </script>
 
 <style scoped>
-.title {
-  font-size: 85px;
-}
+
 </style>
