@@ -13,7 +13,7 @@
     <div slot="title">
       {{ title }}
     </div>
-    <div slot="subtitle">
+    <div v-if="subtitle !== null" slot="subtitle">
       {{ subtitle }}
     </div>
   </va-page-header>

@@ -8,20 +8,20 @@
 import Breadcrumb from '~/components/Breadcrumb'
 
 export default {
-  name: 'Home',
+  name: 'Workspaces',
 
   components: {
     Breadcrumb
   },
 
   metaInfo () {
-    return { title: this.$t('home') }
+    return { title: this.$t('workspaces') }
   },
 
   data: () => {
     return {
-      title: 'Dashboard',
-      subtitle: 'A dashboard of all activities'
+      title: 'Workspaces',
+      subtitle: null
     }
   }
 }

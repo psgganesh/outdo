@@ -21,15 +21,24 @@ import { mapGetters } from 'vuex'
 
 export default {
   layout: 'basic',
+
   metaInfo () {
     return { title: this.$t('home') }
   },
+
   data: () => ({
     title: window.config.appName
   }),
+
   computed: mapGetters({
     authenticated: 'auth/check'
-  })
+  }),
+
+  mounted () {
+    if (this.authenticated) {
+      this.$router.push('home')
+    }
+  }
 }
 </script>
 
