@@ -34,6 +34,10 @@
   height: 40px;
 }
 
+.va-breadcrumb-item-inner.va-breadcrumb-link {
+  text-transform: capitalize;
+}
+
 .va-sidebar--theme-blue .va-sidebar-group-title {
   font-size: 2em;
   height: 40px;

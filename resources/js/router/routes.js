@@ -4,8 +4,8 @@ function page (path) {
 
 export default [
   { path: '/', name: 'welcome', component: page('welcome.vue') },
-  { path: '/home', name: 'Home', component: page('home.vue') },
-  { path: '/workspaces', name: 'Workspaces', component: page('workspaces.vue') },
+  { path: '/home', name: 'home', component: page('home.vue') },
+  { path: '/workspaces', name: 'workspaces', component: page('workspaces.vue') },
   { path: '/settings',
     component: page('settings/index.vue'),
     children: [

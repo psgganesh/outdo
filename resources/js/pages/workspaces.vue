@@ -10,6 +10,8 @@ import Breadcrumb from '~/components/Breadcrumb'
 export default {
   name: 'Workspaces',
 
+  middleware: 'auth',
+
   components: {
     Breadcrumb
   },
