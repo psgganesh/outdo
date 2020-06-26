@@ -21,8 +21,8 @@ export default {
           iconStyle: 'solid'
         },
         {
-          name: 'Workspaces',
-          route: '/workspaces',
+          name: 'Spaces',
+          route: '/spaces',
           icon: 'pencil-ruler',
           iconSize: '18px',
           iconColor: 'white',
