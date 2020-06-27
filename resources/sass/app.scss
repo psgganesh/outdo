@@ -1,15 +1,45 @@
+@import url('https://fonts.googleapis.com/css2?family=Oxygen&family=Roboto&family=Ubuntu&display=swap');
 
-@import url('https://fonts.googleapis.com/css?family=Merriweather+Sans|Manrope&display=swap');
+@import '~vue-atlas/dist/vue-atlas.css';
 
-@import 'variables';
-@import '~bootstrap/scss/bootstrap';
-@import '~sweetalert2/src/sweetalert2';
+@font-face {
+  font-family: 'Segoe UI';
+  font-style: normal;
+  font-weight: 400;
+  src: url('fonts/Segoe-UI.ttf')  format('truetype');
+}
 
-@import 'elements/card';
-@import 'elements/navbar';
-@import 'elements/buttons';
-@import 'elements/transitions';
+* {
+  font-family: 'Segoe UI', 'Oxygen', 'Roboto', 'Ubuntu', sans-serif;
+}
 
-body {
-  font-family: 'Merriweather Sans', sans-serif !important;
+.va-dropdown-con .va-dropdown-menu {
+  margin-top: 12px;
+}
+
+.va-sidebar-group-item-text a {
+  font-size: 16px;
+}
+
+.va-sidebar-group-item-icon {
+  margin-right: 16px;
+}
+
+.va-sidebar-treenavigation {
+  padding: 0 22px 0 10px;
+}
+
+.va-sidebar--theme-blue .va-sidebar-group-item,
+.va-sidebar--theme-blue .va-sidebar-group-item:hover {
+  height: 40px;
+}
+
+.va-breadcrumb-item-inner.va-breadcrumb-link {
+  text-transform: capitalize;
+}
+
+.va-sidebar--theme-blue .va-sidebar-group-title {
+  font-size: 2em;
+  height: 40px;
+  text-transform: none;
 }

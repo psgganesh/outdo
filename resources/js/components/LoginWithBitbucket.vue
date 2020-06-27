@@ -1,8 +1,7 @@
 <template>
-  <button v-if="bitbucketAuth" class="btn btn-dark ml-auto" type="button" @click="login">
-    {{ $t('login_with') }}
-    <fa :icon="['fab', 'bitbucket']" />
-  </button>
+  <va-button v-if="bitbucketAuth" type="primary" size="md" @click="login">
+    {{ $t('login_with') }} Bitbucket &nbsp;<va-icon icon-style="brands" type="bitbucket" />
+  </va-button>
 </template>
 
 <script>

@@ -1,30 +1,52 @@
 <template>
-  <div class="basic-layout d-flex align-items-center justify-content-center m-0 bg-white">
-    <child />
-  </div>
+  <va-app
+    :desktop-sidebar-width="desktopSidebarWidth"
+    :desktop-minibar-width="desktopMinibarWidth"
+    :desktop-topbar-height="desktopTopbarHeight"
+
+    :mobile-sidebar-width="mobileSidebarWidth"
+    :mobile-minibar-width="mobileMinibarWidth"
+    :mobile-topbar-height="mobileTopbarHeight"
+
+    :sidebar-priority="sidebarPriority"
+    :minibar-priority="minibarPriority"
+    :reverse="reverse"
+    :split="split"
+    :rtl="rtl"
+  >
+    <topbar />
+    <va-page size="lg">
+      <child />
+    </va-page>
+  </va-app>
 </template>
 
 <script>
+import Topbar from '~/components/Topbar'
+
 export default {
-  name: 'BasicLayout'
-}
-</script>
+  name: 'BasicLayout',
 
-<style lang="scss">
-.basic-layout {
-  color: #636b6f;
-  height: 100vh;
-  font-weight: 100;
-  position: relative;
+  components: {
+    Topbar
+  },
 
-  .links > a {
-    color: #636b6f;
-    padding: 0 25px;
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: .1rem;
-    text-decoration: none;
-    text-transform: uppercase;
+  data: () => {
+    return {
+      desktopSidebarWidth: 0,
+      desktopMinibarWidth: 0,
+      desktopTopbarHeight: 50,
+
+      mobileSidebarWidth: 0,
+      mobileMinibarWidth: 0,
+      mobileTopbarHeight: 50,
+
+      sidebarPriority: false,
+      minibarPriority: false,
+      rtl: false,
+      reverse: false,
+      split: false
+    }
   }
 }
-</style>
+</script>
