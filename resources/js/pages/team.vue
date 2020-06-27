@@ -8,7 +8,7 @@
 import Breadcrumb from '~/components/Breadcrumb'
 
 export default {
-  name: 'Home',
+  name: 'Team',
 
   middleware: 'auth',
 
@@ -17,13 +17,13 @@ export default {
   },
 
   metaInfo () {
-    return { title: this.$t('home') }
+    return { title: this.$t('team') }
   },
 
   data: () => {
     return {
-      title: 'Dashboard',
-      subtitle: 'A dashboard of all activities'
+      title: 'Team',
+      subtitle: 'Your colleagues & public notice'
     }
   }
 }
