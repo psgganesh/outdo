@@ -20,6 +20,7 @@
 </template>
 
 <script>
+
 export default {
   name: 'Breadcrumb',
 
@@ -27,5 +28,6 @@ export default {
     title: { type: String, default: 'Unknown Page Title' },
     subtitle: { type: String, default: 'Unknown subtitle' }
   }
+
 }
 </script>

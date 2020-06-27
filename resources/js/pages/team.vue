@@ -1,32 +1,29 @@
 <template>
   <div>
     <breadcrumb :title="title" :subtitle="subtitle" />
-    <repositories />
   </div>
 </template>
 
 <script>
 import Breadcrumb from '~/components/Breadcrumb'
-import Repositories from '~/components/Repositories'
 
 export default {
-  name: 'Spaces',
+  name: 'Team',
 
   middleware: 'auth',
 
   components: {
-    Breadcrumb,
-    Repositories
+    Breadcrumb
   },
 
   metaInfo () {
-    return { title: this.$t('spaces') }
+    return { title: this.$t('team') }
   },
 
   data: () => {
     return {
-      title: 'Spaces',
-      subtitle: 'Detail view of projects and repositories'
+      title: 'Team',
+      subtitle: 'Your colleagues & public notice'
     }
   }
 }

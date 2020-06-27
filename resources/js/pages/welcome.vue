@@ -36,7 +36,9 @@ export default {
 
   mounted () {
     if (this.authenticated) {
-      this.$router.push('home')
+      this.$store.dispatch('bitbucket/setup').then(() => {
+        this.$router.push('home')
+      })
     }
   }
 }
