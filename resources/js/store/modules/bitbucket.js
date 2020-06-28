@@ -5,7 +5,9 @@ const BASE_URL = 'https://api.bitbucket.org/2.0'
 
 // state
 export const state = {
-  bitbucketClient: null
+  client: null,
+  user: null,
+  repositories: []
 }
 
 // getters
@@ -15,14 +17,15 @@ export const getters = {
 
 // mutations
 export const mutations = {
-  SET_BITBUCKET_CLIENT (state, bitbucketClient) {
-    state.bitbucketClient = bitbucketClient
+  SET_BITBUCKET_CLIENT (state, client) {
+    state.client = client
   }
 }
 
 // actions
 export const actions = {
-  setup ({ commit }) {
+  // ISSUE
+  async setup ({ commit, dispatch }) {
     const token = Cookies.get('token')
     const clientOptions = {
       baseUrl: BASE_URL,
@@ -33,9 +36,16 @@ export const actions = {
         token: token
       }
     }
-    const bitbucketClient = new Bitbucket(clientOptions)
-    if (bitbucketClient) {
-      commit('SET_BITBUCKET_CLIENT', bitbucketClient)
-    }
+    const client = new Bitbucket(clientOptions)
+    commit('SET_BITBUCKET_CLIENT', client)
+  },
+
+  async repositories ({ state, commit }) {
+    // await state.client.users.getAuthedUser({ })
+    //   .then(({ data }) => console.log(data.values))
+    //   .catch((err) => console.error(err))
+    await state.client.teams.listRepositoriesForUser({ username: 'psgganesh@gmail.com' })
+      .then(({ data }) => console.log(data.values))
+      .catch((err) => console.error(err))
   }
 }

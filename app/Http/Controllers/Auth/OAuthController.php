@@ -21,7 +21,7 @@ class OAuthController extends Controller
     public function __construct()
     {
         config([
-            'services.github.redirect' => route('oauth.callback', 'github'),
+            'services.bitbucket.redirect' => route('oauth.callback', 'bitbucket'),
         ]);
     }
 
@@ -47,6 +47,7 @@ class OAuthController extends Controller
     public function handleProviderCallback($provider)
     {
         $user = Socialite::driver($provider)->stateless()->user();
+        logger()->notice(json_encode($user));
         $user = $this->findOrCreateUser($provider, $user);
 
         $this->guard()->setToken(
@@ -96,8 +97,8 @@ class OAuthController extends Controller
     {
         $user = User::create([
             'name' => $sUser->getName(),
+            'username' => $sUser->nickname,
             'email' => $sUser->getEmail(),
-            'email_verified_at' => now(),
         ]);
 
         $user->oauthProviders()->create([
