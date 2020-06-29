@@ -19,5 +19,21 @@ const modules = requireContext.keys()
   }, {})
 
 export default new Vuex.Store({
-  modules
+  modules,
+  state: {
+    loading: false
+  },
+  mutations: {
+    COMMIT_LOADING_STATE (state, value) {
+      state.loading = value
+    }
+  },
+  actions: {
+    START_AUI_LOADING ({ commit }) {
+      commit('COMMIT_LOADING_STATE', true)
+    },
+    STOP_AUI_LOADING ({ commit }) {
+      commit('COMMIT_LOADING_STATE', false)
+    }
+  }
 })

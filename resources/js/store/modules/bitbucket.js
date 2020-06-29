@@ -19,6 +19,9 @@ export const getters = {
 export const mutations = {
   SET_BITBUCKET_CLIENT (state, client) {
     state.client = client
+  },
+  SET_REPOSITORIES (state, repositories) {
+    state.repositories = repositories
   }
 }
 
@@ -40,12 +43,13 @@ export const actions = {
     commit('SET_BITBUCKET_CLIENT', client)
   },
 
-  async repositories ({ state, commit }) {
-    // await state.client.users.getAuthedUser({ })
-    //   .then(({ data }) => console.log(data.values))
-    //   .catch((err) => console.error(err))
-    await state.client.teams.listRepositoriesForUser({ username: 'psgganesh@gmail.com' })
-      .then(({ data }) => console.log(data.values))
+  async repositories ({ state, commit }, user) {
+    let workspace = '{eeea9a97-faab-40b4-93a2-e421b3549b3a}'
+    await state.client.repositories.list({
+      workspace: workspace,
+      pagelen: 100
+    })
+      .then(({ data }) => commit('SET_REPOSITORIES', data.values))
       .catch((err) => console.error(err))
   }
 }

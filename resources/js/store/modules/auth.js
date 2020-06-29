@@ -41,6 +41,7 @@ export const mutations = {
   [types.UPDATE_USER] (state, { user }) {
     state.user = user
   }
+
 }
 
 // actions
