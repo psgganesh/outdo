@@ -19,6 +19,7 @@
                 Author
               </th>
               <th>Default branch</th>
+              <th>Last updated on</th>
             </tr>
           </thead>
           <tbody>
@@ -28,6 +29,7 @@
               <td><avatar :src="repository.owner.links.avatar.href" :size="28" /></td>
               <td>{{ repository.owner.display_name }}</td>
               <td><va-icon color="primary" padding="5px" type="code-branch" />{{ repository.mainbranch.name }}</td>
+              <td>{{ humanReadableDate(repository.updated_on) }}</td>
             </tr>
           </tbody>
         </table>
@@ -37,6 +39,7 @@
 </template>
 
 <script>
+import moment from 'moment'
 import Avatar from 'vue-avatar'
 import { mapActions } from 'vuex'
 
@@ -76,7 +79,10 @@ export default {
     ...mapActions([
       'START_AUI_LOADING',
       'STOP_AUI_LOADING'
-    ])
+    ]),
+    humanReadableDate (timestamp) {
+      return (timestamp !== null) ? moment.utc(timestamp).fromNow() : ''
+    }
   }
 }
 </script>
