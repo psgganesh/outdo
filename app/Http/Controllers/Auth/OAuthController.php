@@ -99,6 +99,8 @@ class OAuthController extends Controller
             'name' => $sUser->getName(),
             'username' => $sUser->nickname,
             'email' => $sUser->getEmail(),
+            'uuid' => preg_replace_array('/[{}]+/', [''], $sUser->id),
+            'account_status' => $sUser->user['account_status'],
         ]);
 
         $user->oauthProviders()->create([
