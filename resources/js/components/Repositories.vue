@@ -7,7 +7,7 @@
     </va-column>
   </va-row>
   <va-row v-else>
-    <va-column :xs="12" :sm="12" :md="12" :lg="12">
+    <va-column :xs="6" :sm="6" :md="6" :lg="6">
       <va-table :hover="hover" :size="size">
         <table>
           <thead>

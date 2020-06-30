@@ -29,14 +29,6 @@ export default {
           iconStyle: 'solid'
         },
         {
-          name: 'Team',
-          route: '/team',
-          icon: 'mug-hot',
-          iconSize: '18px',
-          iconColor: 'white',
-          iconStyle: 'solid'
-        },
-        {
           name: 'Tasks',
           route: '/tasks',
           icon: 'tasks',
@@ -46,7 +38,7 @@ export default {
         },
         {
           name: 'Meetings',
-          route: '/board',
+          route: '/meetings',
           icon: 'chalkboard',
           iconSize: '18px',
           iconColor: 'white',

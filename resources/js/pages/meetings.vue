@@ -1,23 +1,18 @@
 <template>
   <div>
-    <breadcrumb :title="title" :subtitle="subtitle" />
+    <h2>Test</h2>
   </div>
 </template>
 
 <script>
-import Breadcrumb from '~/components/Breadcrumb'
 
 export default {
-  name: 'Team',
+  name: 'Meetings',
 
   middleware: 'auth',
 
-  components: {
-    Breadcrumb
-  },
-
   metaInfo () {
-    return { title: this.$t('team') }
+    return { title: this.$t('meetings') }
   },
 
   data: () => {
