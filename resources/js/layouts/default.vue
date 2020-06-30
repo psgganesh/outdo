@@ -16,7 +16,7 @@
   >
     <minibar />
     <sidebar />
-    <va-page size="lg">
+    <va-page size="md">
       <child />
     </va-page>
   </va-app>

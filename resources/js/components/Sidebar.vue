@@ -37,9 +37,9 @@ export default {
           iconStyle: 'solid'
         },
         {
-          name: 'Meetings',
-          route: '/meetings',
-          icon: 'chalkboard',
+          name: 'Conversations',
+          route: '/conversations',
+          icon: 'comment-dots',
           iconSize: '18px',
           iconColor: 'white',
           iconStyle: 'solid'
