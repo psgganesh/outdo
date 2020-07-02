@@ -13,4 +13,5 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// Route::get('info', function() { echo phpinfo();});
 Route::get('{path}', 'SpaController')->where('path', '(.*)');
