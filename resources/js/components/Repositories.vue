@@ -23,7 +23,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(repository, index) in repositories" :key="index">
+            <tr v-for="(repository, index) in repositories" :key="index" class="space" @click="openSpace(repository)">
               <td><avatar :src="repository.links.avatar.href" :size="28" /></td>
               <td>{{ repository.full_name }}</td>
               <td><avatar :src="repository.owner.links.avatar.href" :size="28" /></td>
@@ -82,6 +82,9 @@ export default {
     ]),
     humanReadableDate (timestamp) {
       return (timestamp !== null) ? moment.utc(timestamp).fromNow() : ''
+    },
+    openSpace (repository) {
+      this.$router.push('space')
     }
   }
 }

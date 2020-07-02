@@ -14,6 +14,7 @@
         "laravel/tinker": "^2.0",
         "laravel/ui": "^2.0",
         "socialiteproviders/bitbucket": "dev-master",
+        "twilio/sdk": "^6.8",
         "tymon/jwt-auth": "^1.0.0"
     },
     "require-dev": {
