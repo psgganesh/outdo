@@ -14,22 +14,22 @@
     :split="split"
     :rtl="rtl"
   >
-    <!-- <topbar /> -->
-    <div class="container-fluid padded-white-section">
+    <topbar />
+    <div class="container-fluid full-height white-section">
       <child />
-      <div class="container-fluid footer" />
+      <div class="footer" />
     </div>
   </va-app>
 </template>
 
 <script>
-// import Topbar from '~/components/Topbar'
+import Topbar from '~/components/Topbar'
 
 export default {
   name: 'BasicLayout',
 
   components: {
-    // Topbar
+    Topbar
   },
 
   data: () => {
@@ -40,7 +40,7 @@ export default {
 
       mobileSidebarWidth: 0,
       mobileMinibarWidth: 0,
-      mobileTopbarHeight: 50,
+      mobileTopbarHeight: 60,
 
       sidebarPriority: false,
       minibarPriority: false,
@@ -53,8 +53,10 @@ export default {
 </script>
 
 <style scoped>
-.padded-white-section {
-  padding-top: 50px;
+.full-height {
+  height: 98vh;
+}
+.white-section {
   background: #FFF;
 }
 .footer {

@@ -1,26 +1,21 @@
 <template>
   <va-topbar theme="primary">
-    <div slot="left">
-      <va-icon type="bars" color="primary" />
-      <span style="font-weight:700;margin:0 20px 0 10px;">
-        Outdo
-      </span>
+    <div slot="center">
+      <h1 class="title">
+        <va-icon type="check-circle" /> Outdo
+      </h1>
     </div>
-    <div v-if="!user" slot="right">
-      <login-with-bitbucket />
-    </div>
+    <div slot="right" />
   </va-topbar>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import LoginWithBitbucket from '~/components/LoginWithBitbucket'
 
 export default {
   name: 'Topbar',
 
   components: {
-    LoginWithBitbucket
   },
 
   data: () => ({
@@ -42,11 +37,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.profile-photo {
-  width: 2rem;
-  height: 2rem;
-  margin: -.375rem 0;
-}
-</style>
