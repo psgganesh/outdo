@@ -3,7 +3,7 @@
     <div slot="breadcrumb">
       <va-breadcrumb separator="/">
         <va-breadcrumb-item to="/home">
-          outdo
+          {{ this.$t('home') }}
         </va-breadcrumb-item>
         <va-breadcrumb-item :to="this.$route.path">
           {{ this.$route.name }}

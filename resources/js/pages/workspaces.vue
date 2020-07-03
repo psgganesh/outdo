@@ -10,7 +10,7 @@ import Breadcrumb from '~/components/Breadcrumb'
 import Repositories from '~/components/Repositories'
 
 export default {
-  name: 'Spaces',
+  name: 'Workspaces',
 
   middleware: 'auth',
 
@@ -20,12 +20,12 @@ export default {
   },
 
   metaInfo () {
-    return { title: this.$t('spaces') }
+    return { title: this.$t('workspaces') }
   },
 
   data: () => {
     return {
-      title: 'Spaces',
+      title: this.$t('workspaces'),
       subtitle: 'Detail view of projects and repositories'
     }
   }
