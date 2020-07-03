@@ -1,5 +1,5 @@
 <template>
-  <va-row v-if="loading" :gutter="gutter" class="text-align-center">
+  <va-row v-if="loading" :gutter="gutter" class="text-align-center full-height">
     <va-column :xs="12" :sm="12" :md="12" :lg="12">
       <div>
         <va-loading v-if="loading" size="lg" color="blue" />
@@ -93,5 +93,8 @@ export default {
 <style scoped>
 .text-align-center {
   text-align: -webkit-center;
+}
+.full-height {
+  height: 100vh;
 }
 </style>

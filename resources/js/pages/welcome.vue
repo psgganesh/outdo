@@ -1,19 +1,15 @@
 <template>
-  <div>
-    <div class="va-page-header">
-      <div class="va-page-header-title-wrapper">
-        <div class="va-page-header-title-container">
-          <h1><div>Page</div></h1><h2>
-            <div>
-              A convenience component that serves as a wrapper around
-              <a href="/documentation/pageheader" class="">PageHeader</a>
-              and the rest of your page content.
-            </div>
-          </h2>
-        </div>
+  <va-row :gutter="gutter">
+    <va-column :xs="0" :sm="0" :md="2" />
+    <va-column :xs="12" :sm="12" :md="8" :lg="8">
+      <div>
+        <va-card :elevation="elevation" :padding="padding">
+          ...
+        </va-card>
       </div>
-    </div>
-  </div>
+    </va-column>
+    <va-column :xs="0" :sm="0" :md="2" />
+  </va-row>
 </template>
 
 <script>
@@ -27,7 +23,10 @@ export default {
   },
 
   data: () => ({
-    title: window.config.appName
+    title: window.config.appName,
+    elevation: 1,
+    padding: 20,
+    gutter: 0
   }),
 
   computed: mapGetters({
@@ -46,7 +45,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>
