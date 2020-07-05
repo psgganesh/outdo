@@ -84,7 +84,12 @@ export default {
       return (timestamp !== null) ? moment.utc(timestamp).fromNow() : ''
     },
     openSpace (repository) {
-      this.$router.push({ name: 'space', params: { repository: repository.slug } })
+      this.$router.push({ name: 'space',
+        params: {
+          workspace: repository.workspace.slug,
+          repository: repository.slug
+        }
+      })
     }
   }
 }

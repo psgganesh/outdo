@@ -54,11 +54,14 @@ export default {
     }
   },
 
+  beforeMount () {
+    this.$store.commit('bitbucket/RESET_REPOSITORY_LIST')
+  },
+
   mounted () {
     const user = this.$store.state.auth.user
     this.START_AUI_LOADING()
     const request = {
-      format: 'meta',
       slug: this.$route.params.repository,
       workspace: `{${user.uuid}}`
     }
@@ -79,15 +82,5 @@ export default {
       return (type === 'commit_directory') ? 'folder' : 'file'
     }
   }
-
 }
 </script>
-
-<style scoped>
-.text-align-center {
-  text-align: -webkit-center;
-}
-.full-height {
-  height: 100vh;
-}
-</style>

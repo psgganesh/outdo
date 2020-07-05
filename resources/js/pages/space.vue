@@ -1,12 +1,20 @@
 <template>
   <div>
-    <breadcrumb :title="this.$route.params.repository" />
-    <files />
+    <breadcrumb :title="title" />
+    <va-tabs :cache-lifetime="cacheLifetime" @changed="onTabChange">
+      <va-tab name="Issues">
+        <issues />
+      </va-tab>
+      <va-tab name="Files">
+        <files />
+      </va-tab>
+    </va-tabs>
   </div>
 </template>
 
 <script>
 import Files from '~/components/Files'
+import Issues from '~/components/Issues'
 import Breadcrumb from '~/components/Breadcrumb'
 
 export default {
@@ -16,6 +24,7 @@ export default {
 
   components: {
     Files,
+    Issues,
     Breadcrumb
   },
 
@@ -25,7 +34,18 @@ export default {
 
   data: () => {
     return {
-      subtitle: 'Files'
+      title: null,
+      cacheLifetime: 5
+    }
+  },
+
+  beforeMount () {
+    this.title = `${this.$route.params.workspace}/${this.$route.params.repository}`
+  },
+
+  methods: {
+    onTabChange () {
+      console.log('Tab changed')
     }
   }
 }

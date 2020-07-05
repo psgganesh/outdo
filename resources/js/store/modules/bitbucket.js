@@ -8,7 +8,8 @@ export const state = {
   client: null,
   user: null,
   repositories: [],
-  files: []
+  files: [],
+  issues: []
 }
 
 // getters
@@ -26,6 +27,15 @@ export const mutations = {
   },
   SET_FILES (state, files) {
     state.files = files
+  },
+  SET_ISSUES (state, issues) {
+    state.issues = issues
+  },
+  RESET_REPOSITORY_LIST (state) {
+    state.repositories = []
+  },
+  RESET_ISSUES_LIST (state) {
+    state.issues = []
   }
 }
 
@@ -58,13 +68,21 @@ export const actions = {
   },
 
   async files ({ state, commit }, request) {
-    console.log(request)
     await state.client.repositories.readSrcRoot({
       repo_slug: request.slug,
       workspace: request.workspace,
       pagelen: 100
     })
       .then(({ data }) => commit('SET_FILES', data.values))
+      .catch((err) => console.error(err))
+  },
+
+  async issues ({ state, commit }, request) {
+    await state.client.repositories.listIssues({
+      repo_slug: request.slug,
+      workspace: request.workspace,
+      pagelen: 100
+    }).then(({ data }) => commit('SET_ISSUES', data.values))
       .catch((err) => console.error(err))
   }
 }

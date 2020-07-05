@@ -29,14 +29,6 @@ export default {
           iconStyle: 'solid'
         },
         {
-          name: 'Tasks',
-          route: '/tasks',
-          icon: 'tasks',
-          iconSize: '18px',
-          iconColor: 'white',
-          iconStyle: 'solid'
-        },
-        {
           name: 'Conversations',
           route: '/conversations',
           icon: 'comment-dots',
