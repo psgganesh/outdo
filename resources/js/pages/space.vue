@@ -1,11 +1,12 @@
 <template>
   <div>
-    <breadcrumb :title="this.$t('space')" :subtitle="subtitle" />
-    <repositories />
+    <breadcrumb :title="this.$route.params.repository" />
+    <files />
   </div>
 </template>
 
 <script>
+import Files from '~/components/Files'
 import Breadcrumb from '~/components/Breadcrumb'
 
 export default {
@@ -14,6 +15,7 @@ export default {
   middleware: 'auth',
 
   components: {
+    Files,
     Breadcrumb
   },
 
@@ -23,8 +25,7 @@ export default {
 
   data: () => {
     return {
-        subtitle: 'Files'
-      }
+      subtitle: 'Files'
     }
   }
 }

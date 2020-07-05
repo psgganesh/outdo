@@ -7,7 +7,8 @@ const BASE_URL = 'https://api.bitbucket.org/2.0'
 export const state = {
   client: null,
   user: null,
-  repositories: []
+  repositories: [],
+  files: []
 }
 
 // getters
@@ -22,6 +23,9 @@ export const mutations = {
   },
   SET_REPOSITORIES (state, repositories) {
     state.repositories = repositories
+  },
+  SET_FILES (state, files) {
+    state.files = files
   }
 }
 
@@ -44,12 +48,23 @@ export const actions = {
   },
 
   async repositories ({ state, commit }, user) {
-    let workspace = '{eeea9a97-faab-40b4-93a2-e421b3549b3a}'
+    let workspace = `{${user.uuid}}`
     await state.client.repositories.list({
       workspace: workspace,
       pagelen: 100
     })
       .then(({ data }) => commit('SET_REPOSITORIES', data.values))
+      .catch((err) => console.error(err))
+  },
+
+  async files ({ state, commit }, request) {
+    console.log(request)
+    await state.client.repositories.readSrcRoot({
+      repo_slug: request.slug,
+      workspace: request.workspace,
+      pagelen: 100
+    })
+      .then(({ data }) => commit('SET_FILES', data.values))
       .catch((err) => console.error(err))
   }
 }

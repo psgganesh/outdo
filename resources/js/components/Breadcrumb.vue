@@ -26,7 +26,7 @@ export default {
 
   props: {
     title: { type: String, default: 'Unknown Page Title' },
-    subtitle: { type: String, default: 'Unknown subtitle' }
+    subtitle: { type: String, default: null }
   }
 
 }

@@ -12,24 +12,16 @@
         <table>
           <thead>
             <tr>
-              <th colspan="2">
-                Repository
-              </th>
-              <th colspan="2">
-                Author
-              </th>
-              <th>Default branch</th>
-              <th>Last updated on</th>
+              <th>Name</th>
+              <th>Size</th>
+              <th>Last commit</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(repository, index) in repositories" :key="index" class="space" @click="openSpace(repository)">
-              <td><avatar :src="repository.links.avatar.href" :size="28" /></td>
-              <td>{{ repository.full_name }}</td>
-              <td><avatar :src="repository.owner.links.avatar.href" :size="28" /></td>
-              <td>{{ repository.owner.display_name }}</td>
-              <td><va-icon color="primary" padding="5px" type="code-branch" />{{ repository.mainbranch.name }}</td>
-              <td>{{ humanReadableDate(repository.updated_on) }}</td>
+            <tr v-for="(file, index) in files" :key="index" class="space">
+              <td><va-icon :type="fileIcon(file.type)" padding="4px" />{{ file.path }}</td>
+              <td>{{ (Object.is(file.size, null)) ? null : file.size }}</td>
+              <td>{{ file.commit.hash }}</td>
             </tr>
           </tbody>
         </table>
@@ -40,15 +32,10 @@
 
 <script>
 import moment from 'moment'
-import Avatar from 'vue-avatar'
 import { mapActions } from 'vuex'
 
 export default {
-  name: 'Repositories',
-
-  components: {
-    Avatar
-  },
+  name: 'Files',
 
   data () {
     return {
@@ -62,15 +49,20 @@ export default {
     loading () {
       return this.$store.state.loading
     },
-    repositories () {
-      return this.$store.state.bitbucket.repositories
+    files () {
+      return this.$store.state.bitbucket.files
     }
   },
 
   mounted () {
     const user = this.$store.state.auth.user
     this.START_AUI_LOADING()
-    this.$store.dispatch('bitbucket/repositories', user).then(() => {
+    const request = {
+      format: 'meta',
+      slug: this.$route.params.repository,
+      workspace: `{${user.uuid}}`
+    }
+    this.$store.dispatch('bitbucket/files', request).then(() => {
       this.STOP_AUI_LOADING()
     })
   },
@@ -83,10 +75,11 @@ export default {
     humanReadableDate (timestamp) {
       return (timestamp !== null) ? moment.utc(timestamp).fromNow() : ''
     },
-    openSpace (repository) {
-      this.$router.push({ name: 'space', params: { repository: repository.slug } })
+    fileIcon (type) {
+      return (type === 'commit_directory') ? 'folder' : 'file'
     }
   }
+
 }
 </script>
 
