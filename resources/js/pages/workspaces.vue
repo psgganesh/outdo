@@ -1,6 +1,6 @@
 <template>
   <div>
-    <breadcrumb :title="title" :subtitle="subtitle" />
+    <breadcrumb :title="this.$t('workspaces')" :subtitle="subtitle" />
     <repositories />
   </div>
 </template>
@@ -25,8 +25,7 @@ export default {
 
   data: () => {
     return {
-      title: this.$t('workspaces'),
-      subtitle: 'Detail view of projects and repositories'
+      subtitle: 'Your repositories'
     }
   }
 }

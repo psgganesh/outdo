@@ -6,6 +6,7 @@ export default [
   { path: '/', name: 'welcome', component: page('welcome.vue') },
   { path: '/home', name: 'home', component: page('home.vue') },
   { path: '/workspaces', name: 'workspaces', component: page('workspaces.vue') },
+  { path: '/workspaces/:space', name: 'space', component: page('space.vue') },
   { path: '/conversations', name: 'conversations', component: page('conversations.vue') },
   { path: '/settings',
     component: page('settings/index.vue'),
