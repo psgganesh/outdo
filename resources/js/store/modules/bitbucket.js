@@ -14,7 +14,15 @@ export const state = {
 
 // getters
 export const getters = {
-
+  openIssues: state => {
+    let openIssues = []
+    state.issues.map((issue) => {
+      if (issue.state === 'new') {
+        openIssues.push(issue)
+      }
+    })
+    return openIssues
+  }
 }
 
 // mutations

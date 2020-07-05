@@ -12,6 +12,7 @@
     </va-column>
     <va-column class="swimlane" :xs="12" :sm="6" :md="3" :lg="3">
       <h4>Open</h4>
+      {{ openIssues }}
     </va-column>
     <va-column class="swimlane" :xs="12" :sm="6" :md="3" :lg="3">
       <h4>Resolved</h4>
@@ -23,7 +24,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'Issues',
@@ -35,6 +36,9 @@ export default {
   },
 
   computed: {
+    ...mapGetters({
+      openIssues: 'bitbucket/openIssues'
+    }),
     loading () {
       return this.$store.state.loading
     }
