@@ -1,6 +1,6 @@
 <template>
   <va-sidebar :theme="sidebarTheme">
-    <va-sidebar-group :items="coreItems" title="Outdo" :default-open-level="0" />
+    <va-sidebar-group :items="coreItems" title="Outdo" :default-open-level="1" />
   </va-sidebar>
 </template>
 
@@ -12,14 +12,6 @@ export default {
     return {
       sidebarTheme: 'blue',
       coreItems: [
-        {
-          name: 'Home',
-          route: '/home',
-          icon: 'home',
-          iconSize: '18px',
-          iconColor: 'white',
-          iconStyle: 'solid'
-        },
         {
           name: 'Workspaces',
           route: '/workspaces',
@@ -34,7 +26,12 @@ export default {
           icon: 'comment-dots',
           iconSize: '18px',
           iconColor: 'white',
-          iconStyle: 'solid'
+          iconStyle: 'solid',
+          children: [
+            { name: 'Installation', element: '#installation' },
+            { name: 'Quickstart', element: '#quickstart' },
+            { name: 'GitHub', external: 'https://github.com/nvms/vue-atlas' }
+          ]
         }
       ]
     }

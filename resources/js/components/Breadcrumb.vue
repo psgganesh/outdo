@@ -16,6 +16,9 @@
     <div v-if="subtitle !== null" slot="subtitle">
       {{ subtitle }}
     </div>
+    <div slot="actions">
+      <va-input icon-style="solid" icon="search" placeholder="Filter" width="lg" />
+    </div>
   </va-page-header>
 </template>
 
