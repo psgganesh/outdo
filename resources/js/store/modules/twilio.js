@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const TWILIO_TOKEN_URL = 'https://outdo.test/token'
+const TWILIO_TOKEN_URL = 'https://outdo.test/api/token'
 
 // state
 export const state = {
@@ -16,14 +16,15 @@ export const mutations = {
 export const actions = {
   fetchAccessToken (user, handler) {
     const { username } = user
-    let vm = this
+    // let vm = this
     axios.post(`${TWILIO_TOKEN_URL}`, {
       identity: username,
       device: 'browser'
     })
       .then(function (response) {
-        handler(response.data)
-        vm.username = ''
+        // handler(response.data)
+        // vm.username = ''
+        console.log(response)
       })
       .catch(function (error) {
         console.log(error)
