@@ -9,20 +9,16 @@ export const state = {
   user: null,
   repositories: [],
   files: [],
-  issues: []
+  issues: [],
+  backlogIssues: [],
+  openIssues: [],
+  resolvedIssues: [],
+  deferredIssues: []
 }
 
 // getters
 export const getters = {
-  openIssues: state => {
-    let openIssues = []
-    state.issues.map((issue) => {
-      if (issue.state === 'new') {
-        openIssues.push(issue)
-      }
-    })
-    return openIssues
-  }
+
 }
 
 // mutations
@@ -38,12 +34,38 @@ export const mutations = {
   },
   SET_ISSUES (state, issues) {
     state.issues = issues
+    state.issues.map((issue) => {
+      switch (issue.state) {
+        case 'on hold':
+          state.backlogIssues.push(issue)
+          break
+        case 'new':
+        case 'open':
+          state.openIssues.push(issue)
+          break
+        case 'resolved':
+        case 'closed':
+          state.resolvedIssues.push(issue)
+          break
+        case 'invalid':
+        case 'wont fix':
+        case 'duplicate':
+          state.deferredIssues.push(issue)
+          break
+        default:
+          state.deferredIssues.push(issue)
+      }
+    })
   },
   RESET_REPOSITORY_LIST (state) {
     state.repositories = []
   },
   RESET_ISSUES_LIST (state) {
     state.issues = []
+  },
+  UPDATE_ISSUE (state, data) {
+    let type = data.type
+    state[type] = data.issue
   }
 }
 
@@ -92,5 +114,17 @@ export const actions = {
       pagelen: 100
     }).then(({ data }) => commit('SET_ISSUES', data.values))
       .catch((err) => console.error(err))
+  },
+
+  async updateIssue ({ commit }, data) {
+
+    // await state.client.repositories.listIssues({
+    //   repo_slug: request.slug,
+    //   workspace: request.workspace,
+    //   pagelen: 100
+    // }).then(({ data }) => commit('SET_ISSUES', data.values))
+    //   .catch((err) => console.error(err))
+
+    // commit('UPDATE_ISSUE', data);
   }
 }
