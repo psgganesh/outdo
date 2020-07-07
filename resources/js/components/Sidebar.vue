@@ -26,12 +26,7 @@ export default {
           icon: 'comment-dots',
           iconSize: '18px',
           iconColor: 'white',
-          iconStyle: 'solid',
-          children: [
-            { name: 'Installation', element: '#installation' },
-            { name: 'Quickstart', element: '#quickstart' },
-            { name: 'GitHub', external: 'https://github.com/nvms/vue-atlas' }
-          ]
+          iconStyle: 'solid'
         }
       ]
     }

@@ -41,10 +41,7 @@ export default {
   mounted () {
     if (this.authenticated) {
       this.$store.dispatch('bitbucket/setup').then(() => {
-        const { user } = this.$store.state.auth.user
-        this.$store.dispatch('twilio/fetchAccessToken', user).then(() => {
-          this.$router.push('workspaces')
-        })
+        this.$router.push('workspaces')
       })
     }
   }

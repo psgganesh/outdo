@@ -6,6 +6,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import Breadcrumb from '~/components/Breadcrumb'
 import Repositories from '~/components/Repositories'
 
@@ -29,9 +30,13 @@ export default {
     }
   },
 
+  computed: {
+    ...mapState('auth', ['user'])
+  },
+
   mounted () {
+    const user = this.user
     this.$store.dispatch('bitbucket/setup').then(() => {
-      const { user } = this.$store.state.auth.user
       this.$store.dispatch('twilio/fetchAccessToken', user).then(() => {
         this.$router.push('workspaces')
       })

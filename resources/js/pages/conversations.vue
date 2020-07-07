@@ -1,20 +1,22 @@
 <template>
   <va-row :gutter="gutter">
-    <va-column :xs="12" :sm="4" :md="4" class="nav-bar">
-      <div>
-        xs: 12, sm: 4, md: 4
-      </div>
-    </va-column>
-    <va-column :xs="12" :sm="8" :md="8" class="chat-window">
-      <div>
-        xs: 12, sm: 8, md: 8
-      </div>
+    <va-column :xs="12" :sm="12" :md="12">
+      <div v-chat-scroll class="scrollableChatWindow" />
+      <va-textarea
+        v-model="value"
+        :resize="resize"
+        :width="width + '%'"
+        :readonly="readonly"
+        :disabled="disabled"
+        :max-height="maxHeight + 'px'"
+        :min-height="minHeight + 'px'"
+        :max-length="maxLength"
+      />
     </va-column>
   </va-row>
 </template>
 
 <script>
-
 export default {
   name: 'Conversations',
 
@@ -26,17 +28,31 @@ export default {
 
   data: () => {
     return {
-      gutter: 15
+      gutter: 15,
+      value: '',
+      width: 100,
+      resize: false,
+      readonly: false,
+      disabled: false,
+      maxHeight: 200,
+      minHeight: 100,
+      maxLength: 1024
     }
   }
 }
 </script>
 
 <style scoped>
-.nav-bar {
-  height: 98vh;
+.scrollableChatWindow {
+  min-height: 87vh;
+  height: 87vh;
+  max-height: 87vh;
+  width: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  z-index: 1;
 }
-.chat-window {
-  height: 98vh;
+.scrollableChatWindow .message {
+  width: fit-content;
 }
 </style>

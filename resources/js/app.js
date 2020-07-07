@@ -3,12 +3,14 @@ import store from '~/store'
 import router from '~/router'
 import i18n from '~/plugins/i18n'
 import App from '~/components/App'
+import VueChatScroll from 'vue-chat-scroll'
 import Va from 'vue-atlas'
 
 import '~/plugins'
 import '~/components'
 
 Vue.config.productionTip = false
+Vue.use(VueChatScroll)
 /**
  * Some components are pre-wired for i18n.
  * 'en', 'es' and 'fr' are available at the moment.
