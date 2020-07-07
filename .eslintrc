@@ -10,6 +10,9 @@
     "standard"
   ],
   "rules": {
-    "vue/max-attributes-per-line": "off"
+    "vue/max-attributes-per-line": "off",
+    "vue/attribute-hyphenation": ["always", {
+      "ignore": [ "ghostClass" ]
+    }]
   }
 }

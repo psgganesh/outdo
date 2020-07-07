@@ -12,7 +12,31 @@
     </va-column>
     <va-column class="swimlane" :xs="12" :sm="6" :md="3" :lg="3">
       <h4>Open</h4>
-      {{ openIssues }}
+      <draggable
+        v-model="openIssues"
+        v-bind="{ group: 'issues' }"
+        ghostClass="ghost"
+        animation="150"
+        easing="cubic-bezier(1, 0, 0, 1)"
+      >
+        <template v-for="issue in openIssues">
+          <va-card :key="issue.id" :elevation="elevation" :padding="padding" class="card">
+            <div slot="topLeft">
+              <va-badge type="default">
+                {{ `Issue #${issue.id}` }}
+              </va-badge>
+            </div>
+            <div slot="topRight">
+              <va-lozenge uppercase type="primary">
+                {{ issue.state }}
+              </va-lozenge>
+            </div>
+            <h3>
+              {{ issue.title }}
+            </h3>
+          </va-card>
+        </template>
+      </draggable>
     </va-column>
     <va-column class="swimlane" :xs="12" :sm="6" :md="3" :lg="3">
       <h4>Resolved</h4>
@@ -24,13 +48,20 @@
 </template>
 
 <script>
+import Draggable from 'vuedraggable'
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'Issues',
 
+  components: {
+    Draggable
+  },
+
   data: () => {
     return {
+      elevation: 1,
+      padding: 5,
       gutter: 5
     }
   },
