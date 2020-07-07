@@ -18,6 +18,16 @@ export default {
           icon: 'check-circle',
           size: '2.0em',
           brand: true
+        },
+        {
+          icon: 'search',
+          size: '1.25em',
+          method: this.demoMethod
+        },
+        {
+          icon: 'plus',
+          size: '1.25em',
+          method: this.demoMethod
         }
       ],
       minibarBottomItems: [
