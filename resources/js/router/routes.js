@@ -4,7 +4,6 @@ function page (path) {
 
 export default [
   { path: '/', name: 'welcome', component: page('welcome.vue') },
-  { path: '/home', name: 'home', component: page('home.vue') },
   { path: '/workspaces', name: 'workspaces', component: page('workspaces.vue') },
   { path: '/workspaces/:workspace/:repository', name: 'space', component: page('space.vue') },
   { path: '/conversations', name: 'conversations', component: page('conversations.vue') },

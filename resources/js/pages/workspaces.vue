@@ -35,12 +35,15 @@ export default {
   },
 
   mounted () {
-    const user = this.user
-    this.$store.dispatch('bitbucket/setup').then(() => {
-      this.$store.dispatch('twilio/fetchAccessToken', user).then(() => {
-        this.$router.push('workspaces')
-      })
-    })
+    this.setup()
+  },
+
+  methods: {
+    async setup () {
+      await this.$store.dispatch('bitbucket/setup')
+      await this.$store.dispatch('twilio/setup', this.user)
+    }
   }
+
 }
 </script>

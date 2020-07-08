@@ -46,11 +46,19 @@
   text-transform: capitalize;
 }
 
-.va-sidebar--theme-blue .va-sidebar-group-title {
+#brand .va-sidebar-group-title:first-child {
   font-size: 2em;
   height: 40px;
   text-transform: none;
 }
+
+#conversations {
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  left: 0px;
+}
+
 .text-align-center {
   text-align: -webkit-center;
 }

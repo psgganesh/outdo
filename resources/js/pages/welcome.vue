@@ -3,7 +3,7 @@
     <va-column :xs="0" :sm="0" :md="5" />
     <va-column :xs="12" :sm="12" :md="2" :lg="2" class="text-align-center">
       <va-card :elevation="elevation" class="padding-5">
-        <div v-if="!user">
+        <div v-if="!authenticated">
           <login-with-bitbucket />
         </div>
       </va-card>
@@ -40,9 +40,7 @@ export default {
 
   mounted () {
     if (this.authenticated) {
-      this.$store.dispatch('bitbucket/setup').then(() => {
-        this.$router.push('workspaces')
-      })
+      this.$router.push({ name: 'workspaces' })
     }
   }
 }

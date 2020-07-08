@@ -21,11 +21,15 @@ const modules = requireContext.keys()
 export default new Vuex.Store({
   modules,
   state: {
-    loading: false
+    loading: false,
+    channels: []
   },
   mutations: {
     COMMIT_LOADING_STATE (state, value) {
       state.loading = value
+    },
+    UPDATE_CHANNELS_LIST (state, channels) {
+      state.channels = channels
     }
   },
   actions: {
@@ -34,6 +38,24 @@ export default new Vuex.Store({
     },
     STOP_AUI_LOADING ({ commit }) {
       commit('COMMIT_LOADING_STATE', false)
+    }
+  },
+  getters: {
+    conversationItems: (state) => {
+      let channels = [
+        {
+          name: 'outdobot',
+          route: '/conversations',
+          icon: 'robot',
+          iconSize: '18px',
+          iconColor: 'white',
+          iconStyle: 'solid'
+        }
+      ]
+      state.channels.map((channel) => {
+        channels.push(channel)
+      })
+      return channels
     }
   }
 })

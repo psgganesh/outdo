@@ -1,10 +1,13 @@
 <template>
   <va-sidebar :theme="sidebarTheme">
-    <va-sidebar-group :items="coreItems" title="Outdo" :default-open-level="1" />
+    <va-sidebar-group id="brand" :items="coreItems" title="Outdo" :default-open-level="1" />
+    <va-sidebar-group id="conversations" :items="conversationItems" title="Conversations" :default-open-level="1" />
   </va-sidebar>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'Sidebar',
 
@@ -19,17 +22,13 @@ export default {
           iconSize: '18px',
           iconColor: 'white',
           iconStyle: 'solid'
-        },
-        {
-          name: 'Conversations',
-          route: '/conversations',
-          icon: 'comment-dots',
-          iconSize: '18px',
-          iconColor: 'white',
-          iconStyle: 'solid'
         }
       ]
     }
+  },
+
+  computed: {
+    ...mapGetters(['conversationItems'])
   },
 
   methods: {

@@ -17,7 +17,8 @@ export default {
         {
           icon: 'check-circle',
           size: '2.0em',
-          brand: true
+          brand: true,
+          method: this.navigateToWelcomePage
         },
         {
           icon: 'search',
@@ -46,6 +47,9 @@ export default {
   },
 
   methods: {
+    navigateToWelcomePage () {
+      this.$router.push({ name: 'welcome' })
+    },
     demoMethod () {
       this.VaModal.confirm({
         title: 'Hello!',

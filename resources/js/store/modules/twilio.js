@@ -7,7 +7,7 @@ const TWILIO_TOKEN_URL = 'https://outdo.test/api/token'
 export const state = {
   twilioClient: null,
   twilioJWTToken: null,
-  channels: []
+  currentChatChannel: null
 }
 
 // mutations
@@ -18,22 +18,32 @@ export const mutations = {
   SET_TWILIO_TOKEN (state, jwtToken) {
     state.twilioJWTToken = jwtToken
   },
-  SET_INITIAL_CHANNEL_ITEMS (state, channels) {
-    state.channels = channels
+  SET_GLOBAL_CHANNEL (state, currentChatChannel) {
+    state.currentChatChannel = currentChatChannel
   }
 }
 
 // actions
 export const actions = {
 
-  async fetchAccessToken ({ commit, dispatch }, user) {
+  async setup ({ state, dispatch }, user) {
+    // Call twilio API only if token is null - caching on next call
     const { username } = user
+    if (Object.is(state.twilioJWTToken, null)) {
+      await dispatch('fetchToken', username)
+    }
+    // Create twilio API only if client is null - caching on next call
+    if (Object.is(state.twilioClient, null)) {
+      await dispatch('initChat')
+    }
+  },
+
+  async fetchToken ({ commit }, username) {
     await axios.post(`${TWILIO_TOKEN_URL}`, {
       identity: username,
       device: 'browser'
     }).then(function (response) {
       commit('SET_TWILIO_TOKEN', response.data.token)
-      dispatch('initChat')
     }).catch(function (error) {
       console.log(error)
     })
@@ -51,7 +61,21 @@ export const actions = {
 
   async getPublicChannels ({ commit, state }) {
     await state.twilioClient.getPublicChannelDescriptors().then(channels => {
-      commit('SET_INITIAL_CHANNEL_ITEMS', channels.state.items)
+      commit('UPDATE_CHANNELS_LIST', channels.state.items, { root: true })
+    })
+  },
+
+  async joinChannel ({ commit, state, dispatch }, channel) {
+    await state.twilioClient.getChannelByUniqueName(channel.uniqueName).then(channel => {
+      channel.join().then(channel => {
+        commit('SET_GLOBAL_CHANNEL', channel) // Set it global
+        // dispatch('OPEN_CHANNEL', channel)
+      }).catch(() => {
+        commit('SET_GLOBAL_CHANNEL', channel) // Set it global
+        // dispatch('OPEN_CHANNEL', channel)
+      })
+    }).catch(e => {
+      console.log('error!')
     })
   }
 }

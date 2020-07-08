@@ -71,20 +71,22 @@ export const mutations = {
 
 // actions
 export const actions = {
-  // ISSUE
-  async setup ({ commit, dispatch }) {
-    const token = Cookies.get('token')
-    const clientOptions = {
-      baseUrl: BASE_URL,
-      request: {
-        timeout: 10
-      },
-      auth: {
-        token: token
+  async setup ({ commit, state }) {
+    // Call bitbucket API only if client is null - caching on next call
+    if (Object.is(state.client, null)) {
+      const token = Cookies.get('token')
+      const clientOptions = {
+        baseUrl: BASE_URL,
+        request: {
+          timeout: 10
+        },
+        auth: {
+          token: token
+        }
       }
+      const client = new Bitbucket(clientOptions)
+      commit('SET_BITBUCKET_CLIENT', client)
     }
-    const client = new Bitbucket(clientOptions)
-    commit('SET_BITBUCKET_CLIENT', client)
   },
 
   async repositories ({ state, commit }, user) {
