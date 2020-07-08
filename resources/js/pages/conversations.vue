@@ -48,8 +48,7 @@ export default {
     } else {
       this.channel = this.$route.params.channel
     }
-    console.log(this.channel)
-    // this.$store.dispatch('twilio/joinChannel', channel)
+    // this.$store.dispatch('twilio/joinChannel', this.channel)
   },
 
   beforeDestroy () {

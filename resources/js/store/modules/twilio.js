@@ -53,19 +53,43 @@ export const actions = {
     await Chat.Client.create(state.twilioJWTToken).then(client => {
       commit('SET_CHAT_CLIENT', client)
       dispatch('getPublicChannels')
-      // dispatch('GET_USER_CHANNELS')
-      // dispatch('ADD_ON_INVITE_HANDLER')
-      // dispatch('FINISH_LOADING_CHANNELS')
+      dispatch('getUserChannels')
+      dispatch('addOnInviteListener')
     })
   },
 
   async getPublicChannels ({ commit, state }) {
     await state.twilioClient.getPublicChannelDescriptors().then(channels => {
-      commit('UPDATE_CHANNELS_LIST', channels.state.items, { root: true })
+      if (channels.length > 0) {
+        commit('UPDATE_CHANNELS_LIST', channels.state.items, { root: true })
+      }
     })
   },
 
-  async joinChannel ({ commit, state, dispatch }, channel) {
+  async getUserChannels ({ commit, state, dispatch }) {
+    await state.twilioClient.getUserChannelDescriptors().then(channels => {
+      if (channels.length > 0) {
+        commit('UPDATE_CHANNELS_LIST', channels.state.items, { root: true })
+      } else {
+        console.log('Time to create a new outdo_username channel for this user!')
+        const channelData = {
+          uniqueCode: 1001,
+          contact: 'test'
+        }
+        dispatch('createNewChannel', channelData)
+      }
+    })
+  },
+
+  async addOnInviteListener ({ commit, state }) {
+    state.twilioClient.on('channelInvited', function (channel) {
+      console.log('Invited to channel ' + channel.friendlyName)
+      commit('ADD_CHANNEL', channel.state, { root: true })
+      channel.join()
+    })
+  },
+
+  async joinChannel ({ commit, state }, channel) {
     await state.twilioClient.getChannelByUniqueName(channel.uniqueName).then(channel => {
       channel.join().then(channel => {
         commit('SET_GLOBAL_CHANNEL', channel) // Set it global
@@ -77,6 +101,22 @@ export const actions = {
     }).catch(e => {
       console.log('error!')
     })
+  },
+
+  async createNewChannel ({ commit, state, dispatch }, channelData) {
+    state.twilioClient
+      .createChannel({
+        uniqueName: channelData.uniqueCode,
+        friendlyName: channelData.contact,
+        isPrivate: true
+      })
+      .then(channel => {
+        channel.join().then(channel => {
+          commit('SET_GLOBAL_CHANNEL', channel) // Set it global
+          // dispatch('INVITE_PERSON', channel)
+        })
+        commit('ADD_CHANNEL', channel.state, { root: true })
+      })
   }
 }
 

@@ -30,6 +30,9 @@ export default new Vuex.Store({
     },
     UPDATE_CHANNELS_LIST (state, channels) {
       state.channels = channels
+    },
+    ADD_CHANNEL (state, channel) {
+      state.channels.push(channel)
     }
   },
   actions: {
