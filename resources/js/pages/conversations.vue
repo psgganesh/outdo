@@ -28,6 +28,7 @@ export default {
 
   data: () => {
     return {
+      channel: null,
       gutter: 15,
       value: '',
       width: 100,
@@ -38,6 +39,21 @@ export default {
       minHeight: 100,
       maxLength: 1024
     }
+  },
+
+  mounted () {
+    if (this.$route.params.channel === 'outdobot') {
+      const user = this.$store.state.auth.user
+      this.channel = user.username
+    } else {
+      this.channel = this.$route.params.channel
+    }
+    console.log(this.channel)
+    // this.$store.dispatch('twilio/joinChannel', channel)
+  },
+
+  beforeDestroy () {
+    this.channel = null
   }
 }
 </script>

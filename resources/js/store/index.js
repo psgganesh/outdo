@@ -45,7 +45,7 @@ export default new Vuex.Store({
       let channels = [
         {
           name: 'outdobot',
-          route: '/conversations',
+          route: '/conversations/outdobot',
           icon: 'robot',
           iconSize: '18px',
           iconColor: 'white',
