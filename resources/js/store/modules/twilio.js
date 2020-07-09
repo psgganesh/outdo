@@ -112,15 +112,21 @@ export const actions = {
       /**
        * Adding listener to listen for new messages and add them in it's channel
        */
-      state.currentChatChannel.on('messageAdded', message => {
-        commit('ADD_MESSAGE', message)
-      })
+      if (!state.joinedChannels.includes(channelUniqueName)) {
+        state.currentChatChannel.on('messageAdded', message => {
+          commit('ADD_MESSAGE', message)
+        })
+        commit('LISTENING_JOINED_CHANNEL', channelUniqueName)
+      }
       /**
        * Load prev. messages of this channel
        */
-      state.currentChatChannel.getMessages().then(messages => {
-        commit('SET_INITIAL_CHAT_CHANNEL_MESSAGES', messages.items)
-      })
+      if (!state.joinedChannels.includes(channelUniqueName)) {
+        state.currentChatChannel.getMessages().then(messages => {
+          commit('SET_INITIAL_CHAT_CHANNEL_MESSAGES', messages.items)
+        })
+        commit('LISTENING_JOINED_CHANNEL', channelUniqueName)
+      }
     })
   },
 

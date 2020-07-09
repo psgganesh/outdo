@@ -25,12 +25,12 @@
       <va-column :xs="12" :sm="12" :md="12">
         <div v-chat-scroll class="scrollableChatWindow">
           <va-row v-for="(message, index) in messages" :key="index" :gutter="gutter">
-            <va-column :xs="12" :sm="12" :md="12">
-              <va-card class="message-card" :elevation="elevation" :padding="padding" style="width:300px;">
-                <p>
-                  {{ message.body }}
-                </p>
-              </va-card>
+            <va-column :xs="12" :sm="12" :md="12" style="border-bottom: 1px solid #E0E2E6;">
+              <!-- <va-card class="message-card" :elevation="elevation" :padding="padding" style="width:300px;border-bottom: 1px solid #E0E2E6;"> -->
+              <p>
+                {{ message.body }}
+              </p>
+              <!-- </va-card> -->
             </va-column>
           </va-row>
         </div>
@@ -71,7 +71,7 @@ export default {
 
   data: () => {
     return {
-      elevation: 1,
+      elevation: 0,
       padding: 12,
       channel: null,
       gutter: 15,
