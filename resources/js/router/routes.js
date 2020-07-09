@@ -6,7 +6,6 @@ export default [
   { path: '/', name: 'welcome', component: page('welcome.vue') },
   { path: '/workspaces', name: 'workspaces', component: page('workspaces.vue') },
   { path: '/workspaces/:workspace/:repository', name: 'space', component: page('space.vue') },
-  { path: '/conversations', name: 'conversations', redirect: { name: 'conversations.channel', params: { channel: 'outdobot'} } },
   { path: '/conversations/:channel', name: 'conversations.channel', component: page('conversations.vue') },
   { path: '/settings',
     component: page('settings/index.vue'),

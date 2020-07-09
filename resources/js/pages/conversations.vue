@@ -1,9 +1,17 @@
 <template>
   <va-row :gutter="gutter">
     <va-column :xs="12" :sm="12" :md="12">
-      <div v-chat-scroll class="scrollableChatWindow" />
+      <div v-chat-scroll class="scrollableChatWindow">
+        <va-row v-for="(message, index) in messages" :key="index">
+          <va-column :xs="12" :sm="12" :md="6">
+            <va-card :elevation="elevation" :padding="padding">
+              <p>{{ message.body }}</p>
+            </va-card>
+          </va-column>
+        </va-row>
+      </div>
       <va-textarea
-        v-model="value"
+        v-model="inputMessage"
         :resize="resize"
         :width="width + '%'"
         :readonly="readonly"
@@ -11,12 +19,15 @@
         :max-height="maxHeight + 'px'"
         :min-height="minHeight + 'px'"
         :max-length="maxLength"
+        @keyup.enter.native="sendMessage"
       />
     </va-column>
   </va-row>
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
+
 export default {
   name: 'Conversations',
 
@@ -28,9 +39,11 @@ export default {
 
   data: () => {
     return {
+      elevation: 1,
+      padding: 12,
       channel: null,
       gutter: 15,
-      value: '',
+      inputMessage: null,
       width: 100,
       resize: false,
       readonly: false,
@@ -41,18 +54,28 @@ export default {
     }
   },
 
-  mounted () {
-    if (this.$route.params.channel === 'outdobot') {
-      const user = this.$store.state.auth.user
-      this.channel = user.username
-    } else {
-      this.channel = this.$route.params.channel
-    }
-    // this.$store.dispatch('twilio/joinChannel', this.channel)
+  computed: {
+    ...mapGetters({
+      messages: 'twilio/messages'
+    })
+  },
+
+  beforeMount () {
+    this.$store.dispatch('twilio/openChannel', this.$route.params.channel)
   },
 
   beforeDestroy () {
     this.channel = null
+  },
+
+  methods: {
+    ...mapActions([
+      'send'
+    ]),
+    sendMessage () {
+      this.$store.dispatch('twilio/sendMessage', this.inputMessage)
+      this.inputMessage = null
+    }
   }
 }
 </script>

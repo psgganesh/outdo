@@ -34,15 +34,12 @@ export default {
     ...mapState('auth', ['user'])
   },
 
-  mounted () {
-    this.setup()
+  beforeMount () {
+    this.$store.dispatch('bitbucket/setup')
   },
 
-  methods: {
-    async setup () {
-      await this.$store.dispatch('bitbucket/setup')
-      await this.$store.dispatch('twilio/setup', this.user)
-    }
+  mounted () {
+    this.$store.dispatch('twilio/setup', this.user)
   }
 
 }

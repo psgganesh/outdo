@@ -6,7 +6,9 @@ const TWILIO_TOKEN_URL = 'https://outdo.test/api/token'
 
 // state
 export const state = {
+  messages: [],
   channels: [],
+  joinedChannels: [],
   twilioClient: null,
   twilioJWTToken: null,
   currentChatChannel: null
@@ -20,14 +22,23 @@ export const mutations = {
   SET_TWILIO_TOKEN (state, jwtToken) {
     state.twilioJWTToken = jwtToken
   },
-  SET_GLOBAL_CHANNEL (state, currentChatChannel) {
-    state.currentChatChannel = currentChatChannel
-  },
   UPDATE_CHANNELS_LIST (state, channels) {
     state.channels = channels
   },
   ADD_CHANNEL (state, channel) {
     state.channels.push(channel)
+  },
+  LISTENING_JOINED_CHANNEL (state, channel) {
+    state.joinedChannels.push(channel.uniqueName)
+  },
+  SET_GLOBAL_CHANNEL (state, currentChatChannel) {
+    state.currentChatChannel = currentChatChannel
+  },
+  SET_INITIAL_CHAT_CHANNEL_MESSAGES (state, messages) {
+    state.messages = messages
+  },
+  ADD_MESSAGE (state, message) {
+    state.messages.push(message)
   }
 }
 
@@ -58,12 +69,11 @@ export const actions = {
   },
 
   async initChat ({ commit, dispatch, state }, username) {
-    await Chat.Client.create(state.twilioJWTToken).then(client => {
-      commit('SET_CHAT_CLIENT', client)
-      dispatch('getPublicChannels')
-      dispatch('getUserChannels', username)
-      dispatch('addOnInviteListener')
-    })
+    let client = await Chat.Client.create(state.twilioJWTToken)
+    commit('SET_CHAT_CLIENT', client)
+    dispatch('getPublicChannels')
+    dispatch('getUserChannels', username)
+    // dispatch('addOnInviteListener')
   },
 
   async getPublicChannels ({ commit, state }) {
@@ -89,25 +99,28 @@ export const actions = {
     console.log('EXITED getUserChannels')
   },
 
-  async addOnInviteListener ({ commit, state }) {
-    state.twilioClient.on('channelInvited', function (channel) {
-      console.log('Invited to channel ' + channel.friendlyName)
-      commit('ADD_CHANNEL', channel.state)
-      channel.join()
-    })
-  },
+  // async addOnInviteListener ({ commit, state }) {
+  //   state.twilioClient.on('channelInvited', function (channel) {
+  //     commit('ADD_CHANNEL', channel.state)
+  //     channel.join()
+  //   })
+  // },
 
-  async joinChannel ({ commit, state }, channel) {
-    await state.twilioClient.getChannelByUniqueName(channel.uniqueName).then(channel => {
-      channel.join().then(channel => {
-        commit('SET_GLOBAL_CHANNEL', channel) // Set it global
-        // dispatch('OPEN_CHANNEL', channel)
-      }).catch(() => {
-        commit('SET_GLOBAL_CHANNEL', channel) // Set it global
-        // dispatch('OPEN_CHANNEL', channel)
+  async openChannel ({ commit, state }, channelUniqueName) {
+    state.twilioClient.getChannelByUniqueName(channelUniqueName).then(channel => {
+      commit('SET_GLOBAL_CHANNEL', channel)
+      /**
+       * Adding listener to listen for new messages and add them in it's channel
+       */
+      state.currentChatChannel.on('messageAdded', message => {
+        commit('ADD_MESSAGE', message)
       })
-    }).catch(e => {
-      console.log('error!')
+      /**
+       * Load prev. messages of this channel
+       */
+      state.currentChatChannel.getMessages().then(messages => {
+        commit('SET_INITIAL_CHAT_CHANNEL_MESSAGES', messages.items)
+      })
     })
   },
 
@@ -117,12 +130,12 @@ export const actions = {
       friendlyName: channelData.friendlyName,
       isPrivate: true
     }).then(channel => {
-      channel.join().then(channel => {
-        commit('SET_GLOBAL_CHANNEL', channel) // Set it global
-        // dispatch('INVITE_PERSON', channel)
-      })
-      commit('ADD_CHANNEL', channel.state)
+      channel.join()
     })
+  },
+
+  sendMessage ({ state }, encryptedMessage) {
+    state.currentChatChannel.sendMessage(encryptedMessage)
   }
 }
 
@@ -134,7 +147,7 @@ export const getters = {
       const botUser = (channel.friendlyName.includes('_outdo'))
       const icon = (botUser) ? 'robot' : 'user'
       const name = (botUser) ? 'outdo' : channel.friendlyName
-      const route = `/conversations/${channel.sid}`
+      const route = `/conversations/${channel.uniqueName}`
       channels.push({
         name: name,
         route: route,
@@ -145,5 +158,12 @@ export const getters = {
       })
     })
     return channels
+  },
+  messages: (state) => {
+    let messages = []
+    state.messages.map((message) => {
+      messages.push(message.state)
+    })
+    return messages
   }
 }
