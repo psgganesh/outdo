@@ -1,30 +1,60 @@
 <template>
-  <va-row :gutter="gutter">
-    <va-column :xs="12" :sm="12" :md="12">
-      <div v-chat-scroll class="scrollableChatWindow">
-        <va-row v-for="(message, index) in messages" :key="index" :gutter="gutter">
-          <va-column :xs="12" :sm="12" :md="6">
-            <va-card class="message-card" :elevation="elevation" :padding="padding">
-              <p>
-                {{ message.body }}
-              </p>
-            </va-card>
-          </va-column>
-        </va-row>
+  <div>
+    <va-page-header>
+      <div slot="breadcrumb">
+        <va-breadcrumb separator="/">
+          <va-breadcrumb-item to="/home">
+            Home
+          </va-breadcrumb-item>
+          <va-breadcrumb-item to="/">
+            Route
+          </va-breadcrumb-item>
+        </va-breadcrumb>
       </div>
-      <va-textarea
-        v-model="inputMessage"
-        :resize="resize"
-        :width="width + '%'"
-        :readonly="readonly"
-        :disabled="disabled"
-        :max-height="maxHeight + 'px'"
-        :min-height="minHeight + 'px'"
-        :max-length="maxLength"
-        @keyup.enter.native="sendMessage"
-      />
-    </va-column>
-  </va-row>
+      <div slot="title">
+        Title
+      </div>
+      <div slot="subtitle">
+        Subtitle
+      </div>
+      <div slot="actions">
+        <va-input icon-style="solid" icon="search" placeholder="Filter" width="lg" />
+      </div>
+    </va-page-header>
+    <va-row id="chat" :gutter="gutter">
+      <va-column :xs="12" :sm="12" :md="12">
+        <div v-chat-scroll class="scrollableChatWindow">
+          <va-row v-for="(message, index) in messages" :key="index" :gutter="gutter">
+            <va-column :xs="12" :sm="12" :md="6">
+              <va-card class="message-card" :elevation="elevation" :padding="padding">
+                <p>
+                  {{ message.body }}
+                </p>
+              </va-card>
+            </va-column>
+          </va-row>
+        </div>
+        <va-textarea
+          v-model="inputMessage"
+          style="position:absolute; bottom: 10px; left 0px; right 0px;"
+          :resize="resize"
+          :width="width + '%'"
+          :readonly="readonly"
+          :disabled="disabled"
+          :max-height="maxHeight + 'px'"
+          :min-height="minHeight + 'px'"
+          :max-length="maxLength"
+          @keyup.enter.native="sendMessage"
+        />
+        <!-- <va-input
+          id="chatInput"
+          v-model="inputMessage"
+          placeholder="Reply..."
+          @keyup.enter.native="sendMessage"
+        /> -->
+      </va-column>
+    </va-row>
+  </div>
 </template>
 
 <script>
@@ -46,12 +76,12 @@ export default {
       channel: null,
       gutter: 15,
       inputMessage: null,
-      width: 100,
+      width: 98,
       resize: false,
       readonly: false,
       disabled: false,
       maxHeight: 200,
-      minHeight: 100,
+      minHeight: 50,
       maxLength: 1024
     }
   },
@@ -84,9 +114,9 @@ export default {
 
 <style scoped>
 .scrollableChatWindow {
-  min-height: 87vh;
-  height: 87vh;
-  max-height: 87vh;
+  min-height: 73vh;
+  height: 73vh;
+  max-height: 73vh;
   width: 100%;
   overflow-x: hidden;
   overflow-y: auto;

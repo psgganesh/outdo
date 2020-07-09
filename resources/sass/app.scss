@@ -13,6 +13,10 @@
   font-family: 'Segoe UI', 'Oxygen', 'Roboto', 'Ubuntu', sans-serif;
 }
 
+body {
+  overflow-x: hidden;
+}
+
 .space {
   cursor: pointer;
 }
@@ -81,4 +85,12 @@
 
 .card {
   padding: 10px;
+}
+
+.va-sidebar-group-item-icon i {
+  font-size: 16px !important;
+}
+
+#chatInput {
+  min-height: 40px !important;
 }
