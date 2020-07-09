@@ -1,6 +1,6 @@
 <template>
   <div>
-    <va-page-header>
+    <va-page-header id="chatHeader">
       <div slot="breadcrumb">
         <va-breadcrumb separator="/">
           <va-breadcrumb-item to="/home">
@@ -25,8 +25,8 @@
       <va-column :xs="12" :sm="12" :md="12">
         <div v-chat-scroll class="scrollableChatWindow">
           <va-row v-for="(message, index) in messages" :key="index" :gutter="gutter">
-            <va-column :xs="12" :sm="12" :md="6">
-              <va-card class="message-card" :elevation="elevation" :padding="padding">
+            <va-column :xs="12" :sm="12" :md="12">
+              <va-card class="message-card" :elevation="elevation" :padding="padding" style="width:300px;">
                 <p>
                   {{ message.body }}
                 </p>
@@ -113,6 +113,9 @@ export default {
 </script>
 
 <style scoped>
+#chatHeader {
+  border-bottom: 1px solid #E0E2E6;
+}
 .scrollableChatWindow {
   min-height: 73vh;
   height: 73vh;
