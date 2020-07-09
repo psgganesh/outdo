@@ -28,7 +28,9 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['conversationItems'])
+    ...mapGetters({
+      conversationItems: 'twilio/conversationItems'
+    })
   },
 
   methods: {

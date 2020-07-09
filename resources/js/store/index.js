@@ -21,18 +21,11 @@ const modules = requireContext.keys()
 export default new Vuex.Store({
   modules,
   state: {
-    loading: false,
-    channels: []
+    loading: false
   },
   mutations: {
     COMMIT_LOADING_STATE (state, value) {
       state.loading = value
-    },
-    UPDATE_CHANNELS_LIST (state, channels) {
-      state.channels = channels
-    },
-    ADD_CHANNEL (state, channel) {
-      state.channels.push(channel)
     }
   },
   actions: {
@@ -44,21 +37,6 @@ export default new Vuex.Store({
     }
   },
   getters: {
-    conversationItems: (state) => {
-      let channels = [
-        {
-          name: 'outdobot',
-          route: '/conversations/outdobot',
-          icon: 'robot',
-          iconSize: '18px',
-          iconColor: 'white',
-          iconStyle: 'solid'
-        }
-      ]
-      state.channels.map((channel) => {
-        channels.push(channel)
-      })
-      return channels
-    }
+
   }
 })
