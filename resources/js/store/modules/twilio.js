@@ -48,13 +48,9 @@ export const actions = {
   async setup ({ state, dispatch }, user) {
     // Call twilio API only if token is null - caching on next call
     const { username } = user
-    // if (Object.is(state.twilioJWTToken, null)) {
     await dispatch('fetchToken', username)
-    // }
     // Create twilio API only if client is null - caching on next call
-    // if (Object.is(state.twilioClient, null)) {
     await dispatch('initChat', username)
-    // }
   },
 
   async fetchToken ({ commit }, username) {
@@ -73,7 +69,7 @@ export const actions = {
     commit('SET_CHAT_CLIENT', client)
     dispatch('getPublicChannels')
     dispatch('getUserChannels', username)
-    // dispatch('addOnInviteListener')
+    dispatch('addOnInviteListener')
   },
 
   async getPublicChannels ({ commit, state }) {
@@ -99,12 +95,12 @@ export const actions = {
     console.log('EXITED getUserChannels')
   },
 
-  // async addOnInviteListener ({ commit, state }) {
-  //   state.twilioClient.on('channelInvited', function (channel) {
-  //     commit('ADD_CHANNEL', channel.state)
-  //     channel.join()
-  //   })
-  // },
+  async addOnInviteListener ({ commit, state }) {
+    state.twilioClient.on('channelInvited', function (channel) {
+      commit('ADD_CHANNEL', channel.state)
+      channel.join()
+    })
+  },
 
   async openChannel ({ commit, state }, channelUniqueName) {
     state.twilioClient.getChannelByUniqueName(channelUniqueName).then(channel => {
@@ -130,7 +126,7 @@ export const actions = {
     })
   },
 
-  async createNewChannel ({ commit, state, dispatch }, channelData) {
+  async createNewChannel ({ state }, channelData) {
     state.twilioClient.createChannel({
       uniqueName: channelData.uniqueName,
       friendlyName: channelData.friendlyName,

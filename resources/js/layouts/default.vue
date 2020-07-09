@@ -57,7 +57,7 @@ export default {
     ...mapState('auth', ['user'])
   },
 
-  created () {
+  mounted () {
     this.$store.dispatch('twilio/setup', this.user)
   }
 }
