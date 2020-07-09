@@ -23,6 +23,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import Minibar from '~/components/Minibar'
 import Sidebar from '~/components/Sidebar'
 
@@ -50,6 +51,14 @@ export default {
       reverse: false,
       split: false
     }
+  },
+
+  computed: {
+    ...mapState('auth', ['user'])
+  },
+
+  beforeMount () {
+    this.$store.dispatch('twilio/setup', this.user)
   }
 }
 </script>

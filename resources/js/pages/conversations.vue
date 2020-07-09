@@ -2,10 +2,12 @@
   <va-row :gutter="gutter">
     <va-column :xs="12" :sm="12" :md="12">
       <div v-chat-scroll class="scrollableChatWindow">
-        <va-row v-for="(message, index) in messages" :key="index">
+        <va-row v-for="(message, index) in messages" :key="index" :gutter="gutter">
           <va-column :xs="12" :sm="12" :md="6">
-            <va-card :elevation="elevation" :padding="padding">
-              <p>{{ message.body }}</p>
+            <va-card class="message-card" :elevation="elevation" :padding="padding">
+              <p>
+                {{ message.body }}
+              </p>
             </va-card>
           </va-column>
         </va-row>
@@ -92,5 +94,12 @@ export default {
 }
 .scrollableChatWindow .message {
   width: fit-content;
+}
+.message-card {
+  padding: 6px;
+  border-bottom-left-radius: 0px;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  border-bottom-right-radius: 12px;
 }
 </style>

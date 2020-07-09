@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+
 import Breadcrumb from '~/components/Breadcrumb'
 import Repositories from '~/components/Repositories'
 
@@ -30,16 +30,8 @@ export default {
     }
   },
 
-  computed: {
-    ...mapState('auth', ['user'])
-  },
-
-  beforeMount () {
-    this.$store.dispatch('bitbucket/setup')
-  },
-
   mounted () {
-    this.$store.dispatch('twilio/setup', this.user)
+    this.$store.dispatch('bitbucket/setup')
   }
 
 }
