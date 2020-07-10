@@ -94,3 +94,13 @@ body {
 #chatInput {
   min-height: 40px !important;
 }
+
+.va-page-loading .va-loading-lg {
+  height: 100vh;
+}
+
+.va-page-container-lg .va-spinner {
+  margin-top: auto;
+  margin-bottom: auto;
+  height: 100vh;
+}

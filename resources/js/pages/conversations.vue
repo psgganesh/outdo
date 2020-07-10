@@ -1,7 +1,7 @@
 <template>
-  <va-row v-if="loading" :gutter="gutter" class="text-align-center full-height">
+  <va-row v-if="loading" :gutter="gutter" class="text-align-center">
     <va-column :xs="12" :sm="12" :md="12" :lg="12">
-      <div>
+      <div class="loader">
         <va-loading v-if="loading" size="lg" color="blue" />
       </div>
     </va-column>
@@ -70,6 +70,8 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'Conversations',
 
+  layout: 'chat',
+
   middleware: 'auth',
 
   metaInfo () {
@@ -100,10 +102,6 @@ export default {
     loading () {
       return this.$store.state.loading
     }
-  },
-
-  beforeMount () {
-    this.$store.dispatch('twilio/openChannel', this.$route.params.channel)
   },
 
   beforeDestroy () {

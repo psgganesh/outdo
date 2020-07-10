@@ -1,12 +1,5 @@
 <template>
-  <va-row v-if="loading" :gutter="gutter" class="text-align-center full-height">
-    <va-column :xs="12" :sm="12" :md="12" :lg="12">
-      <div>
-        <va-loading v-if="loading" size="lg" color="blue" />
-      </div>
-    </va-column>
-  </va-row>
-  <va-row v-else>
+  <va-row>
     <va-column :xs="12" :sm="12" :md="12" :lg="12">
       <va-table :hover="hover" :size="size">
         <table>
@@ -65,14 +58,6 @@ export default {
     repositories () {
       return this.$store.state.bitbucket.repositories
     }
-  },
-
-  mounted () {
-    const user = this.$store.state.auth.user
-    this.START_AUI_LOADING()
-    this.$store.dispatch('bitbucket/repositories', user).then(() => {
-      this.STOP_AUI_LOADING()
-    })
   },
 
   methods: {

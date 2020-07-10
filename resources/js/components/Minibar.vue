@@ -24,17 +24,12 @@ export default {
           icon: 'search',
           size: '1.25em',
           method: this.demoMethod
-        },
-        {
-          icon: 'plus',
-          size: '1.25em',
-          method: this.demoMethod
         }
       ],
       minibarBottomItems: [
         {
-          icon: 'cog',
-          size: '1.5em',
+          icon: 'plus',
+          size: '1.25em',
           method: this.demoMethod
         },
         {
