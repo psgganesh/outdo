@@ -17,14 +17,7 @@
     <minibar />
     <sidebar />
     <va-page size="lg">
-      <va-row v-if="loading" :gutter="gutter" class="text-align-center">
-        <va-column :xs="12" :sm="12" :md="12" :lg="12">
-          <div class="loader">
-            <va-loading v-if="loading" size="lg" color="blue" />
-          </div>
-        </va-column>
-      </va-row>
-      <child v-else />
+      <child v-if="loadingComplete" />
     </va-page>
   </va-app>
 </template>
@@ -63,13 +56,9 @@ export default {
 
   computed: {
     ...mapState('auth', ['user']),
-    loading () {
-      return this.$store.state.loading
+    loadingComplete () {
+      return !this.$store.state.loading
     }
-  },
-
-  beforeMount () {
-    this.$store.dispatch('twilio/setup', this.user)
   }
 
 }

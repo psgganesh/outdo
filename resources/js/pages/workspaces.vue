@@ -1,23 +1,23 @@
 <template>
   <div>
     <breadcrumb :title="this.$t('workspaces')" :subtitle="subtitle" />
-    <repositories />
+    <!-- <repositories /> -->
   </div>
 </template>
 
 <script>
 import { mapActions } from 'vuex'
 import Breadcrumb from '~/components/Breadcrumb'
-import Repositories from '~/components/Repositories'
+// import Repositories from '~/components/Repositories'
 
 export default {
   name: 'Workspaces',
 
-  middleware: 'auth',
+  middleware: ['auth', 'bitbucket-client', 'twilio-client'],
 
   components: {
-    Breadcrumb,
-    Repositories
+    Breadcrumb
+    // Repositories
   },
 
   metaInfo () {
@@ -29,23 +29,6 @@ export default {
       gutter: 25,
       subtitle: 'Your repositories'
     }
-  },
-
-  beforeMount () {
-    const user = this.$store.state.auth.user
-    this.$store.dispatch('bitbucket/setup').then(() => {
-      this.$store.dispatch('bitbucket/repositories', user).then(() => {
-        this.STOP_AUI_LOADING()
-      })
-    })
-  },
-
-  methods: {
-    ...mapActions([
-      'START_AUI_LOADING',
-      'STOP_AUI_LOADING'
-    ])
   }
-
 }
 </script>

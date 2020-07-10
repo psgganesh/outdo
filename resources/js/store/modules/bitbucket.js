@@ -5,7 +5,7 @@ const BASE_URL = 'https://api.bitbucket.org/2.0'
 
 // state
 export const state = {
-  client: null,
+  bitbucketClient: null,
   user: null,
   repositories: [],
   files: [],
@@ -18,13 +18,13 @@ export const state = {
 
 // getters
 export const getters = {
-
+  client: state => state.bitbucketClient
 }
 
 // mutations
 export const mutations = {
   SET_BITBUCKET_CLIENT (state, client) {
-    state.client = client
+    state.bitbucketClient = client
   },
   SET_REPOSITORIES (state, repositories) {
     state.repositories = repositories
@@ -71,9 +71,7 @@ export const mutations = {
 
 // actions
 export const actions = {
-  async setup ({ commit, state }) {
-    // Call bitbucket API only if client is null - caching on next call
-    // if (Object.is(state.client, null)) {
+  async setup ({ commit }) {
     const token = Cookies.get('token')
     const clientOptions = {
       baseUrl: BASE_URL,
@@ -86,12 +84,11 @@ export const actions = {
     }
     const client = new Bitbucket(clientOptions)
     commit('SET_BITBUCKET_CLIENT', client)
-    // }
   },
 
   async repositories ({ state, commit }, user) {
     let workspace = `{${user.uuid}}`
-    await state.client.repositories.list({
+    await state.bitbucketClient.repositories.list({
       workspace: workspace,
       pagelen: 100
     })
@@ -100,7 +97,7 @@ export const actions = {
   },
 
   async files ({ state, commit }, request) {
-    await state.client.repositories.readSrcRoot({
+    await state.bitbucketClient.repositories.readSrcRoot({
       repo_slug: request.slug,
       workspace: request.workspace,
       pagelen: 100
@@ -110,7 +107,7 @@ export const actions = {
   },
 
   async issues ({ state, commit }, request) {
-    await state.client.repositories.listIssues({
+    await state.bitbucketClient.repositories.listIssues({
       repo_slug: request.slug,
       workspace: request.workspace,
       pagelen: 100
@@ -120,7 +117,7 @@ export const actions = {
 
   async updateIssue ({ commit }, data) {
 
-    // await state.client.repositories.listIssues({
+    // await state.bitbucketClient.repositories.listIssues({
     //   repo_slug: request.slug,
     //   workspace: request.workspace,
     //   pagelen: 100

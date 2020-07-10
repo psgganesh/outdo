@@ -1,12 +1,5 @@
 <template>
-  <va-row v-if="loading" :gutter="gutter" class="text-align-center">
-    <va-column :xs="12" :sm="12" :md="12" :lg="12">
-      <div class="loader">
-        <va-loading v-if="loading" size="lg" color="blue" />
-      </div>
-    </va-column>
-  </va-row>
-  <div v-else>
+  <div>
     <va-page-header id="chatHeader">
       <div slot="breadcrumb">
         <va-breadcrumb separator="/">
@@ -53,12 +46,6 @@
           :max-length="maxLength"
           @keyup.enter.native="sendMessage"
         />
-        <!-- <va-input
-            id="chatInput"
-            v-model="inputMessage"
-            placeholder="Reply..."
-            @keyup.enter.native="sendMessage"
-          /> -->
       </va-column>
     </va-row>
   </div>
@@ -70,9 +57,7 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'Conversations',
 
-  layout: 'chat',
-
-  middleware: 'auth',
+  middleware: ['auth', 'twilio-client', 'twilio-chat-session'],
 
   metaInfo () {
     return { title: this.$t('conversations') }
@@ -98,10 +83,7 @@ export default {
   computed: {
     ...mapGetters({
       messages: 'twilio/messages'
-    }),
-    loading () {
-      return this.$store.state.loading
-    }
+    })
   },
 
   beforeDestroy () {
