@@ -33,7 +33,6 @@ export const mutations = {
     state.files = files
   },
   SET_ISSUES (state, issues) {
-    state.issues = []
     state.issues = issues
     state.issues.map((issue) => {
       switch (issue.state) {
@@ -60,6 +59,13 @@ export const mutations = {
   },
   RESET_REPOSITORY_LIST (state) {
     state.repositories = []
+  },
+  RESET_ISSUES_LIST (state) {
+    state.issues = []
+    state.backlogIssues = []
+    state.openIssues = []
+    state.resolvedIssues = []
+    state.deferredIssues = []
   },
   UPDATE_ISSUE (state, data) {
     let type = data.type
@@ -105,6 +111,7 @@ export const actions = {
   },
 
   async issues ({ state, commit }, request) {
+    commit('RESET_ISSUES_LIST')
     await state.bitbucketClient.repositories.listIssues({
       repo_slug: request.slug,
       workspace: request.workspace,
