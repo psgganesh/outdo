@@ -1,19 +1,19 @@
 <template>
   <div>
     <breadcrumb :title="title" />
-    <va-tabs :cache-lifetime="cacheLifetime" @changed="onTabChange">
+    <va-tabs @changed="onTabChange">
       <va-tab name="Issues">
         <issues />
       </va-tab>
       <va-tab name="Files">
-        <files />
+        <!-- <files /> -->
       </va-tab>
     </va-tabs>
   </div>
 </template>
 
 <script>
-import Files from '~/components/Files'
+// import Files from '~/components/Files'
 import Issues from '~/components/Issues'
 import Breadcrumb from '~/components/Breadcrumb'
 
@@ -23,7 +23,7 @@ export default {
   middleware: ['auth', 'bitbucket-client'],
 
   components: {
-    Files,
+    // Files,
     Issues,
     Breadcrumb
   },
@@ -34,8 +34,7 @@ export default {
 
   data: () => {
     return {
-      title: null,
-      cacheLifetime: 5
+      title: null
     }
   },
 

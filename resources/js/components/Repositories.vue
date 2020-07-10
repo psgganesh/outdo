@@ -1,5 +1,12 @@
 <template>
-  <va-row>
+  <va-row v-if="loading" :gutter="gutter" class="text-align-center full-height">
+    <va-column :xs="12" :sm="12" :md="12" :lg="12">
+      <div>
+        <va-loading v-if="loading" size="lg" color="blue" />
+      </div>
+    </va-column>
+  </va-row>
+  <va-row v-else>
     <va-column :xs="12" :sm="12" :md="12" :lg="12">
       <va-table :hover="hover" :size="size">
         <table>
@@ -34,7 +41,6 @@
 <script>
 import moment from 'moment'
 import Avatar from 'vue-avatar'
-import { mapActions } from 'vuex'
 
 export default {
   name: 'Repositories',
@@ -45,6 +51,7 @@ export default {
 
   data () {
     return {
+      loading: true,
       gutter: 25,
       hover: true,
       size: 'lg'
@@ -52,9 +59,6 @@ export default {
   },
 
   computed: {
-    loading () {
-      return this.$store.state.loading
-    },
     repositories () {
       return this.$store.state.bitbucket.repositories
     }
@@ -63,13 +67,10 @@ export default {
   async beforeCreate () {
     const user = this.$store.state.auth.user
     await this.$store.dispatch('bitbucket/repositories', user)
+    this.loading = false
   },
 
   methods: {
-    ...mapActions([
-      'START_AUI_LOADING',
-      'STOP_AUI_LOADING'
-    ]),
     humanReadableDate (timestamp) {
       return (timestamp !== null) ? moment.utc(timestamp).fromNow() : ''
     },
@@ -84,12 +85,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.text-align-center {
-  text-align: -webkit-center;
-}
-.full-height {
-  height: 100vh;
-}
-</style>

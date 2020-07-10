@@ -107,6 +107,7 @@ export const actions = {
   },
 
   async issues ({ state, commit }, request) {
+    commit('RESET_ISSUES_LIST')
     await state.bitbucketClient.repositories.listIssues({
       repo_slug: request.slug,
       workspace: request.workspace,

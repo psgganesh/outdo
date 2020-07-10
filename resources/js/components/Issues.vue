@@ -18,7 +18,7 @@
         class="lane"
       >
         <template v-for="issue in backlogIssues">
-          <va-card :key="issue.id" :elevation="elevation" :padding="padding" class="card">
+          <va-card :key="`backlogIssues_${issue.id}`" :elevation="elevation" :padding="padding" class="card">
             <div slot="topLeft">
               <va-badge type="default">
                 {{ `Issue #${issue.id}` }}
@@ -48,7 +48,7 @@
         class="lane"
       >
         <template v-for="issue in openIssues">
-          <va-card :key="issue.id" :elevation="elevation" :padding="padding" class="card">
+          <va-card :key="`openIssues_${issue.id}`" :elevation="elevation" :padding="padding" class="card">
             <div slot="topLeft">
               <va-badge type="default">
                 {{ `Issue #${issue.id}` }}
@@ -78,7 +78,7 @@
         class="lane"
       >
         <template v-for="issue in resolvedIssues">
-          <va-card :key="issue.id" :elevation="elevation" :padding="padding" class="card">
+          <va-card :key="`resolvedIssues_${issue.id}`" :elevation="elevation" :padding="padding" class="card">
             <div slot="topLeft">
               <va-badge type="default">
                 {{ `Issue #${issue.id}` }}
@@ -108,7 +108,7 @@
         class="lane"
       >
         <template v-for="issue in deferredIssues">
-          <va-card :key="issue.id" :elevation="elevation" :padding="padding" class="card">
+          <va-card :key="`deferredIssues_${issue.id}`" :elevation="elevation" :padding="padding" class="card">
             <div slot="topLeft">
               <va-badge type="default">
                 {{ `Issue #${issue.id}` }}
@@ -131,7 +131,6 @@
 
 <script>
 import Draggable from 'vuedraggable'
-import { mapActions } from 'vuex'
 
 export default {
   name: 'Issues',
@@ -142,6 +141,7 @@ export default {
 
   data: () => {
     return {
+      loading: true,
       swimlanes: {
         backlog: 'Backlog',
         open: 'Open',
@@ -155,9 +155,6 @@ export default {
   },
 
   computed: {
-    loading () {
-      return this.$store.state.loading
-    },
     backlogIssues: {
       get () {
         return this.$store.state.bitbucket.backlogIssues
@@ -196,27 +193,12 @@ export default {
     }
   },
 
-  beforeMount () {
-    this.$store.commit('bitbucket/RESET_ISSUES_LIST')
-  },
-
-  mounted () {
+  async beforeCreate () {
     const user = this.$store.state.auth.user
-    this.START_AUI_LOADING()
-    const request = {
-      slug: this.$route.params.repository,
-      workspace: `{${user.uuid}}`
-    }
-    this.$store.dispatch('bitbucket/issues', request).then(() => {
-      this.STOP_AUI_LOADING()
-    })
-  },
-
-  methods: {
-    ...mapActions([
-      'START_AUI_LOADING',
-      'STOP_AUI_LOADING'
-    ])
+    const slug = this.$route.params.repository
+    const request = { slug: slug, workspace: `{${user.uuid}}` }
+    await this.$store.dispatch('bitbucket/issues', request)
+    this.loading = false
   }
 }
 </script>

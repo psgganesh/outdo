@@ -12,10 +12,11 @@
         </va-breadcrumb>
       </div>
       <div slot="title">
-        Title
+        <va-icon :type="(botChannel)? 'robot' : 'user'" />
+        {{ (botChannel) ? 'outdo' : currentChannel }}
       </div>
       <div slot="subtitle">
-        Subtitle
+        {{ (botChannel) ? 'For you notes and things to remember' : currentChannel }}
       </div>
       <div slot="actions">
         <va-input icon-style="solid" icon="search" placeholder="Filter" width="lg" />
@@ -83,7 +84,13 @@ export default {
   computed: {
     ...mapGetters({
       messages: 'twilio/messages'
-    })
+    }),
+    currentChannel () {
+      if (!Object.is(this.$store.state.twilio.currentChatChannel, null)) {
+        return this.$store.state.twilio.currentChatChannel.friendlyName
+      }
+      return null
+    }
   },
 
   beforeDestroy () {
@@ -94,6 +101,9 @@ export default {
     sendMessage () {
       this.$store.dispatch('twilio/sendMessage', this.inputMessage)
       this.inputMessage = null
+    },
+    botChannel (channelName) {
+      return channelName.includes('_outdo')
     }
   }
 }
