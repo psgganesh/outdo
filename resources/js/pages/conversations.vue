@@ -1,5 +1,12 @@
 <template>
-  <div>
+  <va-row v-if="loading" :gutter="gutter" class="text-align-center full-height">
+    <va-column :xs="12" :sm="12" :md="12" :lg="12">
+      <div>
+        <va-loading v-if="loading" size="lg" color="blue" />
+      </div>
+    </va-column>
+  </va-row>
+  <div v-else>
     <va-page-header id="chatHeader">
       <div slot="breadcrumb">
         <va-breadcrumb separator="/">
@@ -47,18 +54,18 @@
           @keyup.enter.native="sendMessage"
         />
         <!-- <va-input
-          id="chatInput"
-          v-model="inputMessage"
-          placeholder="Reply..."
-          @keyup.enter.native="sendMessage"
-        /> -->
+            id="chatInput"
+            v-model="inputMessage"
+            placeholder="Reply..."
+            @keyup.enter.native="sendMessage"
+          /> -->
       </va-column>
     </va-row>
   </div>
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'Conversations',
@@ -89,7 +96,10 @@ export default {
   computed: {
     ...mapGetters({
       messages: 'twilio/messages'
-    })
+    }),
+    loading () {
+      return this.$store.state.loading
+    }
   },
 
   beforeMount () {
@@ -101,9 +111,6 @@ export default {
   },
 
   methods: {
-    ...mapActions([
-      'send'
-    ]),
     sendMessage () {
       this.$store.dispatch('twilio/sendMessage', this.inputMessage)
       this.inputMessage = null

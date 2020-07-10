@@ -22,6 +22,14 @@ export default {
           iconSize: '18px',
           iconColor: 'white',
           iconStyle: 'solid'
+        },
+        {
+          name: 'Team',
+          route: '/team',
+          icon: 'mug-hot',
+          iconSize: '18px',
+          iconColor: 'white',
+          iconStyle: 'solid'
         }
       ]
     }

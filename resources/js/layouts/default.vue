@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import Minibar from '~/components/Minibar'
 import Sidebar from '~/components/Sidebar'
 
@@ -54,11 +54,18 @@ export default {
   },
 
   computed: {
-    ...mapState('auth', ['user'])
+    ...mapState('auth', ['user']),
+    ...mapActions([
+      'START_AUI_LOADING',
+      'STOP_AUI_LOADING'
+    ])
   },
 
   mounted () {
-    this.$store.dispatch('twilio/setup', this.user)
+    this.START_AUI_LOADING()
+    this.$store.dispatch('twilio/setup', this.user).then(() => {
+      this.STOP_AUI_LOADING()
+    })
   }
 }
 </script>
