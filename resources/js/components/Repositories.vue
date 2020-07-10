@@ -60,6 +60,11 @@ export default {
     }
   },
 
+  async beforeCreate () {
+    const user = this.$store.state.auth.user
+    await this.$store.dispatch('bitbucket/repositories', user)
+  },
+
   methods: {
     ...mapActions([
       'START_AUI_LOADING',

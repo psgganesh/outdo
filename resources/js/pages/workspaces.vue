@@ -1,14 +1,13 @@
 <template>
   <div>
     <breadcrumb :title="this.$t('workspaces')" :subtitle="subtitle" />
-    <!-- <repositories /> -->
+    <repositories />
   </div>
 </template>
 
 <script>
-import { mapActions } from 'vuex'
 import Breadcrumb from '~/components/Breadcrumb'
-// import Repositories from '~/components/Repositories'
+import Repositories from '~/components/Repositories'
 
 export default {
   name: 'Workspaces',
@@ -16,8 +15,8 @@ export default {
   middleware: ['auth', 'bitbucket-client', 'twilio-client'],
 
   components: {
-    Breadcrumb
-    // Repositories
+    Breadcrumb,
+    Repositories
   },
 
   metaInfo () {

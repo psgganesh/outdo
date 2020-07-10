@@ -23,7 +23,6 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import Minibar from '~/components/Minibar'
 import Sidebar from '~/components/Sidebar'
 
@@ -55,7 +54,6 @@ export default {
   },
 
   computed: {
-    ...mapState('auth', ['user']),
     loadingComplete () {
       return !this.$store.state.loading
     }
