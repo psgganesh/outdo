@@ -25,15 +25,23 @@
     <va-row id="chat" :gutter="gutter">
       <va-column :xs="12" :sm="12" :md="12">
         <div v-chat-scroll class="scrollableChatWindow">
-          <va-row v-for="(message, index) in messages" :key="index" :gutter="gutter">
-            <va-column :xs="12" :sm="12" :md="12">
-              <va-card class="message-card" :elevation="elevation" :padding="padding" style="width:60%;">
-                <p>
-                  {{ message.body }}
-                </p>
-              </va-card>
-            </va-column>
-          </va-row>
+          <table>
+            <tbody>
+              <tr v-for="(message, index) in messages" :key="index" class="m-b-10" style="height:80px;">
+                <td style="vertical-align:bottom;text-align:center;">
+                  <avatar :src="user.photo_url" :size="48" :rounded="rounded" />
+                </td>
+                <td style="padding-top: 10px; padding-left: 5px;">
+                  <h3>
+                    {{ message.author }}
+                  </h3>
+                  <p style="margin:0px;">
+                    {{ message.body }}
+                  </p>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
         <va-textarea
           v-model="inputMessage"
@@ -54,6 +62,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import Avatar from 'vue-avatar'
 
 export default {
   name: 'Conversations',
@@ -64,10 +73,15 @@ export default {
     return { title: this.$t('conversations') }
   },
 
+  components: {
+    Avatar
+  },
+
   data: () => {
     return {
-      elevation: 1,
-      padding: 12,
+      rounded: true,
+      elevation: 0,
+      padding: 8,
       channel: null,
       gutter: 15,
       inputMessage: null,
@@ -83,7 +97,8 @@ export default {
 
   computed: {
     ...mapGetters({
-      messages: 'twilio/messages'
+      messages: 'twilio/messages',
+      user: 'auth/user'
     }),
     currentChannel () {
       if (!Object.is(this.$store.state.twilio.currentChatChannel, null)) {
@@ -124,12 +139,5 @@ export default {
 }
 .scrollableChatWindow .message {
   width: fit-content;
-}
-.message-card {
-  padding: 6px;
-  border-bottom-left-radius: 0px;
-  border-top-left-radius: 12px;
-  border-top-right-radius: 12px;
-  border-bottom-right-radius: 12px;
 }
 </style>

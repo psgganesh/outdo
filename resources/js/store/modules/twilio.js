@@ -144,7 +144,7 @@ export const actions = {
 // getters
 export const getters = {
   client: state => state.twilioClient,
-  conversationItems: (state) => {
+  conversationItems: (state, dispatch) => {
     let channels = []
     state.channels.map((channel) => {
       const botUser = (channel.friendlyName.includes('_outdo'))

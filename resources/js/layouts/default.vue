@@ -57,6 +57,12 @@ export default {
     loadingComplete () {
       return !this.$store.state.loading
     }
+  },
+
+  methods: {
+    addNewMember () {
+      alert('Test')
+    }
   }
 
 }
