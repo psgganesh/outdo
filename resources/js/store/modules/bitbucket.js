@@ -142,21 +142,19 @@ export const actions = {
 
   async updateIssue ({ commit }, request) {
     let issue = request.issue
-    if (typeof issue !== 'undefined') {
-      if (issue.state !== request.type) {
-        let issueId = issue.id
-        const requestBody = {
-          '_body': {
-            state: request.type
-          },
-          'issue_id': issueId,
-          'repo_slug': state.currentRepository.slug,
-          'workspace': state.currentRepository.workspace.slug
-        }
-        await state.bitbucketClient.issue_tracker.update(requestBody).catch((err) => console.error(err))
+    let issueToBeUpdated = [...issue].pop()
+    if (issue.length !== 0 && issueToBeUpdated.state !== request.type) {
+      let issueId = issueToBeUpdated.id
+      const requestBody = {
+        '_body': {
+          state: request.type
+        },
+        'issue_id': issueId,
+        'repo_slug': state.currentRepository.slug,
+        'workspace': state.currentRepository.workspace.slug
       }
-
-      commit('UPDATE_ISSUE', request)
+      await state.bitbucketClient.issue_tracker.update(requestBody).catch((err) => console.error(err))
     }
+    commit('UPDATE_ISSUE', request)
   }
 }
