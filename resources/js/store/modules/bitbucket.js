@@ -95,7 +95,7 @@ export const actions = {
   },
 
   async repositories ({ state, commit }, user) {
-    let workspace = `{${user.uuid}}`
+    let workspace = user.uuid
     await state.bitbucketClient.repositories.list({
       workspace: workspace,
       pagelen: 100

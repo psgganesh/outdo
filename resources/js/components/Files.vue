@@ -63,7 +63,7 @@ export default {
     this.START_AUI_LOADING()
     const request = {
       slug: this.$route.params.repository,
-      workspace: `{${user.uuid}}`
+      workspace: user.uuid
     }
     this.$store.dispatch('bitbucket/files', request).then(() => {
       this.STOP_AUI_LOADING()
