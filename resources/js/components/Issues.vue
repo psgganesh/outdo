@@ -11,7 +11,7 @@
       <h4>{{ swimlanes.backlog }}</h4>
       <draggable
         v-model="backlogIssues"
-        v-bind="{ group: 'issues' }"
+        v-bind="getOptions()"
         ghostClass="ghost"
         animation="150"
         easing="cubic-bezier(1, 0, 0, 1)"
@@ -41,7 +41,7 @@
       <h4>{{ swimlanes.open }}</h4>
       <draggable
         v-model="openIssues"
-        v-bind="{ group: 'issues' }"
+        v-bind="getOptions()"
         ghostClass="ghost"
         animation="150"
         easing="cubic-bezier(1, 0, 0, 1)"
@@ -71,7 +71,7 @@
       <h4>{{ swimlanes.deferred }}</h4>
       <draggable
         v-model="deferredIssues"
-        v-bind="{ group: 'issues' }"
+        v-bind="getOptions()"
         ghostClass="ghost"
         animation="150"
         easing="cubic-bezier(1, 0, 0, 1)"
@@ -101,7 +101,7 @@
       <h4>{{ swimlanes.resolved }}</h4>
       <draggable
         v-model="resolvedIssues"
-        v-bind="{ group: 'issues' }"
+        v-bind="getOptions()"
         ghostClass="ghost"
         animation="150"
         easing="cubic-bezier(1, 0, 0, 1)"
@@ -160,14 +160,13 @@ export default {
         return this.$store.state.bitbucket.backlogIssues
       },
       set (value) {
-        if (value.length > 0) {
-          const [ issue ] = value
-          const request = {
-            type: 'on hold',
-            issue: issue
-          }
-          this.$store.dispatch('bitbucket/updateIssue', request)
+        const issue = value
+        const request = {
+          type: 'on hold',
+          to: 'backlogIssues',
+          issue: issue
         }
+        this.$store.dispatch('bitbucket/updateIssue', request)
       }
     },
     openIssues: {
@@ -175,14 +174,13 @@ export default {
         return this.$store.state.bitbucket.openIssues
       },
       set (value) {
-        if (value.length > 0) {
-          const [ issue ] = value
-          const request = {
-            type: 'open',
-            issue: issue
-          }
-          this.$store.dispatch('bitbucket/updateIssue', request)
+        const issue = value
+        const request = {
+          type: 'open',
+          to: 'openIssues',
+          issue: issue
         }
+        this.$store.dispatch('bitbucket/updateIssue', request)
       }
     },
     resolvedIssues: {
@@ -190,14 +188,13 @@ export default {
         return this.$store.state.bitbucket.resolvedIssues
       },
       set (value) {
-        if (value.length > 0) {
-          const [ issue ] = value
-          const request = {
-            type: 'resolved',
-            issue: issue
-          }
-          this.$store.dispatch('bitbucket/updateIssue', request)
+        const issue = value
+        const request = {
+          type: 'resolved',
+          to: 'resolvedIssues',
+          issue: issue
         }
+        this.$store.dispatch('bitbucket/updateIssue', request)
       }
     },
     deferredIssues: {
@@ -205,15 +202,13 @@ export default {
         return this.$store.state.bitbucket.deferredIssues
       },
       set (value) {
-        if (value.length > 0) {
-          const [ issue ] = value
-          const request = {
-            type: 'invalid',
-            issue: issue
-          }
-          console.log(request)
-          this.$store.dispatch('bitbucket/updateIssue', request)
+        const issue = value
+        const request = {
+          type: 'invalid',
+          to: 'deferredIssues',
+          issue: issue
         }
+        this.$store.dispatch('bitbucket/updateIssue', request)
       }
     }
   },
@@ -223,6 +218,12 @@ export default {
     const request = { slug: slug }
     await this.$store.dispatch('bitbucket/issues', request)
     this.loading = false
+  },
+
+  methods: {
+    getOptions () {
+      return { group: 'issues' }
+    }
   }
 }
 </script>

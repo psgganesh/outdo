@@ -19,7 +19,8 @@ export const state = {
 
 // getters
 export const getters = {
-  client: state => state.bitbucketClient
+  client: state => state.bitbucketClient,
+  currentRepository: state => state.currentRepository
 }
 
 // mutations
@@ -65,8 +66,12 @@ export const mutations = {
     state.deferredIssues = []
   },
   UPDATE_ISSUE (state, data) {
+    let to = data.to
     let type = data.type
-    state[type] = data.issue
+    data.issue.map((issue) => {
+      issue.state = type
+    })
+    state[to] = data.issue
   },
   SET_CURRENT_REPOSITORY (state, repositorySlug) {
     state.repositories.map((repository) => {
@@ -132,28 +137,26 @@ export const actions = {
       'repo_slug': state.currentRepository.slug,
       'workspace': state.currentRepository.workspace.slug
     }
-    const { data, headers } = await state.bitbucketClient.issue_tracker.create(requestBody)
+    await state.bitbucketClient.issue_tracker.create(requestBody)
   },
 
   async updateIssue ({ commit }, request) {
-    let _body = {
-      state: 'invalid',
-      'message': {
-        'raw': 'This is now resolved.'
+    let issue = request.issue
+    if (typeof issue !== 'undefined') {
+      if (issue.state !== request.type) {
+        let issueId = issue.id
+        const requestBody = {
+          '_body': {
+            state: request.type
+          },
+          'issue_id': issueId,
+          'repo_slug': state.currentRepository.slug,
+          'workspace': state.currentRepository.workspace.slug
+        }
+        await state.bitbucketClient.issue_tracker.update(requestBody).catch((err) => console.error(err))
       }
-    }
-    let issueId = request.issue.id
-    const requestBody = {
-      '_body': _body,
-      'issue_id': issueId,
-      'repo_slug': state.currentRepository.slug,
-      'workspace': state.currentRepository.workspace.slug
-    }
-    console.log(requestBody)
-    await state.bitbucketClient.issue_tracker.update(requestBody).then(({ data, headers }) => {
-      console.log(data)
-    }).catch((err) => console.error(err))
 
-    // commit('UPDATE_ISSUE', data);
+      commit('UPDATE_ISSUE', request)
+    }
   }
 }
