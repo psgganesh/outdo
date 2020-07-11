@@ -8,6 +8,7 @@ export const state = {
   bitbucketClient: null,
   user: null,
   repositories: [],
+  currentRepository: null,
   files: [],
   issues: [],
   backlogIssues: [],
@@ -39,21 +40,17 @@ export const mutations = {
         case 'on hold':
           state.backlogIssues.push(issue)
           break
-        case 'new':
         case 'open':
           state.openIssues.push(issue)
           break
         case 'resolved':
-        case 'closed':
           state.resolvedIssues.push(issue)
           break
         case 'invalid':
-        case 'wont fix':
-        case 'duplicate':
           state.deferredIssues.push(issue)
           break
         default:
-          state.deferredIssues.push(issue)
+          state.openIssues.push(issue)
       }
     })
   },
@@ -70,13 +67,20 @@ export const mutations = {
   UPDATE_ISSUE (state, data) {
     let type = data.type
     state[type] = data.issue
+  },
+  SET_CURRENT_REPOSITORY (state, repositorySlug) {
+    state.repositories.map((repository) => {
+      if (repository.slug === repositorySlug) {
+        state.currentRepository = repository
+      }
+    })
   }
 }
 
 // actions
 export const actions = {
   async setup ({ commit }) {
-    const token = Cookies.get('token')
+    const token = Cookies.get('oauthToken')
     const clientOptions = {
       baseUrl: BASE_URL,
       request: {
@@ -112,22 +116,43 @@ export const actions = {
 
   async issues ({ state, commit }, request) {
     commit('RESET_ISSUES_LIST')
+    commit('SET_CURRENT_REPOSITORY', request.slug)
     await state.bitbucketClient.repositories.listIssues({
-      repo_slug: request.slug,
-      workspace: request.workspace,
+      repo_slug: state.currentRepository.uuid,
+      workspace: state.currentRepository.workspace.uuid,
       pagelen: 100
     }).then(({ data }) => commit('SET_ISSUES', data.values))
       .catch((err) => console.error(err))
   },
 
-  async updateIssue ({ commit }, data) {
+  async createIssue ({ commit }) {
+    let _body = { 'title': 'new issue' }
+    const requestBody = {
+      '_body': _body,
+      'repo_slug': state.currentRepository.slug,
+      'workspace': state.currentRepository.workspace.slug
+    }
+    const { data, headers } = await state.bitbucketClient.issue_tracker.create(requestBody)
+  },
 
-    // await state.bitbucketClient.repositories.listIssues({
-    //   repo_slug: request.slug,
-    //   workspace: request.workspace,
-    //   pagelen: 100
-    // }).then(({ data }) => commit('SET_ISSUES', data.values))
-    //   .catch((err) => console.error(err))
+  async updateIssue ({ commit }, request) {
+    let _body = {
+      state: 'invalid',
+      'message': {
+        'raw': 'This is now resolved.'
+      }
+    }
+    let issueId = request.issue.id
+    const requestBody = {
+      '_body': _body,
+      'issue_id': issueId,
+      'repo_slug': state.currentRepository.slug,
+      'workspace': state.currentRepository.workspace.slug
+    }
+    console.log(requestBody)
+    await state.bitbucketClient.issue_tracker.update(requestBody).then(({ data, headers }) => {
+      console.log(data)
+    }).catch((err) => console.error(err))
 
     // commit('UPDATE_ISSUE', data);
   }

@@ -46,12 +46,13 @@ export default {
       this.$router.push({ name: 'welcome' })
     },
     demoMethod () {
-      this.VaModal.confirm({
-        title: 'Hello!',
-        message: `This modal exists to show how methods
-        can be applied to Minibar items.`,
-        type: 'info'
-      })
+      // this.VaModal.confirm({
+      //   title: 'Hello!',
+      //   message: `This modal exists to show how methods
+      //   can be applied to Minibar items.`,
+      //   type: 'info'
+      // })
+      this.$store.dispatch('bitbucket/createIssue')
     }
   }
 }

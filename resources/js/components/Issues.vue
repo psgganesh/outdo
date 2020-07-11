@@ -68,17 +68,17 @@
     </va-column>
 
     <va-column class="swimlane" :xs="12" :sm="6" :md="3" :lg="3">
-      <h4>{{ swimlanes.resolved }}</h4>
+      <h4>{{ swimlanes.deferred }}</h4>
       <draggable
-        v-model="resolvedIssues"
+        v-model="deferredIssues"
         v-bind="{ group: 'issues' }"
         ghostClass="ghost"
         animation="150"
         easing="cubic-bezier(1, 0, 0, 1)"
         class="lane"
       >
-        <template v-for="issue in resolvedIssues">
-          <va-card :key="`resolvedIssues_${issue.id}`" :elevation="elevation" :padding="padding" class="card">
+        <template v-for="issue in deferredIssues">
+          <va-card :key="`deferredIssues_${issue.id}`" :elevation="elevation" :padding="padding" class="card">
             <div slot="topLeft">
               <va-badge type="default">
                 {{ `Issue #${issue.id}` }}
@@ -98,17 +98,17 @@
     </va-column>
 
     <va-column class="swimlane" :xs="12" :sm="6" :md="3" :lg="3">
-      <h4>{{ swimlanes.deferred }}</h4>
+      <h4>{{ swimlanes.resolved }}</h4>
       <draggable
-        v-model="deferredIssues"
+        v-model="resolvedIssues"
         v-bind="{ group: 'issues' }"
         ghostClass="ghost"
         animation="150"
         easing="cubic-bezier(1, 0, 0, 1)"
         class="lane"
       >
-        <template v-for="issue in deferredIssues">
-          <va-card :key="`deferredIssues_${issue.id}`" :elevation="elevation" :padding="padding" class="card">
+        <template v-for="issue in resolvedIssues">
+          <va-card :key="`resolvedIssues_${issue.id}`" :elevation="elevation" :padding="padding" class="card">
             <div slot="topLeft">
               <va-badge type="default">
                 {{ `Issue #${issue.id}` }}
@@ -143,10 +143,10 @@ export default {
     return {
       loading: true,
       swimlanes: {
-        backlog: 'Backlog',
+        backlog: 'On hold',
         open: 'Open',
-        resolved: 'Resolved',
-        deferred: 'Deferred'
+        deferred: 'Deferred',
+        resolved: 'Resolved'
       },
       elevation: 1,
       padding: 5,
@@ -160,8 +160,14 @@ export default {
         return this.$store.state.bitbucket.backlogIssues
       },
       set (value) {
-        const data = { type: 'backlogIssues', issue: value }
-        this.$store.dispatch('bitbucket/updateIssue', data)
+        if (value.length > 0) {
+          const [ issue ] = value
+          const request = {
+            type: 'on hold',
+            issue: issue
+          }
+          this.$store.dispatch('bitbucket/updateIssue', request)
+        }
       }
     },
     openIssues: {
@@ -169,8 +175,14 @@ export default {
         return this.$store.state.bitbucket.openIssues
       },
       set (value) {
-        const data = { type: 'openIssues', issue: value }
-        this.$store.dispatch('bitbucket/updateIssue', data)
+        if (value.length > 0) {
+          const [ issue ] = value
+          const request = {
+            type: 'open',
+            issue: issue
+          }
+          this.$store.dispatch('bitbucket/updateIssue', request)
+        }
       }
     },
     resolvedIssues: {
@@ -178,8 +190,14 @@ export default {
         return this.$store.state.bitbucket.resolvedIssues
       },
       set (value) {
-        const data = { type: 'resolvedIssues', issue: value }
-        this.$store.dispatch('bitbucket/updateIssue', data)
+        if (value.length > 0) {
+          const [ issue ] = value
+          const request = {
+            type: 'resolved',
+            issue: issue
+          }
+          this.$store.dispatch('bitbucket/updateIssue', request)
+        }
       }
     },
     deferredIssues: {
@@ -187,16 +205,22 @@ export default {
         return this.$store.state.bitbucket.deferredIssues
       },
       set (value) {
-        const data = { type: 'deferredIssues', issue: value }
-        this.$store.dispatch('bitbucket/updateIssue', data)
+        if (value.length > 0) {
+          const [ issue ] = value
+          const request = {
+            type: 'invalid',
+            issue: issue
+          }
+          console.log(request)
+          this.$store.dispatch('bitbucket/updateIssue', request)
+        }
       }
     }
   },
 
   async beforeCreate () {
-    const user = this.$store.state.auth.user
     const slug = this.$route.params.repository
-    const request = { slug: slug, workspace: `{${user.uuid}}` }
+    const request = { slug: slug }
     await this.$store.dispatch('bitbucket/issues', request)
     this.loading = false
   }

@@ -5,6 +5,7 @@ import * as types from '../mutation-types'
 // state
 export const state = {
   user: null,
+  oauthToken: null,
   token: Cookies.get('token')
 }
 
@@ -17,9 +18,11 @@ export const getters = {
 
 // mutations
 export const mutations = {
-  [types.SAVE_TOKEN] (state, { token, remember }) {
+  [types.SAVE_TOKEN] (state, { token, oauthToken, remember }) {
     state.token = token
+    state.oauthToken = oauthToken
     Cookies.set('token', token, { expires: remember ? 365 : null })
+    Cookies.set('oauthToken', oauthToken, { expires: remember ? 365 : null })
   },
 
   [types.FETCH_USER_SUCCESS] (state, { user }) {

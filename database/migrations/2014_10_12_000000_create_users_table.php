@@ -19,7 +19,7 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->string('username')->unique()->nullable();
             $table->string('uuid')->unique()->nullable();
-            $table->string('account_status')->unique()->nullable();
+            $table->string('account_status')->nullable();
             $table->timestamps();
         });
     }

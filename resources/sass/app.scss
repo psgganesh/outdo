@@ -21,10 +21,6 @@ body {
   cursor: pointer;
 }
 
-.va-page-container-md {
-  padding: 0px !important;
-}
-
 .va-dropdown-con .va-dropdown-menu {
   margin-top: 12px;
 }
@@ -79,8 +75,18 @@ body {
   height: 100vh;
 }
 
+.va-card:hover {
+  cursor: -webkit-grab;
+}
+
 .ghost {
   opacity: 0;
+}
+
+.ghost,
+.sortable-chosen,
+.sortable-chosen.ghost {
+  cursor: -webkit-grabbing !important;
 }
 
 .card {
@@ -89,10 +95,6 @@ body {
 
 .va-sidebar-group-item-icon i {
   font-size: 16px !important;
-}
-
-#chatInput {
-  min-height: 40px !important;
 }
 
 .va-page-loading .va-loading-lg {
