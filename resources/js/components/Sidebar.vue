@@ -9,25 +9,27 @@
         <h2>Add new channel</h2>
       </div>
       <div slot="body" style="height:120px;text-align:center;">
-        <va-form ref="form" :type="type">
+        <va-form ref="form" :type="addMemberForm.type">
           <va-form-item need>
             <va-input
-              v-model="addMember.name"
+              v-model="addMemberForm.username"
               name="username"
               icon-style="solid"
-              icon="search"
+              icon="at"
               autocomplete="off"
-              placeholder="Search by bitbucket username"
-              :rules="[{type:'required', tip:'Sorry, I need to know your bitbucket username'}]"
-              clearable
+              placeholder="Add a member by username"
+              :rules="[{type:'required', tip:'Sorry, we need a valid bitbucket username'}]"
             />
           </va-form-item>
         </va-form>
+        <va-alert :type="type" :title="title" style="text-align:left; margin:12px">
+          <p>{{ body }}</p>
+        </va-alert>
       </div>
-      <div slot="footer" style="border-top: 1px solid #E0E2E6;">
+      <div slot="footer" style="margin-top:40px;margin-right:10px;">
         <div style="margin-top: 10px; text-align: right;">
           <va-button type="primary" @click="$refs.customModal.close()">
-            Add Member
+            Submit
           </va-button>
         </div>
       </div>
@@ -43,8 +45,11 @@ export default {
 
   data () {
     return {
-      type: 'vertical',
-      addMember: {
+      type: 'info',
+      title: 'Information',
+      body: 'Once the invitation is sent, a channel under your name would be visible to your team mate automatically.',
+      addMemberForm: {
+        type: 'vertical',
         username: ''
       },
       width: '500px',
@@ -61,6 +66,7 @@ export default {
         },
         {
           name: 'Team',
+          class: 'cursor-pointer',
           route: '/team',
           icon: 'mug-hot',
           iconSize: '18px',
@@ -78,7 +84,7 @@ export default {
     channelItems () {
       let channels = this.conversationItems
       channels.push({
-        name: 'Add new member',
+        name: 'Add new channel',
         icon: 'plus',
         iconSize: '18px',
         iconColor: 'white',

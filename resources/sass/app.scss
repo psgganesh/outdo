@@ -17,7 +17,8 @@ body {
   overflow-x: hidden;
 }
 
-.space {
+.space,
+#conversations ul li:last-child {
   cursor: pointer;
 }
 
