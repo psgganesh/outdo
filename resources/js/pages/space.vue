@@ -20,7 +20,7 @@ import Breadcrumb from '~/components/Breadcrumb'
 export default {
   name: 'Space',
 
-  middleware: ['auth', 'bitbucket-client', 'bitbucket-set-repositories'],
+  middleware: ['auth', 'bitbucket-client', 'bitbucket-set-repositories', 'twilio-client'],
 
   components: {
     // Files,

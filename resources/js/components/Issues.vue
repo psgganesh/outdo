@@ -8,7 +8,10 @@
   </va-row>
   <va-row v-else :gutter="gutter">
     <va-column class="swimlane" :xs="12" :sm="6" :md="3" :lg="3">
-      <h4>{{ swimlanes.backlog }}</h4>
+      <h3>{{ swimlanes.backlog }}</h3>
+      <va-button icon-before="plus" type="default" class="m-b-10">
+        Add a backlog
+      </va-button>
       <draggable
         v-model="backlogIssues"
         v-bind="getOptions()"
@@ -18,7 +21,7 @@
         class="lane"
       >
         <template v-for="issue in backlogIssues">
-          <va-card :key="`backlogIssues_${issue.id}`" :elevation="elevation" :padding="padding" class="card">
+          <va-card :key="`backlogIssues_${issue.id}`" :elevation="elevation" :padding="padding" class="card m-b-10">
             <div slot="topLeft">
               <va-badge type="default">
                 {{ `Issue #${issue.id}` }}
@@ -38,7 +41,10 @@
     </va-column>
 
     <va-column class="swimlane" :xs="12" :sm="6" :md="3" :lg="3">
-      <h4>{{ swimlanes.open }}</h4>
+      <h3>{{ swimlanes.open }}</h3>
+      <va-button icon-before="plus" type="default" class="m-b-10">
+        Add an open issue
+      </va-button>
       <draggable
         v-model="openIssues"
         v-bind="getOptions()"
@@ -48,7 +54,7 @@
         class="lane"
       >
         <template v-for="issue in openIssues">
-          <va-card :key="`openIssues_${issue.id}`" :elevation="elevation" :padding="padding" class="card">
+          <va-card :key="`openIssues_${issue.id}`" :elevation="elevation" :padding="padding" class="card m-b-10">
             <div slot="topLeft">
               <va-badge type="default">
                 {{ `Issue #${issue.id}` }}
@@ -68,7 +74,10 @@
     </va-column>
 
     <va-column class="swimlane" :xs="12" :sm="6" :md="3" :lg="3">
-      <h4>{{ swimlanes.deferred }}</h4>
+      <h3>{{ swimlanes.deferred }}</h3>
+      <va-button icon-before="plus" type="default" class="m-b-10">
+        Raise an invalid issue
+      </va-button>
       <draggable
         v-model="deferredIssues"
         v-bind="getOptions()"
@@ -78,7 +87,7 @@
         class="lane"
       >
         <template v-for="issue in deferredIssues">
-          <va-card :key="`deferredIssues_${issue.id}`" :elevation="elevation" :padding="padding" class="card">
+          <va-card :key="`deferredIssues_${issue.id}`" :elevation="elevation" :padding="padding" class="card m-b-10">
             <div slot="topLeft">
               <va-badge type="default">
                 {{ `Issue #${issue.id}` }}
@@ -98,7 +107,10 @@
     </va-column>
 
     <va-column class="swimlane" :xs="12" :sm="6" :md="3" :lg="3">
-      <h4>{{ swimlanes.resolved }}</h4>
+      <h3>{{ swimlanes.resolved }}</h3>
+      <va-button icon-before="plus" type="default" class="m-b-10">
+        Add a resolved issue
+      </va-button>
       <draggable
         v-model="resolvedIssues"
         v-bind="getOptions()"
@@ -108,7 +120,7 @@
         class="lane"
       >
         <template v-for="issue in resolvedIssues">
-          <va-card :key="`resolvedIssues_${issue.id}`" :elevation="elevation" :padding="padding" class="card">
+          <va-card :key="`resolvedIssues_${issue.id}`" :elevation="elevation" :padding="padding" class="card m-b-10">
             <div slot="topLeft">
               <va-badge type="default">
                 {{ `Issue #${issue.id}` }}
