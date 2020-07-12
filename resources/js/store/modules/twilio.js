@@ -110,7 +110,7 @@ export const actions = {
       console.group('addOnInviteListener')
       console.log(channel)
       console.groupEnd()
-      commit('ADD_CHANNEL', channel.state)
+      commit('ADD_CHANNEL', channel)
       channel.join()
     })
     console.log('passed addOnInviteListener()')
@@ -157,13 +157,11 @@ export const actions = {
   },
 
   async invitePerson ({ commit, state }, member) {
-    state.currentChatChannel.invite(member)
+    state.currentChatChannel.invite(member.memberName)
       .then(() => {
         console.log('Invited')
       })
       .catch(function (e) {
-        // Silent this exception
-        // console.log(e);
         console.log('Other user not yet logged in on twilio.')
       })
   }

@@ -4,7 +4,7 @@
       <va-sidebar-group id="brand" :items="coreItems" title="Outdo" :default-open-level="1" />
       <va-sidebar-group id="conversations" :items="channelItems" title="Conversations" :default-open-level="1" />
     </va-sidebar>
-    <va-modal ref="customModal" :width="width" :backdrop-clickable="backdropClickable">
+    <va-modal ref="addChannelModal" :width="width" :backdrop-clickable="backdropClickable">
       <div slot="header" style="padding: 10px 20px;">
         <h2>Add new channel</h2>
       </div>
@@ -15,10 +15,10 @@
               v-model="form.channelName"
               name="channelName"
               icon-style="solid"
-              icon="at"
+              icon="comment"
               autocomplete="off"
-              placeholder="Add a member by username"
-              :rules="[{type:'required', tip:'Sorry, we need a valid bitbucket username'}]"
+              placeholder="Name your new private channel"
+              :rules="[{type:'required', tip:'Sorry, we need a valid channel name'}]"
             />
           </va-form-item>
         </va-form>
@@ -28,7 +28,7 @@
       </div>
       <div slot="footer" style="margin-top:40px;margin-right:10px;">
         <div style="margin-top: 10px; text-align: right;">
-          <va-button type="primary" @click="addMember">
+          <va-button type="primary" @click.stop="addChannel">
             Submit
           </va-button>
         </div>
@@ -108,13 +108,13 @@ export default {
       })
     },
     openAddChannelForm () {
-      this.$refs.customModal.open()
+      this.$refs.addChannelModal.open()
     },
-    addMember () {
-      this.$refs.customModal.close()
+    addChannel () {
       const channelName = this.form.channelName
       const channelData = { uniqueName: uuidv4(), friendlyName: `${channelName}` }
       this.$store.dispatch('twilio/createNewChannel', channelData).then(() => {
+        this.$refs.addChannelModal.close()
         this.$router.push({ name: 'conversations',
           params: {
             channel: channelName

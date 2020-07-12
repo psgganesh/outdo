@@ -5,7 +5,7 @@
       <va-tab name="Issues">
         <issues />
       </va-tab>
-      <va-tab name="Files">
+      <va-tab name="Workflows">
         <!-- <files /> -->
       </va-tab>
     </va-tabs>

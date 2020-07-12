@@ -18,8 +18,11 @@
       <div slot="subtitle">
         <va-icon :type="type" /> {{ (botChannel) ? 'For you notes and things to remember' : ' Private channel' }}
       </div>
-      <div slot="actions">
-        <va-input icon-style="solid" icon="search" placeholder="Filter" width="lg" />
+      <div v-if="!(botChannel)" slot="actions">
+        <va-button type="default" @click.stop="openAddMemberForm">
+          <va-icon type="plus" icon-style="solid" margin="0 7px 0 0" />
+          Add member
+        </va-button>
       </div>
     </va-page-header>
     <va-row id="chat" :gutter="gutter">
@@ -57,6 +60,37 @@
         />
       </va-column>
     </va-row>
+
+    <va-modal ref="addMemberModal" :width="modal.width" :backdrop-clickable="modal.backdropClickable">
+      <div slot="header" style="padding: 10px 20px;">
+        <h2>Add new member</h2>
+      </div>
+      <div slot="body" style="height:120px;text-align:center;">
+        <va-form ref="form" :type="form.type">
+          <va-form-item need>
+            <va-input
+              v-model="form.memberName"
+              name="memberName"
+              icon-style="solid"
+              icon="at"
+              autocomplete="off"
+              placeholder="Add a member by bitbucket username"
+              :rules="[{type:'required', tip:'Sorry, we need a valid bitbucket username'}]"
+            />
+          </va-form-item>
+        </va-form>
+        <va-alert :type="modal.type" :title="modal.title" style="text-align:left; margin:12px">
+          <p>{{ modal.body }}</p>
+        </va-alert>
+      </div>
+      <div slot="footer" style="margin-top:40px;margin-right:10px;">
+        <div style="margin-top: 10px; text-align: right;">
+          <va-button type="primary" @click.stop="addMember">
+            Submit
+          </va-button>
+        </div>
+      </div>
+    </va-modal>
   </div>
 </template>
 
@@ -91,7 +125,18 @@ export default {
       disabled: false,
       maxHeight: 200,
       minHeight: 50,
-      maxLength: 1024
+      maxLength: 1024,
+      form: {
+        type: 'vertical',
+        memberName: ''
+      },
+      modal: {
+        width: '500px',
+        backdropClickable: true,
+        type: 'info',
+        title: 'Information',
+        body: 'Once invited your private channel would be visible to users automatically, after they have logged in.'
+      }
     }
   },
 
@@ -131,6 +176,16 @@ export default {
     sendMessage () {
       this.$store.dispatch('twilio/sendMessage', this.inputMessage)
       this.inputMessage = null
+    },
+    openAddMemberForm () {
+      this.$refs.addMemberModal.open()
+    },
+    addMember () {
+      const memberName = this.form.memberName
+      const memberData = { memberName: `${memberName}` }
+      this.$store.dispatch('twilio/invitePerson', memberData).then(() => {
+        this.$refs.addMemberModal.close()
+      })
     }
   }
 }
