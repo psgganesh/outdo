@@ -1,22 +1,22 @@
 <template>
   <div>
-    <va-page-header id="chatHeader">
+    <va-page-header v-if="this.$store.state.twilio.currentChatChannel !== null" id="chatHeader">
       <div slot="breadcrumb">
         <va-breadcrumb separator="/">
           <va-breadcrumb-item to="/home">
             Home
           </va-breadcrumb-item>
           <va-breadcrumb-item to="/">
-            Route
+            Conversations
           </va-breadcrumb-item>
         </va-breadcrumb>
       </div>
       <div slot="title">
-        <va-icon :type="(botChannel)? 'robot' : 'user'" />
+        <va-icon :type="(botChannel)? 'robot' : 'comment'" />
         {{ (botChannel) ? 'outdo' : currentChannel }}
       </div>
       <div slot="subtitle">
-        {{ (botChannel) ? 'For you notes and things to remember' : currentChannel }}
+        <va-icon :type="type" /> {{ (botChannel) ? 'For you notes and things to remember' : ' Private channel' }}
       </div>
       <div slot="actions">
         <va-input icon-style="solid" icon="search" placeholder="Filter" width="lg" />
@@ -67,7 +67,7 @@ import Avatar from 'vue-avatar'
 export default {
   name: 'Conversations',
 
-  middleware: ['auth', 'twilio-client'],
+  middleware: ['auth', 'twilio-client', 'twilio-set-channel'],
 
   metaInfo () {
     return { title: this.$t('conversations') }
@@ -105,12 +105,22 @@ export default {
         return this.$store.state.twilio.currentChatChannel.friendlyName
       }
       return null
-    }
-  },
+    },
+    botChannel () {
+      if (Object.is(this.currentChannel, null)) {
+        return false
+      }
 
-  beforeMount () {
-    this.channel = `${this.$route.params.channel}`
-    this.$store.dispatch('twilio/openChannel', this.channel)
+      return this.currentChannel.includes('_outdo')
+    },
+    type () {
+      if (!Object.is(this.$store.state.twilio.currentChatChannel, null)) {
+        if (this.$store.state.twilio.currentChatChannel.channelState.type.includes('private')) {
+          return 'lock'
+        }
+      }
+      return null
+    }
   },
 
   beforeDestroy () {
@@ -121,10 +131,6 @@ export default {
     sendMessage () {
       this.$store.dispatch('twilio/sendMessage', this.inputMessage)
       this.inputMessage = null
-    },
-    botChannel (channelName) {
-      console.log(channelName)
-      return channelName.includes('_outdo')
     }
   }
 }

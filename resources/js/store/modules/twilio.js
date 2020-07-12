@@ -6,6 +6,7 @@ const TWILIO_TOKEN_URL = 'https://outdo.test/api/token'
 
 // state
 export const state = {
+  identity: null,
   messages: [],
   channels: [],
   joinedChannels: [],
@@ -16,6 +17,9 @@ export const state = {
 
 // mutations
 export const mutations = {
+  SET_IDENTITY (state, username) {
+    state.identity = username
+  },
   SET_CHAT_CLIENT (state, client) {
     state.twilioClient = client
   },
@@ -39,6 +43,10 @@ export const mutations = {
   },
   ADD_MESSAGE (state, message) {
     state.messages.push(message)
+  },
+  RESET_CHANNEL (state) {
+    state.messages = []
+    state.currentChatChannel = null
   }
 }
 
@@ -53,7 +61,12 @@ export const actions = {
     await dispatch('initChat', username)
   },
 
+  resetChannel ({ commit }) {
+    commit('RESET_CHANNEL')
+  },
+
   async fetchToken ({ commit }, username) {
+    commit('SET_IDENTITY', username)
     await axios.post(`${TWILIO_TOKEN_URL}`, {
       identity: username,
       device: 'browser'
@@ -73,17 +86,14 @@ export const actions = {
   },
 
   async getPublicChannels ({ commit, state }) {
-    console.log('ENTERED getPublicChannels')
     await state.twilioClient.getPublicChannelDescriptors().then(channels => {
       if (channels.state.items.length > 0) {
         commit('UPDATE_CHANNELS_LIST', channels.state.items)
       }
     })
-    console.log('EXITED getPublicChannels')
   },
 
   async getUserChannels ({ commit, state, dispatch }, username) {
-    console.log('ENTERED getUserChannels')
     await state.twilioClient.getUserChannelDescriptors().then(channels => {
       if (channels.state.items.length > 0) {
         commit('UPDATE_CHANNELS_LIST', channels.state.items)
@@ -92,14 +102,18 @@ export const actions = {
         dispatch('createNewChannel', channelData)
       }
     })
-    console.log('EXITED getUserChannels')
   },
 
   async addOnInviteListener ({ commit, state }) {
+    console.log('passing addOnInviteListener()')
     state.twilioClient.on('channelInvited', function (channel) {
+      console.group('addOnInviteListener')
+      console.log(channel)
+      console.groupEnd()
       commit('ADD_CHANNEL', channel.state)
       channel.join()
     })
+    console.log('passed addOnInviteListener()')
   },
 
   async openChannel ({ commit, state }, channelUniqueName) {
@@ -126,18 +140,32 @@ export const actions = {
     })
   },
 
-  async createNewChannel ({ state }, channelData) {
+  async createNewChannel ({ commit, state, dispatch }, channelData) {
     state.twilioClient.createChannel({
       uniqueName: channelData.uniqueName,
       friendlyName: channelData.friendlyName,
       isPrivate: true
     }).then(channel => {
-      channel.join()
+      channel.join().then(channel => {
+        commit('SET_GLOBAL_CHANNEL', channel)
+      })
     })
   },
 
   sendMessage ({ state }, encryptedMessage) {
     state.currentChatChannel.sendMessage(encryptedMessage)
+  },
+
+  async invitePerson ({ commit, state }, member) {
+    state.currentChatChannel.invite(member)
+      .then(() => {
+        console.log('Invited')
+      })
+      .catch(function (e) {
+        // Silent this exception
+        // console.log(e);
+        console.log('Other user not yet logged in on twilio.')
+      })
   }
 }
 
@@ -148,7 +176,7 @@ export const getters = {
     let channels = []
     state.channels.map((channel) => {
       const botUser = (channel.friendlyName.includes('_outdo'))
-      const icon = (botUser) ? 'robot' : 'user'
+      const icon = (botUser) ? 'robot' : 'comment'
       const name = (botUser) ? '@outdo' : `@${channel.friendlyName}`
       const route = `/conversations/${channel.uniqueName}`
       channels.push({

@@ -9,11 +9,11 @@
         <h2>Add new channel</h2>
       </div>
       <div slot="body" style="height:120px;text-align:center;">
-        <va-form ref="form" :type="addMemberForm.type">
+        <va-form ref="form" :type="form.type">
           <va-form-item need>
             <va-input
-              v-model="addMemberForm.username"
-              name="username"
+              v-model="form.channelName"
+              name="channelName"
               icon-style="solid"
               icon="at"
               autocomplete="off"
@@ -49,10 +49,11 @@ export default {
       loading: false,
       type: 'info',
       title: 'Information',
-      body: 'Once the invitation is sent, a channel under your name would be visible to your team mate automatically.',
-      addMemberForm: {
+      body: 'You can invite bitbucket users after the private channel is created.' +
+            'Once invited your private channel would be visible to users automatically.',
+      form: {
         type: 'vertical',
-        username: ''
+        channelName: ''
       },
       width: '500px',
       backdropClickable: true,
@@ -111,9 +112,15 @@ export default {
     },
     addMember () {
       this.$refs.customModal.close()
-      const member = this.addMemberForm.username
-      const channelData = { uniqueName: uuidv4(), friendlyName: `${member}` }
-      this.$store.dispatch('twilio/createNewChannel', channelData)
+      const channelName = this.form.channelName
+      const channelData = { uniqueName: uuidv4(), friendlyName: `${channelName}` }
+      this.$store.dispatch('twilio/createNewChannel', channelData).then(() => {
+        this.$router.push({ name: 'conversations',
+          params: {
+            channel: channelName
+          }
+        })
+      })
     }
   }
 }
