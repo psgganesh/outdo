@@ -28,7 +28,7 @@
       </div>
       <div slot="footer" style="margin-top:40px;margin-right:10px;">
         <div style="margin-top: 10px; text-align: right;">
-          <va-button type="primary" @click="$refs.customModal.close()">
+          <va-button type="primary" @click="addMember">
             Submit
           </va-button>
         </div>
@@ -39,12 +39,14 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { v4 as uuidv4 } from 'uuid'
 
 export default {
   name: 'Sidebar',
 
   data () {
     return {
+      loading: false,
       type: 'info',
       title: 'Information',
       body: 'Once the invitation is sent, a channel under your name would be visible to your team mate automatically.',
@@ -89,7 +91,7 @@ export default {
         iconSize: '18px',
         iconColor: 'white',
         iconStyle: 'solid',
-        method: this.addNewMember
+        method: this.openAddChannelForm
       })
       return channels
     }
@@ -104,8 +106,14 @@ export default {
         type: 'info'
       })
     },
-    addNewMember () {
+    openAddChannelForm () {
       this.$refs.customModal.open()
+    },
+    addMember () {
+      this.$refs.customModal.close()
+      const member = this.addMemberForm.username
+      const channelData = { uniqueName: uuidv4(), friendlyName: `${member}` }
+      this.$store.dispatch('twilio/createNewChannel', channelData)
     }
   }
 }

@@ -144,12 +144,12 @@ export const actions = {
 // getters
 export const getters = {
   client: state => state.twilioClient,
-  conversationItems: (state, dispatch) => {
+  conversationItems: (state) => {
     let channels = []
     state.channels.map((channel) => {
       const botUser = (channel.friendlyName.includes('_outdo'))
       const icon = (botUser) ? 'robot' : 'user'
-      const name = (botUser) ? 'outdo' : channel.friendlyName
+      const name = (botUser) ? '@outdo' : `@${channel.friendlyName}`
       const route = `/conversations/${channel.uniqueName}`
       channels.push({
         name: name,

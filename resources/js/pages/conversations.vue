@@ -67,7 +67,7 @@ import Avatar from 'vue-avatar'
 export default {
   name: 'Conversations',
 
-  middleware: ['auth', 'twilio-client', 'twilio-chat-session'],
+  middleware: ['auth', 'twilio-client'],
 
   metaInfo () {
     return { title: this.$t('conversations') }
@@ -108,6 +108,11 @@ export default {
     }
   },
 
+  beforeMount () {
+    this.channel = `${this.$route.params.channel}`
+    this.$store.dispatch('twilio/openChannel', this.channel)
+  },
+
   beforeDestroy () {
     this.channel = null
   },
@@ -118,6 +123,7 @@ export default {
       this.inputMessage = null
     },
     botChannel (channelName) {
+      console.log(channelName)
       return channelName.includes('_outdo')
     }
   }

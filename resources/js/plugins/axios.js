@@ -36,11 +36,11 @@ axios.interceptors.response.use(response => response, error => {
     }).then(() => {
       store.commit('auth/LOGOUT')
 
-      router.push({ name: 'login' })
+      router.push({ name: 'welcome' })
     })
   }
 
-  if (status === 401 && store.getters['auth/check']) {
+  if (status === 401 || store.getters['auth/check']) {
     swal.fire({
       type: 'warning',
       title: i18n.t('token_expired_alert_title'),
@@ -51,7 +51,7 @@ axios.interceptors.response.use(response => response, error => {
     }).then(() => {
       store.commit('auth/LOGOUT')
 
-      router.push({ name: 'login' })
+      router.push({ name: 'welcome' })
     })
   }
 
