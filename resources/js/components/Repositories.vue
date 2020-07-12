@@ -66,7 +66,8 @@ export default {
 
   async beforeCreate () {
     const user = this.$store.state.auth.user
-    await this.$store.dispatch('bitbucket/repositories', user)
+    const params = { user: user }
+    await this.$store.dispatch('bitbucket/repositories', params)
     this.loading = false
   },
 

@@ -5,7 +5,7 @@ import * as types from '../mutation-types'
 // state
 export const state = {
   user: null,
-  oauthToken: null,
+  oauthToken: Cookies.get('oauthToken'),
   token: Cookies.get('token')
 }
 
@@ -31,14 +31,17 @@ export const mutations = {
 
   [types.FETCH_USER_FAILURE] (state) {
     state.token = null
+    state.oauthToken = null
     Cookies.remove('token')
+    Cookies.remove('oauthToken')
   },
 
   [types.LOGOUT] (state) {
     state.user = null
     state.token = null
-
+    state.oauthToken = null
     Cookies.remove('token')
+    Cookies.remove('oauthToken')
   },
 
   [types.UPDATE_USER] (state, { user }) {
@@ -49,7 +52,7 @@ export const mutations = {
 
 // actions
 export const actions = {
-  saveToken ({ commit, dispatch }, payload) {
+  saveToken ({ commit }, payload) {
     commit(types.SAVE_TOKEN, payload)
   },
 

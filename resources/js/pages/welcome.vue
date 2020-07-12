@@ -40,7 +40,7 @@ export default {
 
   mounted () {
     if (this.authenticated) {
-      this.$router.push({ name: 'workspaces' })
+      this.$router.push({ name: 'dashboard' })
     }
   }
 }

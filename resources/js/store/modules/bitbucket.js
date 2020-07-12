@@ -1,12 +1,15 @@
+import axios from 'axios'
 import Cookies from 'js-cookie'
 import { Bitbucket } from 'bitbucket'
 
 const BASE_URL = 'https://api.bitbucket.org/2.0'
+const WORKSPACES_URL = `${BASE_URL}/workspaces`
 
 // state
 export const state = {
   bitbucketClient: null,
   user: null,
+  workspaces: [],
   repositories: [],
   currentRepository: null,
   files: [],
@@ -30,6 +33,9 @@ export const mutations = {
   },
   SET_REPOSITORIES (state, repositories) {
     state.repositories = repositories
+  },
+  SET_WORKSPACES (state, workspaces) {
+    state.workspaces = workspaces
   },
   SET_FILES (state, files) {
     state.files = files
@@ -99,13 +105,22 @@ export const actions = {
     commit('SET_BITBUCKET_CLIENT', client)
   },
 
-  async repositories ({ state, commit }, user) {
+  async workspaces ({ commit }, params) {
+    const { oauthToken } = params
+    const BearerToken = `Bearer ${oauthToken}`
+    await axios.get(`${WORKSPACES_URL}`, {
+      headers: { Authorization: BearerToken }
+    }).then(({ data }) => commit('SET_WORKSPACES', data.values))
+      .catch((error) => console.log(error))
+  },
+
+  async repositories ({ state, commit }, params) {
+    const { user } = params
     let workspace = user.uuid
     await state.bitbucketClient.repositories.list({
       workspace: workspace,
       pagelen: 100
-    })
-      .then(({ data }) => commit('SET_REPOSITORIES', data.values))
+    }).then(({ data }) => commit('SET_REPOSITORIES', data.values))
       .catch((err) => console.error(err))
   },
 

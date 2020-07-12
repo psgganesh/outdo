@@ -107,9 +107,6 @@ export const actions = {
   async addOnInviteListener ({ commit, state }) {
     console.log('passing addOnInviteListener()')
     state.twilioClient.on('channelInvited', function (channel) {
-      console.group('addOnInviteListener')
-      console.log(channel)
-      console.groupEnd()
       commit('ADD_CHANNEL', channel)
       channel.join()
     })

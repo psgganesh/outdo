@@ -7,7 +7,7 @@
     </va-column>
   </va-row>
   <va-row v-else>
-    <breadcrumb :title="this.$t('workspaces')" :subtitle="subtitle" />
+    <breadcrumb :title="this.$t('dashboard')" :subtitle="subtitle" />
     <va-column :xs="12" :sm="12" :md="12" :lg="12">
       <va-table :hover="hover" :size="size">
         <table>
@@ -40,7 +40,7 @@ import Avatar from 'vue-avatar'
 import Breadcrumb from '~/components/Breadcrumb'
 
 export default {
-  name: 'Workspaces',
+  name: 'Dashboard',
 
   middleware: ['auth', 'bitbucket-client', 'twilio-client'],
 
@@ -50,7 +50,7 @@ export default {
   },
 
   metaInfo () {
-    return { title: this.$t('workspaces') }
+    return { title: this.$t('dashboard') }
   },
 
   data: () => {
@@ -59,7 +59,7 @@ export default {
       gutter: 25,
       hover: true,
       size: 'lg',
-      subtitle: 'Your workspaces'
+      subtitle: 'Your dashboard'
     }
   },
 

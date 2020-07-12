@@ -60,6 +60,14 @@ export default {
       sidebarTheme: 'blue',
       coreItems: [
         {
+          name: 'Dashboard',
+          route: '/dashboard',
+          icon: 'pencil-ruler',
+          iconSize: '18px',
+          iconColor: 'white',
+          iconStyle: 'solid'
+        },
+        {
           name: 'Workspaces',
           route: '/workspaces',
           icon: 'pencil-ruler',
@@ -115,7 +123,7 @@ export default {
       const channelData = { uniqueName: uuidv4(), friendlyName: `${channelName}` }
       this.$store.dispatch('twilio/createNewChannel', channelData).then(() => {
         this.$refs.addChannelModal.close()
-        this.$router.push({ name: 'conversations',
+        this.$router.push({ name: 'conversations.channel',
           params: {
             channel: channelName
           }
