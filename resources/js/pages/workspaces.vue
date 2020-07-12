@@ -6,32 +6,39 @@
       </div>
     </va-column>
   </va-row>
-  <va-row v-else>
-    <breadcrumb :title="this.$t('workspaces')" :subtitle="subtitle" />
-    <va-column :xs="12" :sm="12" :md="12" :lg="12">
-      <va-table :hover="hover" :size="size">
-        <table>
-          <thead>
-            <tr>
-              <th colspan="2">
-                Workspace
-              </th>
-              <th>Slug</th>
-              <th>Created on</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(workspace, index) in workspaces" :key="index" class="space" @click="openWorkspace(workspace)">
-              <td><avatar :src="workspace.links.avatar.href" :size="28" /></td>
-              <td>{{ workspace.name }}</td>
-              <td>{{ workspace.slug }}</td>
-              <td>{{ humanReadableDate(workspace.created_on) }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </va-table>
-    </va-column>
-  </va-row>
+  <div v-else>
+    <breadcrumb :title="workspaceTitle" :subtitle="subtitle" />
+    <va-row>
+      <va-column :xs="12" :sm="12" :md="12" :lg="12">
+        <va-table :hover="hover" :size="size">
+          <table>
+            <thead>
+              <tr>
+                <th colspan="2">
+                  Repository
+                </th>
+                <th colspan="2">
+                  Author
+                </th>
+                <th>Default branch</th>
+                <th>Last updated on</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(repository, index) in repositories" :key="index" class="space" @click="openSpace(repository)">
+                <td><avatar :src="repository.links.avatar.href" :size="28" /></td>
+                <td>{{ repository.full_name }}</td>
+                <td><avatar :src="repository.owner.links.avatar.href" :size="28" /></td>
+                <td>{{ repository.owner.display_name }}</td>
+                <td><va-icon color="primary" padding="5px" type="code-branch" />{{ repository.mainbranch.name }}</td>
+                <td>{{ humanReadableDate(repository.updated_on) }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </va-table>
+      </va-column>
+    </va-row>
+  </div>
 </template>
 
 <script>
@@ -42,7 +49,7 @@ import Breadcrumb from '~/components/Breadcrumb'
 export default {
   name: 'Workspaces',
 
-  middleware: ['auth', 'bitbucket-client', 'twilio-client'],
+  middleware: ['auth', 'bitbucket-client', 'twilio-client', 'bitbucket-set-repositories'],
 
   components: {
     Avatar,
@@ -50,40 +57,41 @@ export default {
   },
 
   metaInfo () {
-    return { title: this.$t('workspaces') }
+    return { title: this.$t('workspace') }
   },
 
   data: () => {
     return {
-      loading: true,
       gutter: 25,
       hover: true,
       size: 'lg',
-      subtitle: 'Your workspaces'
+      subtitle: 'Repositories under the workspace'
     }
   },
 
   computed: {
-    workspaces () {
-      return this.$store.state.bitbucket.workspaces
+    loading () {
+      return this.$store.state.loading
+    },
+    repositories () {
+      return this.$store.state.bitbucket.repositories
+    },
+    workspaceTitle () {
+      return (this.$route.params.workspace !== this.$store.state.auth.user.username)
+        ? this.$t('workspace')
+        : this.$t('your_workspace')
     }
-  },
-
-  async beforeCreate () {
-    const oauthToken = this.$store.state.auth.oauthToken
-    const params = { oauthToken: oauthToken }
-    await this.$store.dispatch('bitbucket/workspaces', params)
-    this.loading = false
   },
 
   methods: {
     humanReadableDate (timestamp) {
       return (timestamp !== null) ? moment.utc(timestamp).fromNow() : ''
     },
-    openWorkspace (workspace) {
-      this.$router.push({ name: 'workspaces',
+    openSpace (repository) {
+      this.$router.push({ name: 'space',
         params: {
-          workspace: workspace.slug
+          workspace: repository.workspace.slug,
+          repository: repository.slug
         }
       })
     }

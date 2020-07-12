@@ -115,10 +115,9 @@ export const actions = {
   },
 
   async repositories ({ state, commit }, params) {
-    const { user } = params
-    let workspace = user.uuid
+    commit('RESET_REPOSITORY_LIST')
     await state.bitbucketClient.repositories.list({
-      workspace: workspace,
+      workspace: params.workspace,
       pagelen: 100
     }).then(({ data }) => commit('SET_REPOSITORIES', data.values))
       .catch((err) => console.error(err))

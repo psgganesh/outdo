@@ -6,37 +6,40 @@
       </div>
     </va-column>
   </va-row>
-  <va-row v-else>
+  <div v-else>
     <breadcrumb :title="this.$t('dashboard')" :subtitle="subtitle" />
-    <va-column :xs="12" :sm="12" :md="12" :lg="12">
-      <va-table :hover="hover" :size="size">
-        <table>
-          <thead>
-            <tr>
-              <th colspan="2">
-                Workspace
-              </th>
-              <th>Slug</th>
-              <th>Created on</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(workspace, index) in workspaces" :key="index" class="space" @click="openWorkspace(workspace)">
-              <td><avatar :src="workspace.links.avatar.href" :size="28" /></td>
-              <td>{{ workspace.name }}</td>
-              <td>{{ workspace.slug }}</td>
-              <td>{{ humanReadableDate(workspace.created_on) }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </va-table>
-    </va-column>
-  </va-row>
+    <va-row>
+      <va-column :xs="12" :sm="12" :md="12" :lg="12">
+        <va-table :hover="hover" :size="size">
+          <table>
+            <thead>
+              <tr>
+                <th colspan="2">
+                  Workspace
+                </th>
+                <th>Slug</th>
+                <th>Created on</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(workspace, index) in workspaces" :key="index" class="space" @click="openWorkspace(workspace)">
+                <td><avatar :src="workspace.links.avatar.href" :size="28" /></td>
+                <td>{{ workspace.name }}</td>
+                <td>{{ workspace.slug }}</td>
+                <td>{{ humanReadableDate(workspace.created_on) }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </va-table>
+      </va-column>
+    </va-row>
+  </div>
 </template>
 
 <script>
 import moment from 'moment'
 import Avatar from 'vue-avatar'
+import { mapActions } from 'vuex'
 import Breadcrumb from '~/components/Breadcrumb'
 
 export default {
@@ -55,7 +58,6 @@ export default {
 
   data: () => {
     return {
-      loading: true,
       gutter: 25,
       hover: true,
       size: 'lg',
@@ -64,6 +66,9 @@ export default {
   },
 
   computed: {
+    loading () {
+      return this.$store.state.loading
+    },
     workspaces () {
       return this.$store.state.bitbucket.workspaces
     }
@@ -72,11 +77,17 @@ export default {
   async beforeCreate () {
     const oauthToken = this.$store.state.auth.oauthToken
     const params = { oauthToken: oauthToken }
-    await this.$store.dispatch('bitbucket/workspaces', params)
-    this.loading = false
+    this.START_AUI_LOADING()
+    await this.$store.dispatch('bitbucket/workspaces', params).then(() => {
+      this.STOP_AUI_LOADING()
+    })
   },
 
   methods: {
+    ...mapActions([
+      'START_AUI_LOADING',
+      'STOP_AUI_LOADING'
+    ]),
     humanReadableDate (timestamp) {
       return (timestamp !== null) ? moment.utc(timestamp).fromNow() : ''
     },

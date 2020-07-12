@@ -62,14 +62,14 @@ export default {
         {
           name: 'Dashboard',
           route: '/dashboard',
-          icon: 'pencil-ruler',
+          icon: 'home',
           iconSize: '18px',
           iconColor: 'white',
           iconStyle: 'solid'
         },
         {
-          name: 'Workspaces',
-          route: '/workspaces',
+          name: 'Your workspace',
+          route: `/workspaces/${this.$store.state.auth.user.username}`,
           icon: 'pencil-ruler',
           iconSize: '18px',
           iconColor: 'white',
