@@ -6,6 +6,7 @@ use Twilio\Rest\Client;
 use Illuminate\Http\Request;
 use Twilio\Jwt\AccessToken;
 use Twilio\Jwt\Grants\ChatGrant;
+use Twilio\Jwt\Grants\VideoGrant;
 
 class TwilioChatController
 {
@@ -50,9 +51,13 @@ class TwilioChatController
         // Create Chat grant
         $chat_grant = new ChatGrant();
         $chat_grant->setServiceSid($this->service_sid);
-    
+
+        // Create Video grant
+        $video_grant = new VideoGrant();
+        
         // Add grant to token
         $token->addGrant($chat_grant);
+        $token->addGrant($video_grant);
     
         return response()->json([
             'token' => $token->toJWT()
