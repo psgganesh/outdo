@@ -3,7 +3,8 @@ import { v4 as uuidv4 } from 'uuid'
 import Twilio from 'twilio-video'
 const Chat = require('twilio-chat')
 
-const TWILIO_TOKEN_URL = 'https://outdo.test/api/token'
+// TODO: FIX URLS
+const TWILIO_TOKEN_URL = 'https://outdo.app/api/token'
 
 // state
 export const state = {
