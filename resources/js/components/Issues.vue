@@ -205,6 +205,9 @@ export default {
   },
 
   computed: {
+    loading () {
+      return this.$store.state.loading
+    },
     backlogIssues: {
       get () {
         return this.$store.state.bitbucket.backlogIssues
