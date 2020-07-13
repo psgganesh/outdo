@@ -134,3 +134,34 @@ body {
 .otp-input.error {
   border: 1px solid red !important;
 }
+
+#localTrack2 {
+  /* position: absolute;
+  background: #00000a69;
+  height: 10rem;
+  bottom: 85px;
+  float: left;
+  width: 13rem;
+  left: 15px; */
+}
+#localTrack2 > video {
+  float: right;
+  width: 15%;
+  transform: rotateY(180deg);
+  -webkit-transform:rotateY(180deg);
+  -moz-transform:rotateY(180deg);
+}
+#remoteTrack2 {
+  /* background: #000000;
+  padding: 0px;
+  margin: 0px auto;
+  width: -webkit-fill-available;
+  height: 100vh; */
+  width: max-content !important;
+}
+#remoteTrack2 video {
+  width: -webkit-fill-available;
+  transform: rotateY(180deg);
+  -webkit-transform:rotateY(180deg);
+  -moz-transform:rotateY(180deg);
+}

@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { v4 as uuidv4 } from 'uuid'
+import Twilio from 'twilio-video'
 const Chat = require('twilio-chat')
 
 const TWILIO_TOKEN_URL = 'https://outdo.test/api/token'
@@ -7,12 +8,23 @@ const TWILIO_TOKEN_URL = 'https://outdo.test/api/token'
 // state
 export const state = {
   identity: null,
+  twilioClient: null,
+  twilioJWTToken: null,
+
+  /**
+   * Progammable Chat
+   */
   messages: [],
   channels: [],
   joinedChannels: [],
-  twilioClient: null,
-  twilioJWTToken: null,
-  currentChatChannel: null
+  currentChatChannel: null,
+
+  /**
+   * Programmable Video Chat
+   */
+  rooms: [],
+  activeRoom: null,
+  roomName: null
 }
 
 // mutations
@@ -47,6 +59,12 @@ export const mutations = {
   RESET_CHANNEL (state) {
     state.messages = []
     state.currentChatChannel = null
+  },
+  SET_CURRENT_VIDEO_ROOM (state, room) {
+    state.activeRoom = room
+  },
+  SET_CURRENT_ROOM_NAME (state, roomName) {
+    state.roomName = roomName
   }
 }
 
@@ -161,7 +179,79 @@ export const actions = {
       .catch(function (e) {
         console.log('Other user not yet logged in on twilio.')
       })
+  },
+
+  joinMeeting ({ commit, state }, roomParams) {
+    let roomName = roomParams.name
+    let localTrack = roomParams.localTrack
+    let remoteTrack = roomParams.remoteTrack
+
+    Twilio.createLocalTracks({
+      audio: false,
+      video: { }
+    }).then(localTracks => {
+      const connectOptions = {
+        name: roomName,
+        tracks: localTracks
+      }
+      let localMediaContainer = document.getElementById(localTrack)
+      localTracks.forEach(function (track) {
+        localMediaContainer.appendChild(track.attach())
+      })
+
+      return Twilio.connect(state.twilioJWTToken, connectOptions)
+    }).then(room => {
+      commit('SET_CURRENT_VIDEO_ROOM', room)
+      commit('SET_CURRENT_ROOM_NAME', roomName)
+
+      const remoteDiv = document.getElementById(remoteTrack)
+
+      // Attach the Participant's Media to a <div> element.
+      room.on('participantConnected', participant => {
+        console.log(`Participant "${participant.identity}" connected`)
+
+        participant.tracks.forEach(publication => {
+          if (publication.isSubscribed) {
+            const track = publication.track
+            remoteDiv.appendChild(track.attach())
+          }
+        })
+
+        participant.on('trackSubscribed', track => {
+          remoteDiv.appendChild(track.attach())
+        })
+      })
+
+      room.participants.forEach(participant => {
+        participant.tracks.forEach(publication => {
+          if (publication.track) {
+            remoteDiv.appendChild(publication.track.attach())
+          }
+        })
+
+        participant.on('trackSubscribed', track => {
+          remoteDiv.appendChild(track.attach())
+        })
+      })
+
+      room.on('disconnected', room => {
+        // Detach the local media elements
+        room.localParticipant.tracks.forEach(publication => {
+          const attachedElements = publication.track.detach()
+          attachedElements.forEach(element => element.remove())
+        })
+      })
+    })
+  },
+
+  leaveMeeting ({ state }) {
+    Twilio.connect(state.twilioJWTToken, { name: state.activeRoom }).then(room => {
+      room.disconnect()
+    }, error => {
+      console.error(`Unable to connect to Room: ${error.message}`)
+    })
   }
+
 }
 
 // getters
