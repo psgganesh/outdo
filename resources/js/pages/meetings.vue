@@ -45,8 +45,8 @@
         </va-column>
         <va-column id="local-media" :xs="12" :sm="12" :md="12" />
       </va-row>-->
-      <div id="remoteTrack2" />
-      <div id="localTrack2" />
+      <div id="remoteTrack" />
+      <div id="localTrack" />
     </va-container>
     </va-container-fluid>
   </div>
@@ -74,8 +74,8 @@ export default {
       gutter: 15,
       roomOptions: {
         name: 'my-room-name',
-        localTrack: 'localTrack2',
-        remoteTrack: 'remoteTrack2'
+        localTrack: 'localTrack',
+        remoteTrack: 'remoteTrack'
       }
       // roomName: null
     }
