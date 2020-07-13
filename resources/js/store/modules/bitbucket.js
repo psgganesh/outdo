@@ -169,9 +169,10 @@ export const actions = {
       'repo_slug': state.currentRepository.slug,
       'workspace': state.currentRepository.workspace.slug
     }
-    await state.bitbucketClient.issue_tracker.create(requestBody).then(({ data }) => {
-      // commit('UPDATE_ISSUE_ARRAY', data.values)
-      console.log(data)
+    state.bitbucketClient.issue_tracker.create(requestBody).then(({ data }) => {
+      const dataAsArrayItem = []
+      dataAsArrayItem.push(data)
+      commit('SET_ISSUES', dataAsArrayItem)
     }).catch((err) => console.error(err))
   },
 

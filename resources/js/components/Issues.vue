@@ -137,19 +137,29 @@
 
     <va-modal ref="openIssueModal" :width="modal.width" :backdrop-clickable="modal.backdropClickable">
       <div slot="header" style="padding: 10px 20px;">
-        <h2>Add new member</h2>
+        <h2>Add new {{ form.state }} issue</h2>
       </div>
       <div slot="body" style="height:120px;text-align:center;">
         <va-form ref="form" :type="form.orientation">
           <va-form-item need>
             <va-input
-              v-model="form.memberName"
-              name="memberName"
+              v-model="form.title"
+              name="title"
               icon-style="solid"
-              icon="at"
+              icon="tag"
               autocomplete="off"
-              placeholder="Add a member by bitbucket username"
-              :rules="[{type:'required', tip:'Sorry, we need a valid bitbucket username'}]"
+              placeholder="Title"
+              :rules="[{type:'required', tip:'Sorry, we just need a title for this issue'}]"
+            />
+          </va-form-item>
+          <va-form-item need>
+            <va-textarea
+              v-model="form.description"
+              :resize="form.resize"
+              :width="'100%'"
+              :max-height="'200px'"
+              :min-height="'50px'"
+              :max-length="1024"
             />
           </va-form-item>
         </va-form>
@@ -189,7 +199,9 @@ export default {
       gutter: 5,
       form: {
         orientation: 'vertical',
+        resize: false,
         title: null,
+        description: null,
         state: null
       },
       modal: {
@@ -213,7 +225,9 @@ export default {
         }
         this.loading = true
         this.$store.dispatch('bitbucket/updateIssue', request).then(() => {
+          // this.$store.dispatch('bitbucket/issues').then(() => {
           this.loading = false
+          // })
         })
       }
     },
@@ -230,7 +244,9 @@ export default {
         }
         this.loading = true
         this.$store.dispatch('bitbucket/updateIssue', request).then(() => {
+          // this.$store.dispatch('bitbucket/issues').then(() => {
           this.loading = false
+          // })
         })
       }
     },
@@ -247,7 +263,9 @@ export default {
         }
         this.loading = true
         this.$store.dispatch('bitbucket/updateIssue', request).then(() => {
+          // this.$store.dispatch('bitbucket/issues').then(() => {
           this.loading = false
+          // })
         })
       }
     },
@@ -264,7 +282,9 @@ export default {
         }
         this.loading = true
         this.$store.dispatch('bitbucket/updateIssue', request).then(() => {
+          // this.$store.dispatch('bitbucket/issues').then(() => {
           this.loading = false
+          // })
         })
       }
     }
@@ -278,10 +298,21 @@ export default {
       this.form.state = type
       this.$refs.openIssueModal.open()
     },
-    addMember () {
+    addIssue () {
       const newIssueFormData = this.form
+      // this.loading = true
       this.$store.dispatch('bitbucket/createIssue', newIssueFormData).then(() => {
+        this.form = {
+          orientation: 'vertical',
+          resize: false,
+          title: null,
+          description: null,
+          state: null
+        }
+        // this.$store.dispatch('bitbucket/issues').then(() => {
+        // this.loading = false
         this.$refs.openIssueModal.close()
+        // })
       })
     }
   }
