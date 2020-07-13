@@ -158,7 +158,7 @@
               :resize="form.resize"
               :width="'100%'"
               :max-height="'200px'"
-              :min-height="'50px'"
+              :min-height="'100px'"
               :max-length="1024"
             />
           </va-form-item>

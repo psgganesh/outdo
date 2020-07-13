@@ -8,13 +8,5 @@ export default [
   { path: '/workspaces/:workspace', name: 'workspaces', component: page('workspaces.vue') },
   { path: '/workspaces/:workspace/:repository', name: 'space', component: page('space.vue') },
   { path: '/conversations/:channel', name: 'conversations.channel', component: page('conversations.vue') },
-  { path: '/settings',
-    component: page('settings/index.vue'),
-    children: [
-      { path: '', redirect: { name: 'settings.profile' } },
-      { path: 'profile', name: 'settings.profile', component: page('settings/profile.vue') },
-      { path: 'password', name: 'settings.password', component: page('settings/password.vue') }
-    ] },
-
   { path: '*', component: page('errors/404.vue') }
 ]

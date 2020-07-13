@@ -77,6 +77,9 @@ export default {
       return this.$store.state.bitbucket.repositories
     },
     workspaceTitle () {
+      if (this.$store.state.auth.user === null) {
+        return this.$t('your_workspace')
+      }
       return (this.$route.params.workspace !== this.$store.state.auth.user.username)
         ? this.$t('workspace')
         : this.$t('your_workspace')

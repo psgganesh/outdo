@@ -79,7 +79,6 @@ export const mutations = {
     state[to] = data.issue
   },
   SET_ACTIVE_SPACE (state, space) {
-    console.log(space)
     state.repositories.map((repository) => {
       if (repository.slug === space.repository) {
         state.currentRepository = repository
