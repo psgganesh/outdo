@@ -35,9 +35,9 @@ export default {
         },
         {
           name: 'Meetings',
-          class: 'chalkboard',
+          class: 'meetings',
           route: '/meetings',
-          icon: 'mug-hot',
+          icon: 'chalkboard',
           iconSize: '18px',
           iconColor: 'white',
           iconStyle: 'solid'
