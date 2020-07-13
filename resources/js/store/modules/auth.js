@@ -5,6 +5,7 @@ import * as types from '../mutation-types'
 // state
 export const state = {
   user: null,
+  refreshToken: null,
   oauthToken: Cookies.get('oauthToken'),
   token: Cookies.get('token')
 }
@@ -18,11 +19,20 @@ export const getters = {
 
 // mutations
 export const mutations = {
-  [types.SAVE_TOKEN] (state, { token, oauthToken, remember }) {
+  [types.SAVE_TOKEN] (state, { token, oauthToken, refreshToken }) {
+    const oauthcookieExpiry = new Date(new Date().getTime() + 1 * 60 * 60 * 1000)
     state.token = token
     state.oauthToken = oauthToken
-    Cookies.set('token', token, { expires: remember ? 365 : null })
-    Cookies.set('oauthToken', oauthToken, { expires: remember ? 365 : null })
+    state.refreshToken = refreshToken
+    Cookies.set('token', token, { expires: null })
+    Cookies.set('refreshToken', refreshToken, { expires: null })
+    Cookies.set('oauthToken', oauthToken, { expires: oauthcookieExpiry })
+  },
+
+  [types.SAVE_REFRESHED_TOKEN] (state, { oauthToken }) {
+    const oauthcookieExpiry = new Date(new Date().getTime() + 1 * 60 * 60 * 1000)
+    state.oauthToken = oauthToken
+    Cookies.set('oauthToken', oauthToken, { expires: oauthcookieExpiry })
   },
 
   [types.FETCH_USER_SUCCESS] (state, { user }) {
@@ -34,6 +44,7 @@ export const mutations = {
     state.oauthToken = null
     Cookies.remove('token')
     Cookies.remove('oauthToken')
+    Cookies.remove('refreshToken')
   },
 
   [types.LOGOUT] (state) {
@@ -42,6 +53,7 @@ export const mutations = {
     state.oauthToken = null
     Cookies.remove('token')
     Cookies.remove('oauthToken')
+    Cookies.remove('refreshToken')
   },
 
   [types.UPDATE_USER] (state, { user }) {
@@ -54,6 +66,10 @@ export const mutations = {
 export const actions = {
   saveToken ({ commit }, payload) {
     commit(types.SAVE_TOKEN, payload)
+  },
+
+  saveRefreshedToken ({ commit }, payload) {
+    commit(types.SAVE_REFRESHED_TOKEN, payload)
   },
 
   async fetchUser ({ commit }) {

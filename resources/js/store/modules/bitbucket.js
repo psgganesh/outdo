@@ -90,8 +90,8 @@ export const mutations = {
 
 // actions
 export const actions = {
-  async setup ({ commit }) {
-    const token = Cookies.get('oauthToken')
+  async setup ({ commit }, params) {
+    const token = params.oauthToken
     const clientOptions = {
       baseUrl: BASE_URL,
       request: {

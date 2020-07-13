@@ -42,7 +42,8 @@ export default {
 
       this.$store.dispatch('auth/saveToken', {
         token: e.data.token,
-        oauthToken: e.data.oauthToken
+        oauthToken: e.data.oauthToken,
+        refreshToken: e.data.refreshToken
       })
 
       this.$router.push({ name: 'workspaces' })
