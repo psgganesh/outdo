@@ -16,7 +16,7 @@
               v-model="form.channelName"
               name="channelName"
               icon-style="solid"
-              icon="comment"
+              icon="comment-dots"
               autocomplete="off"
               placeholder="Name your new private channel"
               :rules="[{type:'required', tip:'Sorry, we need a valid channel name'}]"
@@ -29,7 +29,7 @@
       </div>
       <div slot="footer" style="margin-top:40px;margin-right:10px;">
         <div style="margin-top: 10px; text-align: right;">
-          <va-button type="primary" @click.stop="addChannel">
+          <va-button type="primary" :disabled="submitFormDisabledState" @click.stop="addChannel">
             Submit
           </va-button>
         </div>
@@ -54,7 +54,7 @@ export default {
             'Once invited your private channel would be visible to users automatically.',
       form: {
         type: 'vertical',
-        channelName: ''
+        channelName: null
       },
       minibarTheme: 'dark',
       minibarTopItems: [
@@ -63,20 +63,29 @@ export default {
           size: '2.0em',
           brand: true,
           method: this.navigateToWelcomePage
+        },
+        {
+          icon: 'comment-dots',
+          size: '1.25em',
+          method: this.openAddChannelForm
         }
       ],
       minibarBottomItems: [
-        {
-          icon: 'plus',
-          size: '1.25em',
-          method: this.openAddChannelForm
-        },
         {
           icon: 'power-off',
           size: '1.5em',
           method: this.logout
         }
       ]
+    }
+  },
+
+  computed: {
+    submitFormDisabledState () {
+      if (this.form.channelName !== '' || this.form.channelName !== null) {
+        return false
+      }
+      return true
     }
   },
 

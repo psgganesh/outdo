@@ -1,10 +1,10 @@
 import Vue from 'vue'
+import Va from 'vue-atlas'
 import store from '~/store'
 import router from '~/router'
 import i18n from '~/plugins/i18n'
 import App from '~/components/App'
 import VueChatScroll from 'vue-chat-scroll'
-import Va from 'vue-atlas'
 
 import '~/plugins'
 import '~/components'
