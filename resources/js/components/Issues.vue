@@ -1,13 +1,7 @@
 <template>
   <div>
-    <va-row v-if="loading" :gutter="gutter" class="text-align-center full-height">
-      <va-column :xs="12" :sm="12" :md="12" :lg="12">
-        <div>
-          <va-loading v-if="loading" size="lg" color="blue" />
-        </div>
-      </va-column>
-    </va-row>
-    <va-row v-else :gutter="gutter">
+    <va-loading v-if="loading" size="lg" color="blue" center />
+    <va-row :gutter="gutter">
       <va-column class="swimlane" :xs="12" :sm="6" :md="3" :lg="3">
         <h3>{{ swimlanes.backlog }}</h3>
         <va-button icon-before="plus" type="default" class="m-b-10" @click.stop="openIssueModalForm('on hold')">
@@ -29,7 +23,7 @@
                 </va-badge>
               </div>
               <div slot="topRight">
-                <va-lozenge uppercase type="primary">
+                <va-lozenge uppercase type="warning">
                   {{ issue.state }}
                 </va-lozenge>
               </div>
@@ -95,7 +89,7 @@
                 </va-badge>
               </div>
               <div slot="topRight">
-                <va-lozenge uppercase type="primary">
+                <va-lozenge uppercase type="danger">
                   {{ issue.state }}
                 </va-lozenge>
               </div>
@@ -128,7 +122,7 @@
                 </va-badge>
               </div>
               <div slot="topRight">
-                <va-lozenge uppercase type="primary">
+                <va-lozenge uppercase type="success">
                   {{ issue.state }}
                 </va-lozenge>
               </div>
@@ -183,6 +177,7 @@ export default {
 
   data: () => {
     return {
+      loading: false,
       swimlanes: {
         backlog: 'On hold',
         open: 'Open',
@@ -205,9 +200,6 @@ export default {
   },
 
   computed: {
-    loading () {
-      return this.$store.state.loading
-    },
     backlogIssues: {
       get () {
         return this.$store.state.bitbucket.backlogIssues
@@ -219,7 +211,10 @@ export default {
           to: 'backlogIssues',
           issue: issue
         }
-        this.$store.dispatch('bitbucket/updateIssue', request)
+        this.loading = true
+        this.$store.dispatch('bitbucket/updateIssue', request).then(() => {
+          this.loading = false
+        })
       }
     },
     openIssues: {
@@ -233,7 +228,10 @@ export default {
           to: 'openIssues',
           issue: issue
         }
-        this.$store.dispatch('bitbucket/updateIssue', request)
+        this.loading = true
+        this.$store.dispatch('bitbucket/updateIssue', request).then(() => {
+          this.loading = false
+        })
       }
     },
     resolvedIssues: {
@@ -247,7 +245,10 @@ export default {
           to: 'resolvedIssues',
           issue: issue
         }
-        this.$store.dispatch('bitbucket/updateIssue', request)
+        this.loading = true
+        this.$store.dispatch('bitbucket/updateIssue', request).then(() => {
+          this.loading = false
+        })
       }
     },
     deferredIssues: {
@@ -261,7 +262,10 @@ export default {
           to: 'deferredIssues',
           issue: issue
         }
-        this.$store.dispatch('bitbucket/updateIssue', request)
+        this.loading = true
+        this.$store.dispatch('bitbucket/updateIssue', request).then(() => {
+          this.loading = false
+        })
       }
     }
   },

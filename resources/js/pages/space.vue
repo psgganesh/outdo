@@ -38,12 +38,6 @@ export default {
     }
   },
 
-  computed: {
-    loading () {
-      return this.$store.state.loading
-    }
-  },
-
   beforeMount () {
     this.title = `${this.$route.params.workspace}/${this.$route.params.repository}`
   },

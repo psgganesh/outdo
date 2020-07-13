@@ -3,6 +3,7 @@
     <va-sidebar :theme="sidebarTheme">
       <va-sidebar-group id="brand" :items="coreItems" title="Outdo" :default-open-level="1" />
       <va-sidebar-group id="conversations" :items="channelItems" title="Conversations" :default-open-level="1" />
+      <va-sidebar-group id="actions" :items="actionItems" :default-open-level="0" />
     </va-sidebar>
     <va-modal ref="addChannelModal" :width="width" :backdrop-clickable="backdropClickable">
       <div slot="header" style="padding: 10px 20px;">
@@ -84,6 +85,16 @@ export default {
           iconColor: 'white',
           iconStyle: 'solid'
         }
+      ],
+      actionItems: [
+        {
+          name: 'Add new channel',
+          icon: 'plus',
+          iconSize: '18px',
+          iconColor: 'white',
+          iconStyle: 'solid',
+          method: this.openAddChannelForm
+        }
       ]
     }
   },
@@ -94,14 +105,6 @@ export default {
     }),
     channelItems () {
       let channels = this.conversationItems
-      channels.push({
-        name: 'Add new channel',
-        icon: 'plus',
-        iconSize: '18px',
-        iconColor: 'white',
-        iconStyle: 'solid',
-        method: this.openAddChannelForm
-      })
       return channels
     }
   },
