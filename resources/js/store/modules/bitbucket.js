@@ -79,9 +79,9 @@ export const mutations = {
     })
     state[to] = data.issue
   },
-  SET_CURRENT_REPOSITORY (state, repositorySlug) {
+  SET_ACTIVE_SPACE (state, space) {
     state.repositories.map((repository) => {
-      if (repository.slug === repositorySlug) {
+      if (repository.slug === space.repository) {
         state.currentRepository = repository
       }
     })
@@ -105,13 +105,19 @@ export const actions = {
     commit('SET_BITBUCKET_CLIENT', client)
   },
 
+  setActiveSpace ({ commit }, space) {
+    commit('SET_ACTIVE_SPACE', space)
+  },
+
   async workspaces ({ commit }, params) {
     const { oauthToken } = params
     const BearerToken = `Bearer ${oauthToken}`
     await axios.get(`${WORKSPACES_URL}`, {
       headers: { Authorization: BearerToken }
-    }).then(({ data }) => commit('SET_WORKSPACES', data.values))
-      .catch((error) => console.log(error))
+    }).then(({ data }) => {
+      commit('SET_WORKSPACES', data.values)
+      commit('COMMIT_LOADING_STATE', false, { root: true })
+    }).catch((error) => console.log(error))
   },
 
   async repositories ({ state, commit }, params) {
@@ -119,8 +125,10 @@ export const actions = {
     await state.bitbucketClient.repositories.list({
       workspace: params.workspace,
       pagelen: 100
-    }).then(({ data }) => commit('SET_REPOSITORIES', data.values))
-      .catch((err) => console.error(err))
+    }).then(({ data }) => {
+      commit('SET_REPOSITORIES', data.values)
+      commit('COMMIT_LOADING_STATE', false, { root: true })
+    }).catch((err) => console.error(err))
   },
 
   async files ({ state, commit }, request) {
@@ -129,29 +137,39 @@ export const actions = {
       workspace: request.workspace,
       pagelen: 100
     })
-      .then(({ data }) => commit('SET_FILES', data.values))
-      .catch((err) => console.error(err))
+      .then(({ data }) => {
+        commit('SET_FILES', data.values)
+        commit('COMMIT_LOADING_STATE', false, { root: true })
+      }).catch((err) => console.error(err))
   },
 
-  async issues ({ state, commit }, request) {
+  async issues ({ state, commit }) {
     commit('RESET_ISSUES_LIST')
-    commit('SET_CURRENT_REPOSITORY', request.slug)
     await state.bitbucketClient.repositories.listIssues({
       repo_slug: state.currentRepository.uuid,
       workspace: state.currentRepository.workspace.uuid,
       pagelen: 100
-    }).then(({ data }) => commit('SET_ISSUES', data.values))
-      .catch((err) => console.error(err))
+    }).then(({ data }) => {
+      commit('SET_ISSUES', data.values)
+      commit('COMMIT_LOADING_STATE', false, { root: true })
+    }).catch((err) => console.error(err))
   },
 
-  async createIssue ({ commit }) {
-    let _body = { 'title': 'new issue' }
+  async createIssue ({ commit }, formData) {
+    let _body = {
+      'state': formData.state,
+      'title': formData.title,
+      'content': formData.content
+    }
     const requestBody = {
       '_body': _body,
       'repo_slug': state.currentRepository.slug,
       'workspace': state.currentRepository.workspace.slug
     }
-    await state.bitbucketClient.issue_tracker.create(requestBody)
+    await state.bitbucketClient.issue_tracker.create(requestBody).then(({ data }) => {
+      // commit('UPDATE_ISSUE_ARRAY', data.values)
+      console.log(data)
+    }).catch((err) => console.error(err))
   },
 
   async updateIssue ({ commit }, request) {

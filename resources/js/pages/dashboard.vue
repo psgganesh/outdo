@@ -39,7 +39,6 @@
 <script>
 import moment from 'moment'
 import Avatar from 'vue-avatar'
-import { mapActions } from 'vuex'
 import Breadcrumb from '~/components/Breadcrumb'
 
 export default {
@@ -77,17 +76,10 @@ export default {
   async beforeCreate () {
     const oauthToken = this.$store.state.auth.oauthToken
     const params = { oauthToken: oauthToken }
-    this.START_AUI_LOADING()
-    await this.$store.dispatch('bitbucket/workspaces', params).then(() => {
-      this.STOP_AUI_LOADING()
-    })
+    await this.$store.dispatch('bitbucket/workspaces', params)
   },
 
   methods: {
-    ...mapActions([
-      'START_AUI_LOADING',
-      'STOP_AUI_LOADING'
-    ]),
     humanReadableDate (timestamp) {
       return (timestamp !== null) ? moment.utc(timestamp).fromNow() : ''
     },

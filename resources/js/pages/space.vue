@@ -20,7 +20,7 @@ import Breadcrumb from '~/components/Breadcrumb'
 export default {
   name: 'Space',
 
-  middleware: ['auth', 'bitbucket-client', 'bitbucket-set-repositories', 'twilio-client'],
+  middleware: ['auth', 'bitbucket-client', 'twilio-client', 'bitbucket-set-active-repositories'],
 
   components: {
     // Files,
@@ -35,6 +35,12 @@ export default {
   data: () => {
     return {
       title: null
+    }
+  },
+
+  computed: {
+    loading () {
+      return this.$store.state.loading
     }
   },
 
