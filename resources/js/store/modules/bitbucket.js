@@ -1,5 +1,4 @@
 import axios from 'axios'
-import Cookies from 'js-cookie'
 import { Bitbucket } from 'bitbucket'
 
 const BASE_URL = 'https://api.bitbucket.org/2.0'
@@ -80,6 +79,7 @@ export const mutations = {
     state[to] = data.issue
   },
   SET_ACTIVE_SPACE (state, space) {
+    console.log(space)
     state.repositories.map((repository) => {
       if (repository.slug === space.repository) {
         state.currentRepository = repository
@@ -105,7 +105,10 @@ export const actions = {
     commit('SET_BITBUCKET_CLIENT', client)
   },
 
-  setActiveSpace ({ commit }, space) {
+  async setActiveSpace ({ commit, state, dispatch }, space) {
+    if (state.repositories.length === 0) {
+      await dispatch('repositories', space)
+    }
     commit('SET_ACTIVE_SPACE', space)
   },
 
