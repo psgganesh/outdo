@@ -95,9 +95,9 @@ export default {
     },
     logout () {
       // this.$store.dispatch('twilio/leaveMeeting').then(() => {
-        this.$store.dispatch('auth/logout').then(() => {
-          this.$router.push({ name: 'welcome' })
-        })
+      this.$store.dispatch('auth/logout').then(() => {
+        this.$router.push({ name: 'welcome' })
+      })
       // })
     },
     openAddChannelForm () {
