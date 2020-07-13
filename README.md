@@ -1,12 +1,22 @@
-# Outdo SPA 
+# Outdo.app
+> https://www.outdo.app
 
-> Outdo SPA starter project template.
+## Inspiration
+Often as developers we tend to switch between different apps on our daily work. Our managers use Jira, the whole team
+uses Skype / Google meet / Slack / Hipchat for communication. Trello to manage any in-house work. There was a lack of a tool which combines
+all of this into ONE.
 
-<p align="center">
-<img src="https://i.imgur.com/NHFTsGt.png">
-</p>
+## What it does
+Issue tracking, group private chats and video chats and workflow management for bitbucket made simple
 
-## Features
+## How I built it
+- Vue CLI 3 and Vuex to build the front-end
+- Laravel for API back-end
+- Twilio Chat and Video API
+- CORS using nginx
+- Bitbucket OAuth consumer for API integration
+
+## Tools Used
 
 - Laravel 7
 - Vue + VueRouter + Vuex + VueI18n + ESlint
@@ -14,40 +24,22 @@
 - Login, register, email verification and password reset
 - Authentication with JWT
 - Socialite integration
-- Bootstrap 4 + Font Awesome 5
+- Vue-Atlas + Font Awesome 5
 
-## Installation
+## Challenges I ran into
+- State storing using Vuex's - and calling bitbucket API only when needed
+- Integrating Twilio group and video chat
+- Layouting the whole dashboard 
 
-- `composer create-project --prefer-dist cretueusebiu/laravel-vue-spa`
-- Edit `.env` and set your database connection details
-- (When installed via git clone or download, run `php artisan key:generate` and `php artisan jwt:secret`)
-- `php artisan migrate`
-- `npm install`
+## Accomplishments that I'm proud of
+- Integrating front-end and back-end a build an amazing SPA
+- Completed the app with minimal features as planned
 
-## Usage
+## What I learned
+- The Bitbucket connect / oauth APIs
+- Atlassian design system and vue-atlas UI framework
+- Twilio client SDK and APIs for Chat, Video
 
-#### Development
-
-```bash
-# build and watch
-npm run watch
-
-# serve with hot reloading
-npm run hot
-```
-
-#### Production
-
-```bash
-npm run production
-```
-
-## Socialite
-
-This project comes with GitHub as an example for [Laravel Socialite](https://laravel.com/docs/5.8/socialite).
-
-To enable the provider create a new GitHub application and use `https://example.com/api/oauth/github/callback` as the Authorization callback URL.
-
-Edit `.env` and set `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET` with the keys form your GitHub application.
-
-For other providers you may need to set the appropriate keys in `config/services.php` and redirect url in `OAuthController.php`.
+## What's next for outdo.app
+- Workflow prototyping features like Invision / Marvel app
+- Better video calls to enable - draggable video thumnails on any page
