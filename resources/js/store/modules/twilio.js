@@ -188,7 +188,7 @@ export const actions = {
     let remoteTrack = roomParams.remoteTrack
 
     Twilio.createLocalTracks({
-      audio: false,
+      audio: true,
       video: { }
     }).then(localTracks => {
       const connectOptions = {
