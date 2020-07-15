@@ -48,13 +48,10 @@
       <div id="remoteTrack" />
       <div id="localTrack" />
     </va-container>
-    </va-container-fluid>
   </div>
 </template>
 
 <script>
-// import VieOtpInput from '@bachdgvn/vue-otp-input'
-
 export default {
   name: 'Meetings',
 
@@ -64,36 +61,24 @@ export default {
     return { title: this.$t('meetings') }
   },
 
-  components: {
-    // VieOtpInput
-  },
-
   data: () => {
     return {
       title: null,
       gutter: 15,
       roomOptions: {
-        name: 'my-room-name',
+        name: null,
         localTrack: 'localTrack',
         remoteTrack: 'remoteTrack'
       }
-      // roomName: null
     }
   },
 
   beforeMount () {
-    this.title = this.$t('meetings')
+    this.roomOptions.name = this.$route.params.room
   },
 
   mounted () {
     this.$store.dispatch('twilio/joinMeeting', this.roomOptions)
-  },
-
-  methods: {
-    // handleOnComplete (value) {
-    //   console.log(value)
-    //   this.roomName = value
-    // }
   }
 }
 </script>

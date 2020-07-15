@@ -46,7 +46,7 @@ export default {
         refreshToken: e.data.refreshToken
       })
 
-      this.$router.push({ name: 'workspaces' })
+      this.$router.push({ name: 'dashboard' })
     }
   }
 }

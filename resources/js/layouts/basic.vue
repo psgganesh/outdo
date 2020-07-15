@@ -36,7 +36,7 @@ export default {
     return {
       desktopSidebarWidth: 0,
       desktopMinibarWidth: 0,
-      desktopTopbarHeight: 50,
+      desktopTopbarHeight: 100,
 
       mobileSidebarWidth: 0,
       mobileMinibarWidth: 0,

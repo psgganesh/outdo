@@ -9,6 +9,35 @@
   src: url('fonts/Segoe-UI.ttf')  format('truetype');
 }
 
+@font-face {
+  font-family: 'icomoon';
+  src:  url('fonts/icomoon.eot?pvv6x7');
+  src:  url('fonts/icomoon.eot?pvv6x7#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?pvv6x7') format('truetype'),
+    url('fonts/icomoon.woff?pvv6x7') format('woff'),
+    url('fonts/icomoon.svg?pvv6x7#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+[class^="icon-"], [class*="fa-icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon' !important;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.fa-icon-spinner10:before {
+  content: "\e983";
+}
+
 * {
   font-family: 'Segoe UI', 'Oxygen', 'Roboto', 'Ubuntu', sans-serif;
 }
@@ -18,6 +47,7 @@ body {
 }
 
 .space,
+.va-sidebar--theme-blue .va-sidebar-group-item,
 #conversations ul li:last-child {
   cursor: pointer;
 }
@@ -124,7 +154,7 @@ body {
   margin: 0 10px !important;
   font-size: 20px !important;
   border-radius: 4px !important;
-  background: #feffea !important;
+  background: #f4f5f7 !important;
   color: black !important;
   border: 1px solid rgba(0, 0, 0, 0.3) !important;
   text-align: center !important;
@@ -136,14 +166,13 @@ body {
 }
 
 #localTrack {
-  padding: 10px;
   position: fixed;
   float: left;
-  background: #3c3c3b;
-  width: 250px;
-  bottom: 10px;
-  right: 10px;
-  margin: 15px;
+  background: #f4f5f7;
+  width: 200px;
+  bottom: -15px;
+  right: 0px;
+  margin: 0px 15px;
   border-radius: 4px;
 }
 #localTrack > video {
@@ -154,25 +183,23 @@ body {
   -moz-transform:rotateY(180deg);
 }
 #remoteTrack {
-  /* background: #000000;
-  padding: 0px;
-  margin: 0px auto;
-  width: -webkit-fill-available;
-  height: 100vh; */
-  background: #3c3c3b;
-  border-radius: 4px;
-  width: max-content !important;
+  z-index: 100;
+  background: #f4f5f7;
+  width: 215px;
+  height: 100vh;
+  position: fixed;
+  right: 0px;
 }
 #remoteTrack video {
-  /*
+  width: 200px;
+  transform: rotateY(180deg);
+  -webkit-transform:rotateY(180deg);
+  -moz-transform:rotateY(180deg);
+}
+.dominant-speaker {
   position: fixed;
   right: 0;
   bottom: 0;
   min-width: 100%;
   min-height: 100%;
-  */
-  width: 200px;
-  transform: rotateY(180deg);
-  -webkit-transform:rotateY(180deg);
-  -moz-transform:rotateY(180deg);
 }

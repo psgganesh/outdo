@@ -1,8 +1,9 @@
 <template>
   <va-topbar theme="primary">
     <div slot="center">
+      <va-icon type="icon-spinner10" style="font-size: 2.7em;color: #0154d1;" />
       <h1 class="title">
-        <va-icon type="check-circle" /> Outdo
+        Outdo
       </h1>
     </div>
     <div slot="right" />
@@ -14,9 +15,6 @@ import { mapGetters } from 'vuex'
 
 export default {
   name: 'Topbar',
-
-  components: {
-  },
 
   data: () => ({
     appName: window.config.appName
@@ -37,3 +35,12 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.title {
+  margin: 0px 10px;
+  letter-spacing: 0.1em;
+  font-size: -webkit-xxx-large;
+  color: #0048b0;
+}
+</style>

@@ -59,8 +59,8 @@ export default {
       minibarTheme: 'dark',
       minibarTopItems: [
         {
-          icon: 'check-circle',
-          size: '2.0em',
+          icon: 'icon-spinner10',
+          size: '2.7em',
           brand: true,
           method: this.navigateToWelcomePage
         },

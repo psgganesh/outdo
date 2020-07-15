@@ -274,6 +274,12 @@ export const getters = {
         iconStyle: 'solid'
       })
     })
+    channels.forEach(function (item, i) {
+      if (item.name.includes('_outdo')) {
+        channels.splice(i, 1)
+        channels.unshift(item)
+      }
+    })
     return channels
   },
   messages: (state) => {
