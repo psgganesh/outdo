@@ -4,7 +4,7 @@ import Twilio from 'twilio-video'
 const Chat = require('twilio-chat')
 
 // TODO: FIX URLS
-const TWILIO_TOKEN_URL = 'https://outdo.app/api/token'
+const TWILIO_TOKEN_URL = process.env.MIX_TWILIO_TOKEN_URL
 
 // state
 export const state = {
@@ -188,7 +188,7 @@ export const actions = {
     let remoteTrack = roomParams.remoteTrack
 
     Twilio.createLocalTracks({
-      audio: true,
+      audio: (process.env.MIX_APP_ENV === 'production'),
       video: { }
     }).then(localTracks => {
       const connectOptions = {
