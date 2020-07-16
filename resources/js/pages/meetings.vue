@@ -1,61 +1,48 @@
 <template>
   <div>
-    <!-- <va-page-header class="border-bottom-1">
-      <div slot="breadcrumb">
-        <va-breadcrumb separator="/">
-          <va-breadcrumb-item to="/home">
-            {{ this.$t('home') }}
-          </va-breadcrumb-item>
-          <va-breadcrumb-item :to="this.$route.path">
-            {{ this.$route.name }}
-          </va-breadcrumb-item>
-        </va-breadcrumb>
-      </div>
-      <div slot="title">
-        {{ title }}
-      </div>
-      <div slot="actions">
-        <va-button type="default" @click.stop="createNewMeeting">
-          <va-icon type="video" icon-style="solid" margin="0 7px 0 0" />
-          Start a meeting
-        </va-button>
-      </div>
-    </va-page-header> -->
     <va-container fluid size="lg">
-      <!--<va-row id="chat" :gutter="gutter">
-        <va-column :xs="3" :sm="3" :md="3" />
-        <va-column :xs="4" :sm="4" :md="4" style="text-align:center">
-          <va-card>
-            <va-button type="default" @click.stop="createNewMeeting">
-              <va-icon type="video" icon-style="solid" margin="0 7px 0 0" />
-              Start a meeting
-            </va-button>
-            <br>
-            <h3>OR</h3>
-            <br>
-            <h3>Join with meeting ID</h3>
-            <vie-otp-input
-              inputClasses="otp-input"
-              :numInputs="6"
-              separator="-"
-              :shouldAutoFocus="true"
-              @on-complete="handleOnComplete"
-            />
-          </va-card>
-        </va-column>
-        <va-column id="local-media" :xs="12" :sm="12" :md="12" />
-      </va-row>-->
       <div id="remoteTrack" />
       <div id="localTrack" />
     </va-container>
+    <va-modal ref="joinMeetingModal" :width="width" :backdrop-clickable="backdropClickable">
+      <div slot="header" style="padding: 10px 20px;">
+        <h2>Your meeting password</h2>
+      </div>
+      <div slot="body" style="height:0px;">
+        <va-form ref="form" :type="form.type">
+          <va-form-item>
+            <vie-otp-input
+              inputClasses="otp-input"
+              :numInputs="7"
+              separator="-"
+              :shouldAutoFocus="true"
+              @on-change="handleOnChange"
+            />
+          </va-form-item>
+        </va-form>
+      </div>
+      <div slot="footer" style="margin-top:50px;margin-right:10px;">
+        <div style="margin-top: 10px; text-align: right;">
+          <va-button :type="submitFormTypeState" :disabled="submitFormDisabledState" @click.stop="join">
+            Join meeting
+          </va-button>
+        </div>
+      </div>
+    </va-modal>
   </div>
 </template>
 
 <script>
+import VieOtpInput from '@bachdgvn/vue-otp-input'
+
 export default {
   name: 'Meetings',
 
-  middleware: ['auth', 'bitbucket-client', 'twilio-client'],
+  components: {
+    VieOtpInput
+  },
+
+  middleware: ['auth', 'bitbucket-client', 'twilio-client', 'twilio-setup-meeting'],
 
   metaInfo () {
     return { title: this.$t('meetings') }
@@ -63,22 +50,62 @@ export default {
 
   data: () => {
     return {
+      width: '500px',
+      backdropClickable: true,
       title: null,
       gutter: 15,
+      alert: {
+        type: 'warning',
+        title: 'Information',
+        body: 'If the meeting ID is present, you will be automatically joining the existing meeting room. ' +
+            'If meeting ID is not present, you will be prompted for creating a new meeting room.'
+      },
+      form: {
+        type: 'vertical',
+        password: null
+      },
       roomOptions: {
         name: null,
         localTrack: 'localTrack',
-        remoteTrack: 'remoteTrack'
+        remoteTrack: 'remoteTrack',
+        incompletePassword: true
       }
     }
   },
 
-  beforeMount () {
-    this.roomOptions.name = this.$route.params.room
+  computed: {
+    submitFormDisabledState () {
+      if (this.form.room === null || this.form.password === null || this.form.incompletePassword) {
+        return true
+      }
+      return false
+    },
+    submitFormTypeState () {
+      if (this.form.room === null || this.form.password === null || this.form.incompletePassword) {
+        return 'default'
+      }
+      return 'success'
+    }
   },
 
   mounted () {
-    this.$store.dispatch('twilio/joinMeeting', this.roomOptions)
+    this.roomOptions.name = this.$route.params.room
+    this.$refs.joinMeetingModal.open()
+  },
+
+  methods: {
+    handleOnChange (value) {
+      this.form.password = value
+      if (value.length === 7) {
+        this.form.incompletePassword = false
+      } else {
+        this.form.incompletePassword = true
+      }
+    },
+    join () {
+      this.$refs.joinMeetingModal.close()
+      this.$store.dispatch('twilio/joinMeeting', this.roomOptions)
+    }
   }
 }
 </script>

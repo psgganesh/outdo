@@ -14,6 +14,7 @@
   "home": "Home",
   "login": "Login",
   "dashboard": "Dashboard",
+  "room_not_found": "Invalid meeting room",
   "meetings": "Meetings",
   "space": "Space",
   "workspace": "Workspace",

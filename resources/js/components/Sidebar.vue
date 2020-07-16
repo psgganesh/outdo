@@ -7,25 +7,33 @@
 
     <va-modal ref="meetingsModal" :width="width" :backdrop-clickable="backdropClickable">
       <div slot="header" style="padding: 10px 20px;">
-        <h2>Join a meeting</h2>
+        <h2>Start new meeting</h2>
       </div>
-      <div slot="body" style="height:120px;text-align:center;">
+      <div slot="body" style="height:120px;">
         <va-form ref="form" :type="form.type">
-          <va-form-item>
+          <va-form-item label="Meeting URL" need>
+            <va-input
+              v-model="form.room"
+              name="slug"
+              :prefix="meetingUrl"
+              readonly
+            />
+          </va-form-item>
+          <va-form-item label="Password" need>
             <vie-otp-input
               inputClasses="otp-input"
               :numInputs="7"
               separator="-"
               :shouldAutoFocus="true"
-              @on-complete="handleOnComplete"
+              @on-change="handleOnChange"
             />
           </va-form-item>
         </va-form>
       </div>
-      <div slot="footer" style="margin-top:40px;margin-right:10px;">
+      <div slot="footer" style="margin-top:50px;margin-right:10px;">
         <div style="margin-top: 10px; text-align: right;">
-          <va-button type="help" :disabled="submitFormDisabledState" @click.stop="addChannel">
-            Join meeting
+          <va-button :type="submitFormTypeState" :disabled="submitFormDisabledState" @click.stop="createNewMeetingRoom">
+            Start meeting
           </va-button>
         </div>
       </div>
@@ -34,8 +42,11 @@
 </template>
 
 <script>
-import VieOtpInput from '@bachdgvn/vue-otp-input'
 import { mapGetters } from 'vuex'
+import { v4 as uuidv4 } from 'uuid'
+import VieOtpInput from '@bachdgvn/vue-otp-input'
+
+const MEETINGS_APP_URL = process.env.MIX_APP_URL
 
 export default {
   name: 'Sidebar',
@@ -78,7 +89,9 @@ export default {
       backdropClickable: true,
       form: {
         type: 'vertical',
-        room: null
+        room: null,
+        password: null,
+        incompletePassword: true
       }
     }
   },
@@ -92,10 +105,19 @@ export default {
       return channels
     },
     submitFormDisabledState () {
-      if (this.form.room !== '' || this.form.room !== null) {
-        return false
+      if (this.form.room === null || this.form.password === null || this.form.incompletePassword) {
+        return true
       }
-      return true
+      return false
+    },
+    submitFormTypeState () {
+      if (this.form.room === null || this.form.password === null || this.form.incompletePassword) {
+        return 'default'
+      }
+      return 'success'
+    },
+    meetingUrl () {
+      return MEETINGS_APP_URL + '/meetings/'
     }
   },
 
@@ -110,9 +132,19 @@ export default {
     },
     meetingsInit () {
       this.$refs.meetingsModal.open()
+      this.form.room = uuidv4()
     },
-    handleOnComplete (value) {
-      console.log(value)
+    handleOnChange (value) {
+      this.form.password = value
+      if (value.length === 7) {
+        this.form.incompletePassword = false
+      } else {
+        this.form.incompletePassword = true
+      }
+    },
+    createNewMeetingRoom () {
+      this.$refs.meetingsModal.close()
+      this.$router.push({ name: 'meetings', params: { room: this.form.room } })
     }
   }
 }

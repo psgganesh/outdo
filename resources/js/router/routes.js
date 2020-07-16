@@ -5,6 +5,7 @@ function page (path) {
 export default [
   { path: '/', name: 'welcome', component: page('welcome.vue') },
   { path: '/dashboard', name: 'dashboard', component: page('dashboard.vue') },
+  { path: '/meetings/nosuchroom', name: 'meetings.room.not.found', component: page('invalidroom.vue') },
   { path: '/meetings/:room', name: 'meetings', component: page('meetings.vue') },
   { path: '/workspaces/:workspace', name: 'workspaces', component: page('workspaces.vue') },
   { path: '/workspaces/:workspace/:repository', name: 'space', component: page('space.vue') },

@@ -274,12 +274,10 @@ export const getters = {
         iconStyle: 'solid'
       })
     })
-    channels.forEach(function (item, i) {
-      if (item.name.includes('_outdo')) {
-        channels.splice(i, 1)
-        channels.unshift(item)
-      }
-    })
+    if (channels.length > 0) {
+      const outdoBotChannelIndex = channels.findIndex(channel => channel.name.includes('@outdo'))
+      channels.push(...channels.splice(0, outdoBotChannelIndex))
+    }
     return channels
   },
   messages: (state) => {
