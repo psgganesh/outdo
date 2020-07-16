@@ -1,30 +1,30 @@
 <template>
   <div>
     <breadcrumb :title="title" />
-    <va-tabs @changed="onTabChange">
+    <va-tabs>
       <va-tab name="Issues">
         <issues />
       </va-tab>
       <va-tab name="Workflows">
-        <!-- <files /> -->
+        <workflow />
       </va-tab>
     </va-tabs>
   </div>
 </template>
 
 <script>
-// import Files from '~/components/Files'
 import Issues from '~/components/Issues'
+import Workflow from '~/components/Workflow'
 import Breadcrumb from '~/components/Breadcrumb'
 
 export default {
   name: 'Space',
 
-  middleware: ['auth', 'bitbucket-client', 'twilio-client', 'bitbucket-set-active-repositories'],
+  middleware: ['auth', 'bitbucket-client', 'twilio-client', 'bitbucket-set-active-repositories', 'outdo-get-workflows'],
 
   components: {
-    // Files,
     Issues,
+    Workflow,
     Breadcrumb
   },
 
@@ -40,12 +40,7 @@ export default {
 
   beforeMount () {
     this.title = `${this.$route.params.workspace}/${this.$route.params.repository}`
-  },
-
-  methods: {
-    onTabChange () {
-      console.log('Tab changed')
-    }
   }
+
 }
 </script>
