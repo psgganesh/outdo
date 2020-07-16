@@ -66,6 +66,14 @@ export const mutations = {
   },
   SET_CURRENT_ROOM_NAME (state, roomName) {
     state.roomName = roomName
+  },
+  ACTIVE_MEETING_ROOMS (state, room) {
+    state.rooms.push(room)
+  },
+  DESTROY_CURRENT_ROOM (state, roomName) {
+    state.rooms.splice(state.rooms.indexOf(roomName), 1)
+    state.roomName = null
+    state.activeRoom = null
   }
 }
 
@@ -182,12 +190,25 @@ export const actions = {
       })
   },
 
-  joinMeeting ({ commit, state }, roomParams) {
+  async startMeeting ({ commit, state }, roomParams) {
+    let roomName = roomParams.room
+    const connectOptions = {
+      name: roomName
+    }
+    await Twilio.connect(state.twilioJWTToken, connectOptions).then(room => {
+      console.log(`Successfully joined a Room: ${room}`)
+      commit('ACTIVE_MEETING_ROOMS', room)
+    }, error => {
+      console.error(`Unable to connect to Room: ${error.message}`)
+    })
+  },
+
+  async joinMeeting ({ commit, state }, roomParams) {
     let roomName = roomParams.name
     let localTrack = roomParams.localTrack
     let remoteTrack = roomParams.remoteTrack
 
-    Twilio.createLocalTracks({
+    await Twilio.createLocalTracks({
       audio: (process.env.MIX_APP_ENV === 'production'),
       video: { }
     }).then(localTracks => {
@@ -238,6 +259,7 @@ export const actions = {
       room.on('disconnected', room => {
         // Detach the local media elements
         room.localParticipant.tracks.forEach(publication => {
+          publication.track.stop()
           const attachedElements = publication.track.detach()
           attachedElements.forEach(element => element.remove())
         })
@@ -245,12 +267,12 @@ export const actions = {
     })
   },
 
-  leaveMeeting ({ state }) {
-    Twilio.connect(state.twilioJWTToken, { name: state.activeRoom }).then(room => {
-      room.disconnect()
-    }, error => {
-      console.error(`Unable to connect to Room: ${error.message}`)
-    })
+  async leaveMeeting ({ commit, state }) {
+    let roomName = state.activeRoom.name
+    if (state.activeRoom !== null) {
+      state.activeRoom.disconnect()
+    }
+    commit('DESTROY_CURRENT_ROOM', roomName)
   }
 
 }

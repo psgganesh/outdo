@@ -183,12 +183,16 @@ body {
   -moz-transform:rotateY(180deg);
 }
 #remoteTrack {
-  z-index: 100;
   background: #f4f5f7;
   width: 215px;
   height: 100vh;
   position: fixed;
+  left: 304px;
   right: 0px;
+  /* Below 3 lines enables full screen on remote track */
+  bottom: 0px;
+  min-width: 84.5%;
+  min-height: 100%;
 }
 #remoteTrack video {
   width: 200px;

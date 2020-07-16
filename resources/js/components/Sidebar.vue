@@ -1,5 +1,6 @@
 <template>
   <div>
+    <va-loading v-if="loading" size="lg" color="blue" center />
     <va-sidebar :theme="sidebarTheme">
       <va-sidebar-group id="brand" :items="coreItems" title="Outdo" :default-open-level="1" />
       <va-sidebar-group id="conversations" :items="channelItems" title="Conversations" :default-open-level="1" />
@@ -57,6 +58,7 @@ export default {
 
   data () {
     return {
+      loading: false,
       sidebarTheme: 'blue',
       coreItems: [
         {
@@ -133,6 +135,7 @@ export default {
     meetingsInit () {
       this.$refs.meetingsModal.open()
       this.form.room = uuidv4()
+      this.form.password = null
     },
     handleOnChange (value) {
       this.form.password = value
@@ -144,7 +147,11 @@ export default {
     },
     createNewMeetingRoom () {
       this.$refs.meetingsModal.close()
-      this.$router.push({ name: 'meetings', params: { room: this.form.room } })
+      this.loading = true
+      this.$store.dispatch('twilio/startMeeting', this.form).then(() => {
+        this.loading = false
+        this.$router.push({ name: 'meetings', params: { room: this.form.room } })
+      })
     }
   }
 }

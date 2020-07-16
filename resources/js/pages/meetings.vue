@@ -93,6 +93,10 @@ export default {
     this.$refs.joinMeetingModal.open()
   },
 
+  beforeDestroy () {
+    this.$store.dispatch('twilio/leaveMeeting')
+  },
+
   methods: {
     handleOnChange (value) {
       this.form.password = value
