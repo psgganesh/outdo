@@ -29,7 +29,7 @@
       </div>
       <div slot="footer" style="margin-top:40px;margin-right:10px;">
         <div style="margin-top: 10px; text-align: right;">
-          <va-button type="primary" :disabled="submitFormDisabledState" @click.stop="addChannel">
+          <va-button :type="submitFormTypeState" :disabled="submitFormDisabledState" @click.stop="addChannel">
             Submit
           </va-button>
         </div>
@@ -82,10 +82,16 @@ export default {
 
   computed: {
     submitFormDisabledState () {
-      if (this.form.channelName !== '' || this.form.channelName !== null) {
-        return false
+      if (this.form.channelName === '' || this.form.channelName === null) {
+        return true
       }
-      return true
+      return false
+    },
+    submitFormTypeState () {
+      if (this.form.channelName === '' || this.form.channelName === null) {
+        return 'default'
+      }
+      return 'success'
     }
   },
 
@@ -94,11 +100,11 @@ export default {
       this.$router.push({ name: 'welcome' })
     },
     logout () {
-      // this.$store.dispatch('twilio/leaveMeeting').then(() => {
-      this.$store.dispatch('auth/logout').then(() => {
-        this.$router.push({ name: 'welcome' })
+      this.$store.dispatch('twilio/leaveMeeting').then(() => {
+        this.$store.dispatch('auth/logout').then(() => {
+          this.$router.push({ name: 'welcome' })
+        })
       })
-      // })
     },
     openAddChannelForm () {
       this.$refs.addChannelModal.open()

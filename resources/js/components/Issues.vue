@@ -166,7 +166,7 @@
       </div>
       <div slot="footer" style="margin-top:40px;margin-right:10px;">
         <div style="margin-top: 10px; text-align: right;">
-          <va-button type="primary" @click.stop="addIssue">
+          <va-button :type="submitFormTypeState" :disabled="submitFormDisabledState" @click.stop="addIssue">
             Submit
           </va-button>
         </div>
@@ -206,7 +206,7 @@ export default {
       },
       modal: {
         width: '500px',
-        backdropClickable: true
+        backdropClickable: false
       }
     }
   },
@@ -225,9 +225,7 @@ export default {
         }
         this.loading = true
         this.$store.dispatch('bitbucket/updateIssue', request).then(() => {
-          // this.$store.dispatch('bitbucket/issues').then(() => {
           this.loading = false
-          // })
         })
       }
     },
@@ -244,9 +242,7 @@ export default {
         }
         this.loading = true
         this.$store.dispatch('bitbucket/updateIssue', request).then(() => {
-          // this.$store.dispatch('bitbucket/issues').then(() => {
           this.loading = false
-          // })
         })
       }
     },
@@ -263,9 +259,7 @@ export default {
         }
         this.loading = true
         this.$store.dispatch('bitbucket/updateIssue', request).then(() => {
-          // this.$store.dispatch('bitbucket/issues').then(() => {
           this.loading = false
-          // })
         })
       }
     },
@@ -282,15 +276,25 @@ export default {
         }
         this.loading = true
         this.$store.dispatch('bitbucket/updateIssue', request).then(() => {
-          // this.$store.dispatch('bitbucket/issues').then(() => {
           this.loading = false
-          // })
         })
       }
     }
   },
 
   methods: {
+    submitFormDisabledState () {
+      if (this.form.title === null || this.form.description === null || this.form.state === null) {
+        return true
+      }
+      return false
+    },
+    submitFormTypeState () {
+      if (this.form.title === null || this.form.description === null || this.form.state === null) {
+        return 'default'
+      }
+      return 'success'
+    },
     getOptions () {
       return { group: 'issues' }
     },
@@ -300,7 +304,6 @@ export default {
     },
     addIssue () {
       const newIssueFormData = this.form
-      // this.loading = true
       this.$store.dispatch('bitbucket/createIssue', newIssueFormData).then(() => {
         this.form = {
           orientation: 'vertical',
@@ -309,10 +312,7 @@ export default {
           description: null,
           state: null
         }
-        // this.$store.dispatch('bitbucket/issues').then(() => {
-        // this.loading = false
         this.$refs.openIssueModal.close()
-        // })
       })
     }
   }

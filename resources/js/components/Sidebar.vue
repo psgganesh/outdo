@@ -6,7 +6,7 @@
       <va-sidebar-group id="conversations" :items="channelItems" title="Conversations" :default-open-level="1" />
     </va-sidebar>
 
-    <va-modal ref="meetingsModal" :width="width" :backdrop-clickable="backdropClickable">
+    <va-modal ref="meetingsModal" :width="width" :backdrop-clickable="backdropClickable" @closed="resetModalStates">
       <div slot="header" style="padding: 10px 20px;">
         <h2>Start new meeting</h2>
       </div>
@@ -88,7 +88,7 @@ export default {
         }
       ],
       width: '500px',
-      backdropClickable: true,
+      backdropClickable: false,
       form: {
         type: 'vertical',
         room: null,
@@ -145,12 +145,19 @@ export default {
         this.form.incompletePassword = true
       }
     },
+    resetModalStates () {
+      this.form.room = uuidv4()
+      this.form.password = null
+      this.form.incompletePassword = true
+    },
     createNewMeetingRoom () {
       this.$refs.meetingsModal.close()
       this.loading = true
       this.$store.dispatch('twilio/startMeeting', this.form).then(() => {
         this.loading = false
-        this.$router.push({ name: 'meetings', params: { room: this.form.room } })
+        let roomName = this.form.room
+        this.resetModalStates()
+        this.$router.push({ name: 'meetings', params: { room: roomName } })
       })
     }
   }

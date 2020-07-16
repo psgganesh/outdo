@@ -1,8 +1,11 @@
 <template>
   <div>
-    <va-container fluid size="lg">
+    <va-container fluid size="lg" style="height: 80vh;">
       <div id="remoteTrack" />
       <div id="localTrack" />
+      <va-button round size="lg" type="danger" style="position:absolute; left: 50%; right: 50%; bottom: 10px;" @click.stop="leave">
+        <va-icon type="times" />
+      </va-button>
     </va-container>
     <va-modal ref="joinMeetingModal" :width="width" :backdrop-clickable="backdropClickable">
       <div slot="header" style="padding: 10px 20px;">
@@ -51,7 +54,7 @@ export default {
   data: () => {
     return {
       width: '500px',
-      backdropClickable: true,
+      backdropClickable: false,
       title: null,
       gutter: 15,
       alert: {
@@ -94,7 +97,11 @@ export default {
   },
 
   beforeDestroy () {
-    this.$store.dispatch('twilio/leaveMeeting')
+    this.$store.dispatch('twilio/leaveMeeting').then(() => {
+      this.form.room = null
+      this.form.password = null
+      this.form.incompletePassword = true
+    })
   },
 
   methods: {
@@ -109,6 +116,11 @@ export default {
     join () {
       this.$refs.joinMeetingModal.close()
       this.$store.dispatch('twilio/joinMeeting', this.roomOptions)
+    },
+    leave () {
+      this.$store.dispatch('twilio/leaveMeeting').then(() => {
+        this.$router.push({ name: 'dashboard' })
+      })
     }
   }
 }

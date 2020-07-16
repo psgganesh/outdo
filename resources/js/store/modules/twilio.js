@@ -268,11 +268,11 @@ export const actions = {
   },
 
   async leaveMeeting ({ commit, state }) {
-    let roomName = state.activeRoom.name
     if (state.activeRoom !== null) {
+      let roomName = state.activeRoom.name
       state.activeRoom.disconnect()
+      commit('DESTROY_CURRENT_ROOM', roomName)
     }
-    commit('DESTROY_CURRENT_ROOM', roomName)
   }
 
 }
