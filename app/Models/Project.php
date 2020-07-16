@@ -19,7 +19,7 @@ class Project extends Model
     
         static::creating(function ($image) {
             $image->user_id = auth()->guard('api')->user()->id;
-            $image->created_by = auth()->guard('api')->user()->email;
+            $image->created_by = auth()->guard('api')->user()->username;
         });
     }
 
@@ -41,7 +41,7 @@ class Project extends Model
      */
     public function scopeList($query)
     {
-        return $query->where('useri_id', auth()->guard('api')->user()->id);
+        return $query->where('user_id', auth()->guard('api')->user()->id);
     }
 
 }

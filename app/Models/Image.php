@@ -22,7 +22,7 @@ class Image extends Model
     
         static::creating(function ($image) {
             $image->user_id = auth()->guard('api')->user()->id;
-            $image->created_by = auth()->guard('api')->user()->email;
+            $image->created_by = auth()->guard('api')->user()->username;
         });
     }
  

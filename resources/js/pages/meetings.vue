@@ -45,7 +45,7 @@ export default {
     VieOtpInput
   },
 
-  middleware: ['auth', 'bitbucket-client', 'twilio-client', 'twilio-setup-meeting'],
+  middleware: ['auth', 'bitbucket-client', 'twilio-client'],
 
   metaInfo () {
     return { title: this.$t('meetings') }

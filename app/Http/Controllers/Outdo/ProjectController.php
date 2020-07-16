@@ -24,9 +24,10 @@ class ProjectController
     /**
      * Display a listing of the resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $records = $this->project->list()->get();
 
