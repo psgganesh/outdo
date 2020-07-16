@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Outdo;
 
 use App\Models\Project;
 use Illuminate\Http\Request;
+use App\Http\Resources\ProjectResource;
+use App\Http\Resources\ProjectCollection;
 
 class ProjectController
 {
@@ -28,7 +30,7 @@ class ProjectController
     {
         $records = $this->project->list()->get();
 
-        return new CouponCollection($records);
+        return new ProjectCollection($records);
     }
 
     /**
@@ -39,7 +41,9 @@ class ProjectController
      */
     public function store(Request $request)
     {
-        //
+        $record = $this->project->create($request->all())->fresh();
+        
+        return new ProjectResource($record);
     }
 
     /**

@@ -19,7 +19,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get('user', 'Auth\UserController@current');
     Route::post('token', "AddOns\TwilioChatController@getToken");
 
-    Route::resource('projects', 'Outdo\ProjectController')->name('outdo.projects');
+    Route::resource('projects', 'Outdo\ProjectController');
     Route::post('media/upload/{type?}', 'Outdo\MediaController@upload')->name('outdo.media.upload');
 });
 
