@@ -146,6 +146,7 @@ export default {
       }
     },
     resetModalStates () {
+      console.log('resetModalStates')
       this.form.room = uuidv4()
       this.form.password = null
       this.form.incompletePassword = true

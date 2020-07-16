@@ -212,6 +212,18 @@ export default {
   },
 
   computed: {
+    submitFormDisabledState () {
+      if (this.form.title === null || this.form.description === null || this.form.state === null) {
+        return true
+      }
+      return false
+    },
+    submitFormTypeState () {
+      if (this.form.title === null || this.form.description === null || this.form.state === null) {
+        return 'default'
+      }
+      return 'success'
+    },
     backlogIssues: {
       get () {
         return this.$store.state.bitbucket.backlogIssues
@@ -283,18 +295,6 @@ export default {
   },
 
   methods: {
-    submitFormDisabledState () {
-      if (this.form.title === null || this.form.description === null || this.form.state === null) {
-        return true
-      }
-      return false
-    },
-    submitFormTypeState () {
-      if (this.form.title === null || this.form.description === null || this.form.state === null) {
-        return 'default'
-      }
-      return 'success'
-    },
     getOptions () {
       return { group: 'issues' }
     },

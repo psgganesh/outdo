@@ -115,7 +115,10 @@ export default {
     },
     join () {
       this.$refs.joinMeetingModal.close()
-      this.$store.dispatch('twilio/joinMeeting', this.roomOptions)
+      this.$store.dispatch('twilio/joinMeeting', this.roomOptions).then(() => {
+        this.form.password = null
+        this.form.incompletePassword = true
+      })
     },
     leave () {
       this.$store.dispatch('twilio/leaveMeeting').then(() => {
