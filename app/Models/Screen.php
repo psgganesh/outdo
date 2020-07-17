@@ -61,9 +61,9 @@ class Screen extends Model
         return round($this->size / 1024, 2);
     }
 
-    public function project()
+    public function workflow()
     {
-        return $this->belongsTo('App\Models\Project', 'project_id');
+        return $this->belongsTo('App\Models\Workflow', 'workflow_id');
     }
 
     public function user()

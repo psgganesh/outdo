@@ -2,23 +2,23 @@
 
 namespace App\Http\Controllers\Outdo;
 
-use App\Models\Project;
+use App\Models\Workflow;
 use Illuminate\Http\Request;
-use App\Http\Resources\ProjectResource;
-use App\Http\Resources\ProjectCollection;
+use App\Http\Resources\WorkflowResource;
+use App\Http\Resources\WorkflowCollection;
 
-class ProjectController
+class WorkflowController
 {
-    public $project;
+    public $workflow;
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct(Project $project)
+    public function __construct(Workflow $workflow)
     {
-        $this->project = $project;
+        $this->workflow = $workflow;
     }
 
     /**
@@ -29,9 +29,10 @@ class ProjectController
      */
     public function index(Request $request)
     {
-        $records = $this->project->list()->get();
+        $workspace = $request->workspace;
+        $records = $this->workflow->of($workspace)->get();
 
-        return new ProjectCollection($records);
+        return new WorkflowCollection($records);
     }
 
     /**
@@ -42,9 +43,9 @@ class ProjectController
      */
     public function store(Request $request)
     {
-        $record = $this->project->create($request->all())->fresh();
+        $record = $this->workflow->create($request->all())->fresh();
         
-        return new ProjectResource($record);
+        return new WorkflowResource($record);
     }
 
     /**
@@ -55,7 +56,9 @@ class ProjectController
      */
     public function show($id)
     {
-        //
+        $record = $this->workflow->find($id);
+        
+        return new WorkflowResource($record);
     }
 
     /**

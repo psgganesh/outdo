@@ -9,39 +9,43 @@
   <div v-else>
     <breadcrumb :title="title" />
     <va-tabs>
-      <va-tab name="Gallery">
-        <gallery />
-      </va-tab>
-      <va-tab name="Flow builder">
+      <va-tab name="Story builder">
         <builder />
+      </va-tab>
+      <va-tab name="Story simulator">
+        <simulator />
       </va-tab>
     </va-tabs>
   </div>
 </template>
 
 <script>
-import Gallery from '~/components/Gallery'
+import Simulator from '~/components/Simulator'
 import Builder from '~/components/Builder'
 import Breadcrumb from '~/components/Breadcrumb'
 
 export default {
-  name: 'Project',
+  name: 'Workflow',
 
-  middleware: ['auth', 'bitbucket-client', 'twilio-client', 'outdo-get-workflow-detail'],
+  middleware: [
+    'auth',
+    'bitbucket-client',
+    'twilio-client',
+    'outdo-get-workflow-detail'
+  ],
 
   components: {
-    Gallery,
+    Simulator,
     Builder,
     Breadcrumb
   },
 
   metaInfo () {
-    return { title: this.$t('project') }
+    return { title: this.$t('workflow') }
   },
 
   data: () => {
     return {
-      title: null,
       gutter: 25,
       size: 'lg'
     }
@@ -50,11 +54,12 @@ export default {
   computed: {
     loading () {
       return this.$store.state.loading
+    },
+    title () {
+      return Object.is(this.$store.state.outdo.active.workflow, null)
+        ? ''
+        : this.$store.state.outdo.active.workflow.name
     }
-  },
-
-  beforeMount () {
-    // this.title = `${this.$route.params.workspace}/${this.$route.params.repository}/${this.$route.params.project}`
   }
 
 }

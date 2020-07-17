@@ -10,7 +10,10 @@
     <breadcrumb :title="workspaceTitle" :subtitle="subtitle" />
     <va-row>
       <va-column :xs="12" :sm="12" :md="12" :lg="12">
-        <va-table :hover="hover" :size="size">
+        <va-alert v-if="repositories.length === 0" :type="alert.type" :title="alert.title">
+          <p>{{ alert.body }}</p>
+        </va-alert>
+        <va-table v-else :hover="hover" :size="size">
           <table>
             <thead>
               <tr>
@@ -62,6 +65,11 @@ export default {
 
   data: () => {
     return {
+      alert: {
+        type: 'warning',
+        title: 'No repositories in this workspace!',
+        body: 'Currently there are no repositories in this workspace, you may considering creating a new repository from bitbucket / browse one of your shared repositories.'
+      },
       gutter: 25,
       hover: true,
       size: 'lg',

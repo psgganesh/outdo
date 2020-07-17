@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class ProjectCollection extends ResourceCollection
+class WorkflowCollection extends ResourceCollection
 {
     /**
      * Transform the resource collection into an array.
@@ -19,7 +19,7 @@ class ProjectCollection extends ResourceCollection
                 return [
                     'id' => $item->id,
                     'name' => $item->name,
-                    'screens_id' => $item->screens_id,
+                    'screens_count' => $item->screens->count(),
                     'user_id' => $item->user_id,
                     'created_by' => $item->created_by,
                 ];
