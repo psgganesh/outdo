@@ -1,9 +1,9 @@
 <template>
-  <h6>Images</h6>
+  <h1>Simulator</h1>
 </template>
 
 <script>
 export default {
-  name: 'Gallery'
+  name: 'Simulator'
 }
 </script>
