@@ -21,15 +21,15 @@ export default {
       rect: null,
       started: false,
       gutter: 25,
-      size: 'lg'
+      size: 'lg',
+      canvasObjects: []
     }
   },
 
   mounted () {
     const ref = this.$refs.can
     const canvas = new fabric.Canvas(ref)
-    // const rect = new fabric.Rect({ fill: '#2196f366', width: 20, height: 20 })
-    // canvas.add(rect)
+
     canvas.setBackgroundImage('https://outdo.test/test/1.png', canvas.renderAll.bind(canvas))
 
     canvas.on('mouse:down', function (options) {
@@ -80,7 +80,11 @@ export default {
         this.started = false
       }
 
-      canvas.getActiveObject()
+      var square = canvas.getActiveObject()
+      if (!Object.is(square, null)) {
+        square.setCoords()
+      }
+
       if (this.rect.width > 1 && this.rect.height > 1) {
         console.log(this.rect)
       }
