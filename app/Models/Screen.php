@@ -9,6 +9,8 @@ class Screen extends Model
 {
     protected $table = "screens";
 
+    public $incrementing = false;
+    
     /**
      * Static boot method which calls itself, everytime
      * a instance of this model is created anywhere

@@ -8,6 +8,8 @@ class Workflow extends Model
 {
     protected $table = "workflows";
 
+    public $incrementing = false;
+    
     /**
      * Static boot method which calls itself, everytime
      * a instance of this model is created anywhere

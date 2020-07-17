@@ -19,7 +19,7 @@ class WorkflowCollection extends ResourceCollection
                 return [
                     'id' => $item->id,
                     'name' => $item->name,
-                    'screens_count' => $item->screens->count(),
+                    'screens_count' => (empty($item->screens)) ? 0 : $item->screens->count(),
                     'user_id' => $item->user_id,
                     'created_by' => $item->created_by,
                 ];
