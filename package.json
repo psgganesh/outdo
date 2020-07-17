@@ -15,6 +15,7 @@
     "axios": "^0.18.1",
     "babel-runtime": "^6.26.0",
     "bitbucket": "^2.2.0",
+    "fabric": "^3.6.3",
     "js-cookie": "^2.2.0",
     "moment": "^2.27.0",
     "sweetalert2": "^8.10.0",

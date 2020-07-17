@@ -5,9 +5,9 @@
       <va-tab name="Issues">
         <issues />
       </va-tab>
-      <!-- <va-tab name="Workflows">
+      <va-tab name="Workflows">
         <workflow />
-      </va-tab> -->
+      </va-tab>
     </va-tabs>
   </div>
 </template>
@@ -20,7 +20,7 @@ import Breadcrumb from '~/components/Breadcrumb'
 export default {
   name: 'Space',
 
-  middleware: ['auth', 'bitbucket-client', 'twilio-client', 'bitbucket-set-active-repositories', 'outdo-get-workflows'],
+  middleware: ['auth', 'bitbucket-client', 'twilio-client', 'bitbucket-set-active-repositories'],
 
   components: {
     Issues,

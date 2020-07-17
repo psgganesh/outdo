@@ -28,7 +28,6 @@ export const actions = {
       const response = await axios.get('/api/projects', {
         user: user.id
       })
-      console.log(response)
       commit('LOAD_PROJECTS', response.data.data)
     } catch (e) {
       console.log('Unable to fetch projects')
@@ -43,7 +42,6 @@ export const actions = {
         user: user.id,
         project: project
       })
-      console.log(response)
       commit('LOAD_SCREENS', response.data.data)
     } catch (e) {
       console.log('Unable to fetch project screens')

@@ -9,7 +9,9 @@
       </va-column>
       <va-column v-for="project in projects" :key="project.id" :xs="12" :sm="3" :md="2" :lg="2">
         <va-card class="project card m-b-10" :elevation="elevation" :padding="padding">
-          <h3>{{ project.name }}</h3>
+          <h3 @click.stop="openProject(project)">
+            {{ project.name }}
+          </h3>
         </va-card>
       </va-column>
     </va-row>
@@ -38,7 +40,15 @@ export default {
   },
 
   methods: {
-
+    openProject (project) {
+      console.log('clicked openProject')
+      const params = {
+        workspace: this.$route.params.workspace,
+        repository: this.$route.params.repository,
+        id: project.id
+      }
+      this.$router.push({ name: 'project', params: { params } })
+    }
   }
 }
 </script>
