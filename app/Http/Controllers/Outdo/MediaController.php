@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers\Outdo;
 
-use App\Models\Image;
+use App\Models\Screen;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class MediaController extends Controller
 {
-    public $image;
+    public $screen;
 
-    public function __construct(Image $image)
+    public function __construct(Screen $screen)
     {
-        $this->image = $image;
+        $this->screen = $screen;
     }
 
     public function upload(Request $request, $type)
@@ -33,7 +33,7 @@ class MediaController extends Controller
             'dimension' => ($dimension)?? null
         ]);
 
-        $uploadedImage = $this->image->create([
+        $uploadedImage = $this->screen->create([
             'path' => $request->path,
             'size' => $request->size,
             'name' => $request->name,

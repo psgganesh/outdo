@@ -5,9 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 
-class Image extends Model
+class Screen extends Model
 {
-    protected $table = "images";
+    protected $table = "screens";
 
     /**
      * Static boot method which calls itself, everytime
@@ -20,9 +20,9 @@ class Image extends Model
     {
         parent::boot();
     
-        static::creating(function ($image) {
-            $image->user_id = auth()->guard('api')->user()->id;
-            $image->created_by = auth()->guard('api')->user()->username;
+        static::creating(function ($screen) {
+            $screen->user_id = auth()->guard('api')->user()->id;
+            $screen->created_by = auth()->guard('api')->user()->username;
         });
     }
  
@@ -48,7 +48,7 @@ class Image extends Model
 
     public function getUrlAttribute()
     {
-        return Storage::disk('s3')->url($this->path);
+        return Storage::disk('local')->url($this->path);
     }
 
     public function getUploadedTimeAttribute()
@@ -59,6 +59,11 @@ class Image extends Model
     public function getSizeInKbAttribute()
     {
         return round($this->size / 1024, 2);
+    }
+
+    public function project()
+    {
+        return $this->belongsTo('App\Models\Project', 'project_id');
     }
 
     public function user()

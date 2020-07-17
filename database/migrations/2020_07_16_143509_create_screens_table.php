@@ -13,7 +13,7 @@ class CreateImagesTable extends Migration
      */
     public function up()
     {
-        Schema::create('images', function (Blueprint $table) {
+        Schema::create('screens', function (Blueprint $table) {
             $table->id();
             $table->string('path')->nullable();
             $table->string('size', 255)->nullable();
@@ -21,6 +21,7 @@ class CreateImagesTable extends Migration
             $table->string('dimension', 255)->nullable();
             $table->string('type', 255)->nullable();
             $table->json('additional_data', 255)->nullable()->comment('JSON hotspots of the image');
+            $table->bigInteger('project_id')->nullable();
             $table->unsignedInteger('user_id')->nullable();
             $table->string('created_by')->nullable()->comment('Username / email id of the user who created this record');
             $table->timestamps();
@@ -34,6 +35,6 @@ class CreateImagesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('images');
+        Schema::dropIfExists('screens');
     }
 }
