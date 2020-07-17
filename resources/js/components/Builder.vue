@@ -81,9 +81,9 @@ export default {
       }
 
       canvas.getActiveObject()
-      // square.setCoords()
-      // console.log(square)
-      // canvas.add(square)
+      if (this.rect.width > 1 && this.rect.height > 1) {
+        console.log(this.rect)
+      }
     })
   }
 }
