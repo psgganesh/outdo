@@ -1,26 +1,26 @@
 <template>
   <va-row>
     <va-column :xs="3" :sm="3" :md="3" :lg="3">
-      <!-- <va-card :elevation="elevation" :padding="padding" class="card m-b-10 full-height">
-        <va-table :hover="hover" :size="size">
-          <table>
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Size</th>
-                <th>Last commit</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(file, index) in canvasObjects" :key="index" class="space">
-                <td><va-icon :type="fileIcon(file.type)" padding="4px" />{{ file.path }}</td>
-                <td>{{ (Object.is(file.size, null)) ? null : file.size }}</td>
-                <td>{{ file.commit.hash }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </va-table>
-      </va-card> -->
+      <va-card :elevation="elevation" :padding="padding" class="card m-b-10 full-height">
+        <va-form ref="form" :type="form.type">
+          <va-form-item
+            v-for="(item, index) in form.dynamicItems"
+            :key="index"
+            :label="item.label"
+          >
+            <va-input v-model="item.value" style="margin-right: 5px;" :rules="[{type:'required'}]" :name="'dynamic' + index" />
+            <va-button @click="deleteItem(index)">
+              <va-icon type="times" />
+            </va-button>
+          </va-form-item>
+          <va-form-item>
+            <va-button type="subtle" @click="addItem">
+              <va-icon type="plus" margin="0 7px 0 0" />
+              Add item
+            </va-button>
+          </va-form-item>
+        </va-form>
+      </va-card>
     </va-column>
     <va-column :xs="7" :sm="7" :md="7" :lg="7" class="full-height" style="border-left:1px solid #CCC;border-right:1px solid #CCC;">
       <div class="window_outline">
@@ -32,14 +32,25 @@
         </div>
         <div class="browser_body">
           <div style="width:100%;text-align: -webkit-center;">
-            <canvas
-              ref="can"
-              width="800"
-              height="600"
-              @mousedown="startSelect"
-              @mousemove="drawRect"
-              @mouseup="stopSelect"
-            />
+            <div v-if="showDropzone">
+              <vue-dropzone
+                id="dropzone_en_desktop"
+                ref="dropzoneEnDesktop"
+                :options="dropzoneOptions_en_desktop"
+                @vdropzone-success="fileUploadSuccess"
+                @vdropzone-sending="fileUploadingEvent"
+              />
+            </div>
+            <div v-if="onImageReady">
+              <canvas
+                ref="can"
+                width="800"
+                height="600"
+                @mousedown="startSelect"
+                @mousemove="drawRect"
+                @mouseup="stopSelect"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -50,14 +61,30 @@
 
 <script>
 import { fabric } from 'fabric'
+import vue2Dropzone from 'vue2-dropzone'
+
+const UPLOAD_URL = process.env.MIX_APP_URL
 
 export default {
   name: 'Builder',
 
+  components: {
+    'vueDropzone': vue2Dropzone
+  },
+
   data () {
     return {
+      form: {
+        type: 'horizontal',
+        dynamicItems: [
+          {
+            label: 'Page 1',
+            value: null
+          }
+        ]
+      },
       elevation: 0,
-      padding: 5,
+      padding: 10,
       canvas: null,
       x: null,
       y: null,
@@ -66,20 +93,45 @@ export default {
       gutter: 25,
       size: 'lg',
       hover: true,
-      canvasObjects: []
+      canvasObjects: [],
+      showDropzone: true,
+      onImageReady: false,
+      dropzoneOptions_en_desktop: {
+        url: `${UPLOAD_URL}/api/media/upload/screen`,
+        thumbnailWidth: 480,
+        thumbnailHeight: 270,
+        addRemoveLinks: true,
+        dictDefaultMessage: 'Upload desktop image',
+        headers: null
+      }
     }
   },
 
   mounted () {
     const ref = this.$refs.can
     this.canvas = new fabric.Canvas(ref)
-    this.canvas.setBackgroundImage('https://outdo.test/test/1.png', this.canvas.renderAll.bind(this.canvas))
     this.canvas.on('mouse:down', (e) => this.startSelect(e))
     this.canvas.on('mouse:move', (e) => this.drawRect(e))
     this.canvas.on('mouse:up', (e) => this.stopSelect(e))
+    const token = this.$store.getters['auth/token']
+    const headers = {
+      'Cache-Control': null,
+      'X-Requested-With': null,
+      Authorization: `Bearer ${token}`
+    }
+    this.dropzoneOptions_en_desktop.headers = headers
   },
 
   methods: {
+    addItem () {
+      this.form.dynamicItems.push({
+        label: `Page ${this.form.dynamicItems.length + 1}`,
+        value: 'Random data'
+      })
+    },
+    deleteItem (index) {
+      this.form.dynamicItems.splice(index, 1)
+    },
     startSelect (options) {
       if (this.canvas.getActiveObject()) {
         return false
@@ -136,8 +188,18 @@ export default {
         console.log(this.canvasObjects)
       }
     },
-    debug () {
-      console.log(this.canvasObjects)
+    fileUploadingEvent (file, xhr, formData) {
+      formData.append('name', file.name)
+      formData.append('locale', 'en')
+      formData.append('type', 'desktop')
+    },
+    fileUploadSuccess (file, response) {
+      const image = response.url.replace('/storage', UPLOAD_URL)
+      this.showDropzone = false
+      console.log(image)
+      this.canvas.setBackgroundImage(image, this.canvas.renderAll.bind(this.canvas))
+      this.onImageReady = true
+      this.$store.commit('outdo/PUSH_SCREEN', image)
     }
   }
 }
@@ -150,19 +212,17 @@ export default {
 }
 
 .window_outline {
-  border: 3px solid rgba(120,120,120,1);
   border-radius: 5px;
   background-color: white;
   color: #303442;
-  max-width: 810px;
-  margin: 20px 30px;
+  width: 100%;
   height: 643px;
 }
 .window_head {
   background: rgba(200,200,200,1);
   width: 100%;
   height: 2.5em;
-  border-bottom: 3px solid rgba(120,120,120,1);
+  border: 3px solid rgba(120,120,120,1);
   display: flex;
 }
 

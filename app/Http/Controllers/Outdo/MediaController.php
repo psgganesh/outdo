@@ -24,7 +24,7 @@ class MediaController extends Controller
         $imgSize = getimagesize($request->file);
         $dimension = $imgSize[0].'x'.$imgSize[1];
 
-        $path = Storage::disk('local')->put($type, $request->file);
+        $path = Storage::disk('public')->put($type, $request->file, 'public');
 
         $request->merge([
             'path' => $path,

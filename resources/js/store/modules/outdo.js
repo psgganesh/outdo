@@ -5,7 +5,8 @@ export const state = {
   workflows: [],
   screens: [],
   active: {
-    workflow: null
+    workflow: null,
+    screens: []
   }
 }
 
@@ -24,6 +25,9 @@ export const mutations = {
   },
   LOAD_SCREENS (state, screens) {
     state.screens = screens
+  },
+  PUSH_SCREEN (state, screen) {
+    state.active.screens.push(screen)
   }
 }
 

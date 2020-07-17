@@ -14,7 +14,7 @@ class CreateWorkflowsTable extends Migration
     public function up()
     {
         Schema::create('workflows', function (Blueprint $table) {
-            $table->uuid('id');
+            $table->uuid('id')->primary();
             $table->string('name')->nullable();
             $table->bigInteger('screens_id')->nullable();
             $table->bigInteger('user_id')->nullable();

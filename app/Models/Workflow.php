@@ -2,14 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 
 class Workflow extends Model
 {
     protected $table = "workflows";
 
-    public $incrementing = false;
-    
     /**
      * Static boot method which calls itself, everytime
      * a instance of this model is created anywhere
@@ -21,9 +20,10 @@ class Workflow extends Model
     {
         parent::boot();
     
-        static::creating(function ($image) {
-            $image->user_id = auth()->guard('api')->user()->id;
-            $image->created_by = auth()->guard('api')->user()->username;
+        static::creating(function ($workflow) {
+            $workflow->{$workflow->getKeyName()} = (string) Str::uuid();
+            $workflow->user_id = auth()->guard('api')->user()->id;
+            $workflow->created_by = auth()->guard('api')->user()->username;
         });
     }
 
@@ -32,9 +32,17 @@ class Workflow extends Model
      *
      * @var array
      */
-    protected $guarded = [
-        'id'
-    ];
+    protected $guarded = [];
+
+    public function getIncrementing()
+    {
+        return false;
+    }
+
+    public function getKeyType()
+    {
+        return 'string';
+    }
 
     /**
      * Function to return selected response in JSON collection / resource
@@ -66,10 +74,10 @@ class Workflow extends Model
     }
 
     /**
-     * Relationship with workflow table
+     * Relationship with screens table
      */
-    public function workflow()
+    public function screens()
     {
-        return $this->hasOne('App\Models\Workflow', 'workflow_id', 'id');
+        return $this->hasMany('App\Models\Screen', 'workflow_id', 'id');
     }
 }

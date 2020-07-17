@@ -2,14 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 
 class Screen extends Model
 {
     protected $table = "screens";
-
-    public $incrementing = false;
     
     /**
      * Static boot method which calls itself, everytime
@@ -23,6 +22,7 @@ class Screen extends Model
         parent::boot();
     
         static::creating(function ($screen) {
+            $screen->{$screen->getKeyName()} = (string) Str::uuid();
             $screen->user_id = auth()->guard('api')->user()->id;
             $screen->created_by = auth()->guard('api')->user()->username;
         });
@@ -33,9 +33,7 @@ class Screen extends Model
      *
      * @var array
      */
-    protected $guarded = [
-        'id'
-    ];
+    protected $guarded = [];
 
     /**
      * The attributes that should be appended on every toArray() result set.
@@ -47,6 +45,16 @@ class Screen extends Model
         'uploaded_time',
         'size_in_kb'
     ];
+
+    public function getIncrementing()
+    {
+        return false;
+    }
+
+    public function getKeyType()
+    {
+        return 'string';
+    }
 
     public function getUrlAttribute()
     {

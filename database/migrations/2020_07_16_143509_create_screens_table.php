@@ -14,7 +14,7 @@ class CreateScreensTable extends Migration
     public function up()
     {
         Schema::create('screens', function (Blueprint $table) {
-            $table->uuid('id');
+            $table->uuid('id')->primary();
             $table->string('path')->nullable();
             $table->string('size', 255)->nullable();
             $table->string('name', 255)->nullable();

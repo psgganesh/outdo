@@ -5,9 +5,9 @@
       <va-tab name="Issues">
         <issues />
       </va-tab>
-      <!-- <va-tab name="Workflows">
+      <va-tab name="Workflows">
         <workflow />
-      </va-tab> -->
+      </va-tab>
     </va-tabs>
   </div>
 </template>
