@@ -42,7 +42,16 @@
           </div>
         </div>
         <va-row>
-          <va-column :xs="12" :sm="12" :md="12" :lg="12" style="border:3px solid rgba(200,200,200,1)" />
+          <va-column :xs="12" :sm="12" :md="12" :lg="12" style="border-top:3px solid rgba(200,200,200,1);">
+            <va-tabs style="margin:10px;">
+              <va-tab name="Actions">
+                <h1>Test</h1>
+              </va-tab>
+              <va-tab name="Debugger">
+                <hotspot-inspector :spots="canvasObjects" />
+              </va-tab>
+            </va-tabs>
+          </va-column>
         </va-row>
       </va-column>
     </va-row>
@@ -51,7 +60,9 @@
 
 <script>
 import { fabric } from 'fabric'
+import { v4 as uuidv4 } from 'uuid'
 import vue2Dropzone from 'vue2-dropzone'
+import HotspotInspector from '~/components/HotspotInspector'
 
 const UPLOAD_URL = process.env.MIX_APP_URL
 
@@ -59,6 +70,7 @@ export default {
   name: 'Builder',
 
   components: {
+    HotspotInspector,
     'vueDropzone': vue2Dropzone
   },
 
@@ -124,6 +136,7 @@ export default {
       this.x = pointer.x
       this.y = pointer.y
       this.rect = new fabric.Rect({
+        id: uuidv4(),
         left: this.x,
         top: this.y,
         originX: 'left',
@@ -165,9 +178,9 @@ export default {
         square.setCoords()
       }
 
-      if (this.rect.width > 1 && this.rect.height > 1) {
+      let index = this.canvasObjects.findIndex((canvasObject) => canvasObject.id === this.rect.id)
+      if (index === -1) {
         this.canvasObjects.push(this.rect)
-        console.log(this.canvasObjects)
       }
     },
     fileUploadingEvent (file, xhr, formData) {
@@ -185,9 +198,8 @@ export default {
       this.$refs.screensDropzone.removeFile(file)
     },
     applyImageOnCanvas (image) {
-      console.log(image)
       this.canvas.setBackgroundImage(image.src, this.canvas.renderAll.bind(this.canvas), {
-      // Needed to position backgroundImage at 0/0
+        // Needed to position backgroundImage at 0/0
         top: 0,
         left: 0,
         originX: 'left',
