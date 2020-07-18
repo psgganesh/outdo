@@ -18,7 +18,8 @@ class CreateScreensTable extends Migration
             $table->string('path')->nullable();
             $table->string('size', 255)->nullable();
             $table->string('name', 255)->nullable();
-            $table->string('dimension', 255)->nullable();
+            $table->integer('width')->nullable();
+            $table->integer('height')->nullable();
             $table->string('type', 255)->nullable();
             $table->json('additional_data', 255)->nullable()->comment('JSON hotspots of the image');
             $table->bigInteger('workflow_id')->nullable();

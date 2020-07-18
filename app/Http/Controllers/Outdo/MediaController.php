@@ -22,7 +22,8 @@ class MediaController extends Controller
             $type = 'default';
         }
         $imgSize = getimagesize($request->file);
-        $dimension = $imgSize[0].'x'.$imgSize[1];
+        $width = $imgSize[0];
+        $height = $imgSize[1];
 
         $path = Storage::disk('public')->put($type, $request->file, 'public');
 
@@ -30,14 +31,16 @@ class MediaController extends Controller
             'path' => $path,
             'size' => $request->file->getSize(),
             'name' => $request->name,
-            'dimension' => ($dimension)?? null
+            'width' => ($width)?? null,
+            'height' => ($height) ?? null
         ]);
 
         $uploadedImage = $this->screen->create([
             'path' => $request->path,
             'size' => $request->size,
             'name' => $request->name,
-            'dimension' => $request->dimension,
+            'width' => $request->width,
+            'height' => $request->height,
             'type' => $type
         ])->fresh()->toArray();
 

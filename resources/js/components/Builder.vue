@@ -13,7 +13,7 @@
       <div style="width:100%; padding: 10px;">
         <va-card v-for="(image, index) in uploadedImagesList" :key="`image_${index}`" :elevation="thumbnail.elevation" :padding="thumbnail.padding">
           <img
-            :src="image"
+            :src="image.src"
             aspect-ratio="1"
             class="screen-thumbnail"
             @click.stop="applyImageOnCanvas(image)"
@@ -33,8 +33,6 @@
           <div style="width:100%;text-align: -webkit-center;">
             <canvas
               ref="can"
-              width="800"
-              height="600"
               @mousedown="startSelect"
               @mousemove="drawRect"
               @mouseup="stopSelect"
@@ -174,12 +172,19 @@ export default {
       formData.append('type', 'desktop')
     },
     fileUploadSuccess (file, response) {
-      const image = response.url.replace('/storage', UPLOAD_URL)
-      this.$store.commit('outdo/PUSH_SCREEN', image)
+      console.log(response)
+      const payload = {
+        src: response.url.replace('/storage', UPLOAD_URL),
+        response: response
+      }
+      this.$store.commit('outdo/PUSH_SCREEN', payload)
       this.$refs.screensDropzone.removeFile(file)
     },
     applyImageOnCanvas (image) {
-      this.canvas.setBackgroundImage(image, this.canvas.renderAll.bind(this.canvas))
+      console.log(image)
+      this.canvas.setWidth(image.response.width)
+      this.canvas.setHeight(image.response.height)
+      this.canvas.setBackgroundImage(image.src, this.canvas.renderAll.bind(this.canvas))
     }
   }
 }
