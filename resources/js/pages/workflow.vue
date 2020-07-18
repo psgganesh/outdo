@@ -2,15 +2,37 @@
   <va-row v-if="loading" :gutter="gutter" class="text-align-center full-height">
     <va-column :xs="12" :sm="12" :md="12" :lg="12">
       <div>
-        <va-loading v-if="loading" size="lg" color="blue" />
+        <va-loading v-if="loading" size="lg" color="blue" center />
       </div>
     </va-column>
   </va-row>
   <div v-else>
-    <breadcrumb :title="title" />
+    <va-page-header>
+      <div slot="breadcrumb">
+        <va-breadcrumb separator="/">
+          <va-breadcrumb-item to="/home">
+            {{ this.$t('home') }}
+          </va-breadcrumb-item>
+          <va-breadcrumb-item :to="this.$route.path">
+            {{ this.$route.name }}
+          </va-breadcrumb-item>
+        </va-breadcrumb>
+      </div>
+      <div slot="title">
+        {{ currentWorkflow.name }}
+      </div>
+      <div slot="subtitle">
+        <span>{{ `${currentWorkflow.screens_count} screens` }}</span>
+      </div>
+      <div slot="actions">
+        <va-button type="primary" icon-before="save" @click.stop="save">
+          Save changes
+        </va-button>
+      </div>
+    </va-page-header>
     <va-tabs>
       <va-tab name="Story builder">
-        <builder />
+        <builder :workflow="currentWorkflow.id" />
       </va-tab>
       <va-tab name="Story simulator">
         <simulator />
@@ -20,9 +42,9 @@
 </template>
 
 <script>
-import Simulator from '~/components/Simulator'
+import { mapActions } from 'vuex'
 import Builder from '~/components/Builder'
-import Breadcrumb from '~/components/Breadcrumb'
+import Simulator from '~/components/Simulator'
 
 export default {
   name: 'Workflow',
@@ -35,9 +57,8 @@ export default {
   ],
 
   components: {
-    Simulator,
     Builder,
-    Breadcrumb
+    Simulator
   },
 
   metaInfo () {
@@ -46,6 +67,7 @@ export default {
 
   data: () => {
     return {
+      id: null,
       gutter: 25,
       size: 'lg'
     }
@@ -55,12 +77,29 @@ export default {
     loading () {
       return this.$store.state.loading
     },
-    title () {
+    currentWorkflow () {
       return Object.is(this.$store.state.outdo.active.workflow, null)
         ? ''
-        : this.$store.state.outdo.active.workflow.name
+        : this.$store.state.outdo.active.workflow
+    }
+  },
+
+  mounted () {
+    this.id = this.$route.params.id
+  },
+
+  methods: {
+    ...mapActions([
+      'START_AUI_LOADING',
+      'STOP_AUI_LOADING'
+    ]),
+    save () {
+      this.START_AUI_LOADING()
+      this.$store.dispatch('outdo/save', this.id).then(() => {
+        this.STOP_AUI_LOADING()
+        console.log('Saved!')
+      })
     }
   }
-
 }
 </script>

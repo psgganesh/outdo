@@ -55,6 +55,7 @@ class Workflow extends Model
             'id' => $this->id,
             'name' => $this->name,
             'screens' => $this->screens,
+            'screens_count' => (empty($this->screens)) ? 0 : $this->screens->count(),
             'user_id' => $this->user_id,
             'created_by' => $this->created_by,
             'created_at' =>  $this->created_at,

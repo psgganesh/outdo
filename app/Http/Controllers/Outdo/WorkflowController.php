@@ -70,7 +70,8 @@ class WorkflowController
      */
     public function update(Request $request, $id)
     {
-        //
+        // Update screens based on workflow
+        return response()->json(['data'=>'done'], 200);
     }
 
     /**

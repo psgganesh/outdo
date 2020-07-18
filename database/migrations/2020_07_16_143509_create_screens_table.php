@@ -22,7 +22,7 @@ class CreateScreensTable extends Migration
             $table->integer('height')->nullable();
             $table->string('type', 255)->nullable();
             $table->json('additional_data', 255)->nullable()->comment('JSON hotspots of the image');
-            $table->bigInteger('workflow_id')->nullable();
+            $table->string('workflow_id', 36)->nullable();
             $table->unsignedInteger('user_id')->nullable();
             $table->string('created_by')->nullable()->comment('Username / email id of the user who created this record');
             $table->timestamps();

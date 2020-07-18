@@ -20,7 +20,7 @@
             :padding="thumbnail.padding"
           >
             <img
-              :src="image.src"
+              :src="(typeof image.src === 'undefined') ? image.url : image.src"
               aspect-ratio="1"
               class="screen-thumbnail"
               @click.stop="applyImageOnCanvas(image)"
@@ -78,6 +78,10 @@ export default {
   components: {
     HotspotInspector,
     'vueDropzone': vue2Dropzone
+  },
+
+  props: {
+    workflow: { type: String, default: 'unknown-workflow' }
   },
 
   data () {
@@ -219,8 +223,7 @@ export default {
     },
     fileUploadingEvent (file, xhr, formData) {
       formData.append('name', file.name)
-      formData.append('locale', 'en')
-      formData.append('type', 'desktop')
+      formData.append('workflow_id', this.workflow)
     },
     fileUploadSuccess (file, response) {
       console.log(response)
@@ -236,7 +239,8 @@ export default {
       this.currentActiveScreen = image
       this.canvas.clear()
 
-      this.canvas.setBackgroundImage(image.src, this.canvas.renderAll.bind(this.canvas), {
+      let imageSrc = (typeof image.src === 'undefined') ? image.url : image.src
+      this.canvas.setBackgroundImage(imageSrc, this.canvas.renderAll.bind(this.canvas), {
         // Needed to position backgroundImage at 0/0
         top: 0,
         left: 0,

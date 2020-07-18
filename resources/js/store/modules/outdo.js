@@ -18,7 +18,7 @@ export const getters = {
 // mutations
 export const mutations = {
   SET_ACTIVE_WORKFLOW (state, workflow) {
-    state.active.workflow = workflow
+    state.active.workflow = workflow.data
   },
   LOAD_WORKFLOWS (state, workflows) {
     state.workflows = workflows
@@ -43,6 +43,12 @@ export const mutations = {
   },
   SET_CURRENT_CANVAS_STATE (state, canvasState) {
     state.active.screen.canvasState = canvasState
+  },
+  PREPARE_PUT_DATA (state) {
+    state.screens.map((canvasScreens) => {
+      canvasScreens.additional_data = canvasScreens.canvasState
+      delete canvasScreens.canvasState
+    })
   }
 }
 
@@ -67,9 +73,21 @@ export const actions = {
       const { screens } = response.data.data
       delete response.data.data.screens
       commit('LOAD_SCREENS', screens)
-      commit('SET_ACTIVE_WORKFLOW', response.data.data)
+      commit('SET_ACTIVE_WORKFLOW', response.data)
     } catch (e) {
       console.log('Unable to fetch workflow screens')
+    }
+  },
+
+  async save ({ commit, state }, id) {
+    try {
+      commit('PREPARE_PUT_DATA')
+      const { data } = await axios.put(`/api/workflows/${id}`, {
+        screens: state.screens
+      })
+      console.log(data)
+    } catch (e) {
+      console.log('Unable to save workflow')
     }
   }
 
