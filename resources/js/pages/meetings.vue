@@ -3,7 +3,7 @@
     <va-container fluid size="lg" style="height: 80vh;">
       <div id="remoteTrack" class="dominant-speaker" />
       <div id="localTrack" />
-      <va-button round size="lg" type="danger" style="position:absolute; left: 50%; right: 50%; bottom: 10px;" @click.stop="leave">
+      <va-button round size="lg" type="danger" style="position:absolute; left: 50%; right: 50%; bottom: 10px;margin-bottom:20px;z-index:100;" @click.stop="leave">
         <va-icon type="times" />
       </va-button>
     </va-container>
