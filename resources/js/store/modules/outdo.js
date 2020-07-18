@@ -6,7 +6,8 @@ export const state = {
   screens: [],
   active: {
     workflow: null,
-    screen: null
+    screen: null,
+    canvasState: null
   }
 }
 
@@ -24,32 +25,48 @@ export const mutations = {
     state.workflows = workflows
   },
   LOAD_SCREENS (state, screens) {
-    // state.screens = screens
-    state.screens.push({
-      'src': 'https://outdo.test/screen/CAaQWw6tKvY7CfyluPJByOMycNioiVbi8dZifKlp.png',
-      'response': {
-        'id': 'd854c618-e321-44f8-870f-a7f5df0836d4',
-        'path': 'screen/CAaQWw6tKvY7CfyluPJByOMycNioiVbi8dZifKlp.png',
-        'size': '139235',
-        'name': '3.png',
-        'width': 1920,
-        'height': 861,
-        'type': 'screen',
-        'additional_data': null,
-        'workflow_id': null,
-        'user_id': 1,
-        'created_by': 'shankarsapple',
-        'created_at': '2020-07-18T09:59:43.000000Z',
-        'updated_at': '2020-07-18T09:59:43.000000Z',
-        'url': '/storage/screen/CAaQWw6tKvY7CfyluPJByOMycNioiVbi8dZifKlp.png',
-        'uploaded_time': '1 second ago',
-        'size_in_kb': 135.97
-      }
-    })
+    state.screens = screens
+    // state.screens.push({
+    //   'id': 'd854c618-e321-44f8-870f-a7f5df0836d4',
+    //   'src': 'https://outdo.test/screen/CAaQWw6tKvY7CfyluPJByOMycNioiVbi8dZifKlp.png',
+    //   'response': {
+    //     'id': 'd854c618-e321-44f8-870f-a7f5df0836d4',
+    //     'path': 'screen/CAaQWw6tKvY7CfyluPJByOMycNioiVbi8dZifKlp.png',
+    //     'size': '139235',
+    //     'name': '3.png',
+    //     'width': 1920,
+    //     'height': 861,
+    //     'type': 'screen',
+    //     'additional_data': null,
+    //     'workflow_id': null,
+    //     'user_id': 1,
+    //     'created_by': 'shankarsapple',
+    //     'created_at': '2020-07-18T09:59:43.000000Z',
+    //     'updated_at': '2020-07-18T09:59:43.000000Z',
+    //     'url': '/storage/screen/CAaQWw6tKvY7CfyluPJByOMycNioiVbi8dZifKlp.png',
+    //     'uploaded_time': '1 second ago',
+    //     'size_in_kb': 135.97
+    //   }
+    // })
+    if (Object.is(state.active.screen, null)) {
+      let [ activeScreen ] = state.screens
+      state.active.screen = activeScreen
+    }
   },
   PUSH_SCREEN (state, screen) {
     state.screens.push(screen)
-    state.active.screen = screen
+  },
+  SET_ACTIVE_SCREEN (state, activescreen) {
+    let [ activeScreen ] = state.screens
+    state.screens.map((screen) => {
+      if (screen.id === activescreen.id) {
+        activeScreen = screen
+      }
+    })
+    state.active.screen = activeScreen
+  },
+  SET_CURRENT_CANVAS_STATE (state, canvasState) {
+    state.active.canvasState = canvasState
   }
 }
 

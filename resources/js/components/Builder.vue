@@ -12,7 +12,13 @@
           />
         </va-card>
         <div style="width:100%; padding: 10px;">
-          <va-card v-for="(image, index) in uploadedImagesList" :key="`image_${index}`" :elevation="thumbnail.elevation" :padding="thumbnail.padding">
+          <va-card
+            v-for="(image, index) in uploadedImagesList"
+            :key="`image_${index}`"
+            :elevation="(currentActiveScreen.id === image.id) ? `3` : thumbnail.elevation"
+            class="screen"
+            :padding="thumbnail.padding"
+          >
             <img
               :src="image.src"
               aspect-ratio="1"
@@ -107,6 +113,22 @@ export default {
   computed: {
     uploadedImagesList () {
       return this.$store.state.outdo.screens
+    },
+    currentActiveScreen: {
+      get () {
+        return this.$store.state.outdo.active.screen
+      },
+      set (screen) {
+        this.$store.commit('outdo/SET_ACTIVE_SCREEN', screen)
+      }
+    },
+    currentScreenState: {
+      get () {
+        return this.$store.state.outdo.active.canvasState
+      },
+      set (canvasState) {
+        this.$store.commit('outdo/SET_CURRENT_CANVAS_STATE', canvasState)
+      }
     }
   },
 
@@ -181,6 +203,7 @@ export default {
       let index = this.canvasObjects.findIndex((canvasObject) => canvasObject.id === this.rect.id)
       if (index === -1) {
         this.canvasObjects.push(this.rect)
+        this.currentScreenState = this.canvas.toJSON()
       }
     },
     fileUploadingEvent (file, xhr, formData) {
@@ -191,6 +214,7 @@ export default {
     fileUploadSuccess (file, response) {
       console.log(response)
       const payload = {
+        id: uuidv4(),
         src: response.url.replace('/storage', UPLOAD_URL),
         response: response
       }
@@ -198,6 +222,8 @@ export default {
       this.$refs.screensDropzone.removeFile(file)
     },
     applyImageOnCanvas (image) {
+      this.canvas.clear()
+
       this.canvas.setBackgroundImage(image.src, this.canvas.renderAll.bind(this.canvas), {
         // Needed to position backgroundImage at 0/0
         top: 0,
@@ -207,10 +233,14 @@ export default {
         scaleX: 0.67,
         scaleY: 0.67
       })
-      this.canvas.setDimensions({
-        width: 1300,
-        height: 580
-      })
+      this.canvas.setDimensions({ width: 1300, height: 580 })
+      if (Object.is(this.currentScreenState, null)) {
+        this.currentScreenState = this.canvas.toJSON()
+      } else {
+        let json = this.currentScreenState
+        this.canvas.loadFromJSON(json, this.canvas.renderAll.bind(this.canvas))
+      }
+      this.currentActiveScreen = image
     }
   }
 }
@@ -256,5 +286,8 @@ export default {
   flex: 1 1 10px;
   max-width: 50%;
   height: 1.3em
+}
+.screen {
+  margin: 0px 0px 20px 0px;
 }
 </style>
