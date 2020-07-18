@@ -13,6 +13,13 @@
               <va-icon type="times" />
             </va-button>
           </va-form-item>
+          <vue-dropzone
+            id="screens-dropzone"
+            ref="screensDropzone"
+            :options="screensDropzoneUploadArea"
+            @vdropzone-success="fileUploadSuccess"
+            @vdropzone-sending="fileUploadingEvent"
+          />
           <va-form-item>
             <va-button type="subtle" @click="addItem">
               <va-icon type="plus" margin="0 7px 0 0" />
@@ -32,25 +39,14 @@
         </div>
         <div class="browser_body">
           <div style="width:100%;text-align: -webkit-center;">
-            <div v-if="showDropzone">
-              <vue-dropzone
-                id="dropzone_en_desktop"
-                ref="dropzoneEnDesktop"
-                :options="dropzoneOptions_en_desktop"
-                @vdropzone-success="fileUploadSuccess"
-                @vdropzone-sending="fileUploadingEvent"
-              />
-            </div>
-            <div v-if="onImageReady">
-              <canvas
-                ref="can"
-                width="800"
-                height="600"
-                @mousedown="startSelect"
-                @mousemove="drawRect"
-                @mouseup="stopSelect"
-              />
-            </div>
+            <canvas
+              ref="can"
+              width="800"
+              height="600"
+              @mousedown="startSelect"
+              @mousemove="drawRect"
+              @mouseup="stopSelect"
+            />
           </div>
         </div>
       </div>
@@ -94,9 +90,7 @@ export default {
       size: 'lg',
       hover: true,
       canvasObjects: [],
-      showDropzone: true,
-      onImageReady: false,
-      dropzoneOptions_en_desktop: {
+      screensDropzoneUploadArea: {
         url: `${UPLOAD_URL}/api/media/upload/screen`,
         thumbnailWidth: 480,
         thumbnailHeight: 270,
@@ -119,7 +113,7 @@ export default {
       'X-Requested-With': null,
       Authorization: `Bearer ${token}`
     }
-    this.dropzoneOptions_en_desktop.headers = headers
+    this.screensDropzoneUploadArea.headers = headers
   },
 
   methods: {
@@ -195,10 +189,7 @@ export default {
     },
     fileUploadSuccess (file, response) {
       const image = response.url.replace('/storage', UPLOAD_URL)
-      this.showDropzone = false
-      console.log(image)
       this.canvas.setBackgroundImage(image, this.canvas.renderAll.bind(this.canvas))
-      this.onImageReady = true
       this.$store.commit('outdo/PUSH_SCREEN', image)
     }
   }
