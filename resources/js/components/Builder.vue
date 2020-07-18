@@ -15,7 +15,7 @@
           <va-card
             v-for="(image, index) in uploadedImagesList"
             :key="`image_${index}`"
-            :elevation="(currentActiveScreen.id === image.id) ? `3` : thumbnail.elevation"
+            :elevation="computedCurrentActiveScreenElevation(image)"
             class="screen"
             :padding="thumbnail.padding"
           >
@@ -116,7 +116,10 @@ export default {
     },
     currentActiveScreen: {
       get () {
-        return this.$store.state.outdo.active.screen
+        if (!Object.is(this.$store.state.outdo.active.screen, null)) {
+          return this.$store.state.outdo.active.screen
+        }
+        return null
       },
       set (screen) {
         this.$store.commit('outdo/SET_ACTIVE_SCREEN', screen)
@@ -124,7 +127,7 @@ export default {
     },
     currentScreenState: {
       get () {
-        return this.$store.state.outdo.active.canvasState
+        return this.$store.state.outdo.active.screen.canvasState
       },
       set (canvasState) {
         this.$store.commit('outdo/SET_CURRENT_CANVAS_STATE', canvasState)
@@ -148,6 +151,14 @@ export default {
   },
 
   methods: {
+    computedCurrentActiveScreenElevation (image) {
+      if (typeof this.currentActiveScreen !== 'undefined') {
+        if (this.currentActiveScreen.id === image.id) {
+          return `3`
+        }
+      }
+      return this.thumbnail.elevation
+    },
     startSelect (options) {
       if (this.canvas.getActiveObject()) {
         return false
@@ -222,6 +233,7 @@ export default {
       this.$refs.screensDropzone.removeFile(file)
     },
     applyImageOnCanvas (image) {
+      this.currentActiveScreen = image
       this.canvas.clear()
 
       this.canvas.setBackgroundImage(image.src, this.canvas.renderAll.bind(this.canvas), {
@@ -234,13 +246,11 @@ export default {
         scaleY: 0.67
       })
       this.canvas.setDimensions({ width: 1300, height: 580 })
-      if (Object.is(this.currentScreenState, null)) {
-        this.currentScreenState = this.canvas.toJSON()
-      } else {
+
+      if (!Object.is(this.currentScreenState, null)) {
         let json = this.currentScreenState
         this.canvas.loadFromJSON(json, this.canvas.renderAll.bind(this.canvas))
       }
-      this.currentActiveScreen = image
     }
   }
 }
