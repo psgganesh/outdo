@@ -1,6 +1,6 @@
 <template>
   <va-row>
-    <va-column :xs="3" :sm="3" :md="3" :lg="3">
+    <va-column :xs="2" :sm="2" :md="2" :lg="2">
       <va-card :elevation="elevation" :padding="padding" class="card m-b-10">
         <vue-dropzone
           id="screens-dropzone"
@@ -21,7 +21,7 @@
         </va-card>
       </div>
     </va-column>
-    <va-column :xs="7" :sm="7" :md="7" :lg="7" class="full-height" style="border-left:1px solid #CCC;border-right:1px solid #CCC;">
+    <va-column :xs="10" :sm="10" :md="10" :lg="10" class="full-height" style="border-left:1px solid #CCC;border-right:1px solid #CCC;">
       <div class="window_outline">
         <div class="window_head">
           <div class="circle window_item" />
@@ -41,7 +41,6 @@
         </div>
       </div>
     </va-column>
-    <va-column :xs="2" :sm="2" :md="2" :lg="2" />
   </va-row>
 </template>
 
@@ -182,9 +181,19 @@ export default {
     },
     applyImageOnCanvas (image) {
       console.log(image)
-      this.canvas.setWidth(image.response.width)
-      this.canvas.setHeight(image.response.height)
-      this.canvas.setBackgroundImage(image.src, this.canvas.renderAll.bind(this.canvas))
+      this.canvas.setBackgroundImage(image.src, this.canvas.renderAll.bind(this.canvas), {
+      // Needed to position backgroundImage at 0/0
+        top: 0,
+        left: 0,
+        originX: 'left',
+        originY: 'top',
+        scaleX: 0.67,
+        scaleY: 0.67
+      })
+      this.canvas.setDimensions({
+        width: image.response.width,
+        height: image.response.height
+      })
     }
   }
 }
