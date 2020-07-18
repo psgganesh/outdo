@@ -6,7 +6,7 @@ export const state = {
   screens: [],
   active: {
     workflow: null,
-    screens: []
+    screen: null
   }
 }
 
@@ -27,7 +27,8 @@ export const mutations = {
     state.screens = screens
   },
   PUSH_SCREEN (state, screen) {
-    state.active.screens.push(screen)
+    state.screens.push(screen)
+    state.active.screen = screen
   }
 }
 

@@ -1,33 +1,25 @@
 <template>
   <va-row>
     <va-column :xs="3" :sm="3" :md="3" :lg="3">
-      <va-card :elevation="elevation" :padding="padding" class="card m-b-10 full-height">
-        <va-form ref="form" :type="form.type">
-          <va-form-item
-            v-for="(item, index) in form.dynamicItems"
-            :key="index"
-            :label="item.label"
-          >
-            <va-input v-model="item.value" style="margin-right: 5px;" :rules="[{type:'required'}]" :name="'dynamic' + index" />
-            <va-button @click="deleteItem(index)">
-              <va-icon type="times" />
-            </va-button>
-          </va-form-item>
-          <vue-dropzone
-            id="screens-dropzone"
-            ref="screensDropzone"
-            :options="screensDropzoneUploadArea"
-            @vdropzone-success="fileUploadSuccess"
-            @vdropzone-sending="fileUploadingEvent"
-          />
-          <va-form-item>
-            <va-button type="subtle" @click="addItem">
-              <va-icon type="plus" margin="0 7px 0 0" />
-              Add item
-            </va-button>
-          </va-form-item>
-        </va-form>
+      <va-card :elevation="elevation" :padding="padding" class="card m-b-10">
+        <vue-dropzone
+          id="screens-dropzone"
+          ref="screensDropzone"
+          :options="screensDropzoneUploadArea"
+          @vdropzone-success="fileUploadSuccess"
+          @vdropzone-sending="fileUploadingEvent"
+        />
       </va-card>
+      <div style="width:100%; padding: 10px;">
+        <va-card v-for="(image, index) in uploadedImagesList" :key="`image_${index}`" :elevation="thumbnail.elevation" :padding="thumbnail.padding">
+          <img
+            :src="image"
+            aspect-ratio="1"
+            class="screen-thumbnail"
+            @click.stop="applyImageOnCanvas(image)"
+          >
+        </va-card>
+      </div>
     </va-column>
     <va-column :xs="7" :sm="7" :md="7" :lg="7" class="full-height" style="border-left:1px solid #CCC;border-right:1px solid #CCC;">
       <div class="window_outline">
@@ -70,14 +62,12 @@ export default {
 
   data () {
     return {
-      form: {
-        type: 'horizontal',
-        dynamicItems: [
-          {
-            label: 'Page 1',
-            value: null
-          }
-        ]
+      avatar: {
+        rounded: false
+      },
+      thumbnail: {
+        elevation: 1,
+        padding: 0
       },
       elevation: 0,
       padding: 10,
@@ -92,12 +82,17 @@ export default {
       canvasObjects: [],
       screensDropzoneUploadArea: {
         url: `${UPLOAD_URL}/api/media/upload/screen`,
-        thumbnailWidth: 480,
-        thumbnailHeight: 270,
+        thumbnailWidth: 240,
+        thumbnailHeight: 135,
         addRemoveLinks: true,
-        dictDefaultMessage: 'Upload desktop image',
         headers: null
       }
+    }
+  },
+
+  computed: {
+    uploadedImagesList () {
+      return this.$store.state.outdo.screens
     }
   },
 
@@ -117,15 +112,6 @@ export default {
   },
 
   methods: {
-    addItem () {
-      this.form.dynamicItems.push({
-        label: `Page ${this.form.dynamicItems.length + 1}`,
-        value: 'Random data'
-      })
-    },
-    deleteItem (index) {
-      this.form.dynamicItems.splice(index, 1)
-    },
     startSelect (options) {
       if (this.canvas.getActiveObject()) {
         return false
@@ -189,8 +175,11 @@ export default {
     },
     fileUploadSuccess (file, response) {
       const image = response.url.replace('/storage', UPLOAD_URL)
-      this.canvas.setBackgroundImage(image, this.canvas.renderAll.bind(this.canvas))
       this.$store.commit('outdo/PUSH_SCREEN', image)
+      this.$refs.screensDropzone.removeFile(file)
+    },
+    applyImageOnCanvas (image) {
+      this.canvas.setBackgroundImage(image, this.canvas.renderAll.bind(this.canvas))
     }
   }
 }
