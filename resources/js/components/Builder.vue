@@ -1,47 +1,52 @@
 <template>
-  <va-row>
-    <va-column :xs="2" :sm="2" :md="2" :lg="2">
-      <va-card :elevation="elevation" :padding="padding" class="card m-b-10">
-        <vue-dropzone
-          id="screens-dropzone"
-          ref="screensDropzone"
-          :options="screensDropzoneUploadArea"
-          @vdropzone-success="fileUploadSuccess"
-          @vdropzone-sending="fileUploadingEvent"
-        />
-      </va-card>
-      <div style="width:100%; padding: 10px;">
-        <va-card v-for="(image, index) in uploadedImagesList" :key="`image_${index}`" :elevation="thumbnail.elevation" :padding="thumbnail.padding">
-          <img
-            :src="image.src"
-            aspect-ratio="1"
-            class="screen-thumbnail"
-            @click.stop="applyImageOnCanvas(image)"
-          >
+  <div>
+    <va-row>
+      <va-column :xs="2" :sm="2" :md="2" :lg="2">
+        <va-card :elevation="elevation" :padding="padding" class="card m-b-10">
+          <vue-dropzone
+            id="screens-dropzone"
+            ref="screensDropzone"
+            :options="screensDropzoneUploadArea"
+            @vdropzone-success="fileUploadSuccess"
+            @vdropzone-sending="fileUploadingEvent"
+          />
         </va-card>
-      </div>
-    </va-column>
-    <va-column :xs="10" :sm="10" :md="10" :lg="10" class="full-height" style="border-left:1px solid #CCC;border-right:1px solid #CCC;">
-      <div class="window_outline">
-        <div class="window_head">
-          <div class="circle window_item" />
-          <div class="circle window_item" />
-          <div class="circle window_item" />
-          <div class="address_bar window_item" />
+        <div style="width:100%; padding: 10px;">
+          <va-card v-for="(image, index) in uploadedImagesList" :key="`image_${index}`" :elevation="thumbnail.elevation" :padding="thumbnail.padding">
+            <img
+              :src="image.src"
+              aspect-ratio="1"
+              class="screen-thumbnail"
+              @click.stop="applyImageOnCanvas(image)"
+            >
+          </va-card>
         </div>
-        <div class="browser_body">
-          <div style="width:100%;text-align: -webkit-center;">
-            <canvas
-              ref="can"
-              @mousedown="startSelect"
-              @mousemove="drawRect"
-              @mouseup="stopSelect"
-            />
+      </va-column>
+      <va-column :xs="10" :sm="10" :md="10" :lg="10" class="full-height" style="border-left:1px solid #CCC;border-right:1px solid #CCC;">
+        <div class="window_outline">
+          <div class="window_head">
+            <div class="circle window_item" />
+            <div class="circle window_item" />
+            <div class="circle window_item" />
+            <div class="address_bar window_item" />
+          </div>
+          <div class="browser_body">
+            <div style="width:100%;text-align: -webkit-center;">
+              <canvas
+                ref="can"
+                @mousedown="startSelect"
+                @mousemove="drawRect"
+                @mouseup="stopSelect"
+              />
+            </div>
           </div>
         </div>
-      </div>
-    </va-column>
-  </va-row>
+        <va-row>
+          <va-column :xs="12" :sm="12" :md="12" :lg="12" style="border:3px solid rgba(200,200,200,1)" />
+        </va-row>
+      </va-column>
+    </va-row>
+  </div>
 </template>
 
 <script>
@@ -191,8 +196,8 @@ export default {
         scaleY: 0.67
       })
       this.canvas.setDimensions({
-        width: image.response.width,
-        height: image.response.height
+        width: 1300,
+        height: 580
       })
     }
   }
@@ -210,7 +215,6 @@ export default {
   background-color: white;
   color: #303442;
   width: 100%;
-  height: 643px;
 }
 .window_head {
   background: rgba(200,200,200,1);
