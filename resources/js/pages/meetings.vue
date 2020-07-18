@@ -35,9 +35,9 @@
           </div>
         </va-card>
       </div>
-      <div slot="footer" style="margin-top:250px;margin-right:20px;z-index:100;">
-        <div style="margin-top: 10px; text-align: right;">
-          <va-button :type="submitFormTypeState" :disabled="submitFormDisabledState" @click.stop="join">
+      <div slot="footer" style="margin-top:250px;margin-right:20px;margin-bottom:20px;z-index:100;">
+        <div style="margin-top: 10px; text-align: right;z-index:100;">
+          <va-button :type="submitFormTypeState" :disabled="submitFormDisabledState" style="z-index:100;" @click.stop="join">
             Join meeting
           </va-button>
         </div>

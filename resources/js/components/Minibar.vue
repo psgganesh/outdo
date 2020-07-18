@@ -27,7 +27,7 @@
           <p>{{ body }}</p>
         </va-alert>
       </div>
-      <div slot="footer" style="margin-top:40px;margin-right:10px;">
+      <div slot="footer" style="margin-top:40px;margin-right:10px;margin-bottom:20px;">
         <div style="margin-top: 10px; text-align: right;">
           <va-button :type="submitFormTypeState" :disabled="submitFormDisabledState" @click.stop="addChannel">
             Submit
