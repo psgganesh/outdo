@@ -1,7 +1,7 @@
 <template>
   <div>
     <va-container fluid size="lg" style="height: 80vh;">
-      <div id="remoteTrack" />
+      <div id="remoteTrack" class="dominant-speaker" />
       <div id="localTrack" />
       <va-button round size="lg" type="danger" style="position:absolute; left: 50%; right: 50%; bottom: 10px;" @click.stop="leave">
         <va-icon type="times" />
@@ -23,8 +23,19 @@
             />
           </va-form-item>
         </va-form>
+        <va-alert :type="alert.type" :title="alert.title" style="margin:0px 20px 20px 20px;">
+          <p>{{ alert.body }}</p>
+        </va-alert>
+        <va-card :elevation="card.elevation" :padding="card.padding" style="margin:0px 20px;">
+          <div slot="topLeft">
+            <h3>Meeting link</h3>
+          </div>
+          <div style="margin:10px 0px;">
+            <h4>{{ meetingURL }}</h4>
+          </div>
+        </va-card>
       </div>
-      <div slot="footer" style="margin-top:50px;margin-right:10px;">
+      <div slot="footer" style="margin-top:250px;margin-right:20px;z-index:100;">
         <div style="margin-top: 10px; text-align: right;">
           <va-button :type="submitFormTypeState" :disabled="submitFormDisabledState" @click.stop="join">
             Join meeting
@@ -37,6 +48,8 @@
 
 <script>
 import VieOtpInput from '@bachdgvn/vue-otp-input'
+
+const UPLOAD_URL = process.env.MIX_APP_URL
 
 export default {
   name: 'Meetings',
@@ -53,15 +66,19 @@ export default {
 
   data: () => {
     return {
+      meetingURL: null,
       width: '500px',
       backdropClickable: false,
       title: null,
       gutter: 15,
+      card: {
+        elevation: 0,
+        padding: 5
+      },
       alert: {
-        type: 'warning',
-        title: 'Information',
-        body: 'If the meeting ID is present, you will be automatically joining the existing meeting room. ' +
-            'If meeting ID is not present, you will be prompted for creating a new meeting room.'
+        type: 'help',
+        title: 'Invite people to this meeting',
+        body: 'You can copy paste the URL of this window and share them the password to enter this meeting room.'
       },
       form: {
         type: 'vertical',
@@ -94,6 +111,7 @@ export default {
   mounted () {
     this.roomOptions.name = this.$route.params.room
     this.$refs.joinMeetingModal.open()
+    this.meetingURL = `${UPLOAD_URL}${this.$route.fullPath}`
   },
 
   beforeDestroy () {
