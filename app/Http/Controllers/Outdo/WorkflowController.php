@@ -43,9 +43,9 @@ class WorkflowController
      */
     public function store(Request $request)
     {
-        $record = $this->workflow->create($request->all())->fresh();
+        $workflow = $this->workflow->create($request->all())->fresh();
         
-        return new WorkflowResource($record);
+        return new WorkflowResource($workflow);
     }
 
     /**
@@ -56,9 +56,9 @@ class WorkflowController
      */
     public function show($id)
     {
-        $record = $this->workflow->find($id);
+        $workflow = $this->workflow->find($id);
         
-        return new WorkflowResource($record);
+        return new WorkflowResource($workflow);
     }
 
     /**
@@ -70,8 +70,18 @@ class WorkflowController
      */
     public function update(Request $request, $id)
     {
-        // Update screens based on workflow
-        return response()->json(['data'=>'done'], 200);
+        $workflow = $this->workflow->find($id);
+        
+        foreach($request->screens as $screen) {
+            if(isset($screen->additional_data)) {
+                $screenToUpdate = $workflow->screens()->find($screen->id);
+                $screenToUpdate->additional_data = $screen->additional_data;
+                $screenToUpdate->save();
+            } else {
+                logger()->notice('No additional_data');
+            }
+        }
+        return new WorkflowResource($workflow);
     }
 
     /**

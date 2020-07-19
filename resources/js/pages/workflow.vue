@@ -1,11 +1,5 @@
 <template>
-  <va-row v-if="loading" :gutter="gutter" class="text-align-center full-height">
-    <va-column :xs="12" :sm="12" :md="12" :lg="12">
-      <div>
-        <va-loading v-if="loading" size="lg" color="blue" center />
-      </div>
-    </va-column>
-  </va-row>
+  <va-loading v-if="loading" size="lg" color="blue" center />
   <div v-else>
     <va-page-header>
       <div slot="breadcrumb">

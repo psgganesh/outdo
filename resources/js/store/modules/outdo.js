@@ -7,7 +7,8 @@ export const state = {
   active: {
     workflow: null,
     screen: null
-  }
+  },
+  putData: []
 }
 
 // getters
@@ -37,6 +38,7 @@ export const mutations = {
   SET_ACTIVE_SCREEN (state, activescreen) {
     state.screens.map((screen) => {
       if (screen.id === activescreen.id) {
+        screen.canvasState = JSON.stringify(screen.additional_data)
         state.active.screen = screen
       }
     })
@@ -46,9 +48,14 @@ export const mutations = {
   },
   PREPARE_PUT_DATA (state) {
     state.screens.map((canvasScreens) => {
-      canvasScreens.additional_data = canvasScreens.canvasState
-      delete canvasScreens.canvasState
+      state.putData.push({
+        id: canvasScreens.id,
+        additional_data: canvasScreens.canvasState
+      })
     })
+  },
+  RESET_PUT_DATA (state) {
+    state.putData = []
   }
 }
 
@@ -82,10 +89,12 @@ export const actions = {
   async save ({ commit, state }, id) {
     try {
       commit('PREPARE_PUT_DATA')
+      console.log('about to send put')
       const { data } = await axios.put(`/api/workflows/${id}`, {
-        screens: state.screens
+        screens: state.putData
       })
       console.log(data)
+      commit('RESET_PUT_DATA')
     } catch (e) {
       console.log('Unable to save workflow')
     }

@@ -36,6 +36,16 @@ class Screen extends Model
     protected $guarded = [];
 
     /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = [
+        'created_at',
+        'updated_at'
+    ];
+    
+    /**
      * The attributes that should be appended on every toArray() result set.
      *
      * @var array
@@ -69,6 +79,21 @@ class Screen extends Model
     public function getSizeInKbAttribute()
     {
         return round($this->size / 1024, 2);
+    }
+
+    /**
+     * Get the additional_data value.
+     *
+     * @param  string  $value
+     * @return void
+     */
+    public function getAdditionalDataAttribute($value)
+    {
+        if (filled($value)) {
+            return json_decode($value);
+        }
+
+        return null;
     }
 
     public function workflow()
