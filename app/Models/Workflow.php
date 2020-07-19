@@ -90,7 +90,7 @@ class Workflow extends Model
      */
     public function scopeOf($query, $workspace)
     {
-        return $query->where('created_by', $workspace);
+        return $query->where('created_by', $workspace)->orWhere('workspace', $workspace);
     }
 
     /**

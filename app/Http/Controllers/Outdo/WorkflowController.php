@@ -43,7 +43,10 @@ class WorkflowController
      */
     public function store(Request $request)
     {
-        $workflow = $this->workflow->create($request->all())->fresh();
+        $workflow = $this->workflow->create([
+            'name' => $request->name,
+            'workspace' => $request->workspace
+        ])->fresh();
         
         return new WorkflowResource($workflow);
     }
@@ -76,6 +79,12 @@ class WorkflowController
         
         foreach($screens as $screen) {
             $screenToUpdate = $workflow->screens()->find($screen['id']);
+            
+            // Resetting to avoid dirty data
+            $screenToUpdate->additional_data = null;
+            $screenToUpdate->save();
+
+            // Adding data
             $screenToUpdate->additional_data = $screen['additional_data'];
             $screenToUpdate->save();
         }

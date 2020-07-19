@@ -4,7 +4,7 @@
     <va-page-header>
       <div slot="breadcrumb">
         <va-breadcrumb separator="/">
-          <va-breadcrumb-item to="/home">
+          <va-breadcrumb-item to="/dashboard">
             {{ this.$t('home') }}
           </va-breadcrumb-item>
           <va-breadcrumb-item :to="this.$route.path">
@@ -28,9 +28,9 @@
       <va-tab name="Story builder">
         <builder :workflow="currentWorkflow.id" />
       </va-tab>
-      <va-tab name="Story simulator">
+      <!-- <va-tab name="Story simulator">
         <simulator />
-      </va-tab>
+      </va-tab> -->
     </va-tabs>
   </div>
 </template>
@@ -38,7 +38,7 @@
 <script>
 import { mapActions } from 'vuex'
 import Builder from '~/components/Builder'
-import Simulator from '~/components/Simulator'
+// import Simulator from '~/components/Simulator'
 
 export default {
   name: 'Workflow',
@@ -51,8 +51,8 @@ export default {
   ],
 
   components: {
-    Builder,
-    Simulator
+    Builder
+    // Simulator
   },
 
   metaInfo () {

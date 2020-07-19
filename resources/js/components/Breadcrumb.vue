@@ -2,7 +2,7 @@
   <va-page-header>
     <div slot="breadcrumb">
       <va-breadcrumb separator="/">
-        <va-breadcrumb-item to="/home">
+        <va-breadcrumb-item to="/dashboard">
           {{ this.$t('home') }}
         </va-breadcrumb-item>
         <va-breadcrumb-item :to="this.$route.path">

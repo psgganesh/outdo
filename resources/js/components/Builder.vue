@@ -63,8 +63,8 @@
                     <th>Location</th>
                   </tr>
                 </thead>
-                <tbody>
-                  <tr v-for="(spot, index) in canvasObjects"
+                <tbody v-if="canvasIsDirty">
+                  <tr v-for="(spot, index) in canvas.toJSON().objects"
                       :key="index"
                   >
                     <td>{{ index }}</td>
@@ -147,8 +147,9 @@ export default {
         headers: null
       },
       aside: {
-        width: '350px',
+        width: '400px',
         placement: 'right',
+        currentActiveObjectIndex: null,
         imageSelected: {
           id: '',
           src: '',
@@ -159,6 +160,9 @@ export default {
   },
 
   computed: {
+    canvasIsDirty () {
+      return ((!Object.is(this.canvas, null)) && (!Object.is(this.canvas.toJSON(), null)))
+    },
     uploadedImagesList () {
       let selectableImages = []
       this.$store.state.outdo.screens.map((image) => {
@@ -250,7 +254,6 @@ export default {
         fill: '#2196f366',
         transparentCorners: false
       })
-      this.canvas.add(this.rect)
     },
     drawRect (options) {
       if (!this.started) {
@@ -288,13 +291,17 @@ export default {
       let index = this.canvasObjects.findIndex((canvasObject) => canvasObject.id === this.rect.id)
       if (index === -1) {
         if (this.rect.width > 0 && this.rect.height > 0) {
+          this.canvas.add(this.rect)
           this.canvasObjects.push(this.rect)
+
           let filteredCanvasState = this.canvas.toJSON().objects.filter((element) => {
             return (element.width > 0 && element.height > 0)
           })
+
           let currentState = this.canvas.toJSON()
           currentState.objects = null
           currentState.objects = filteredCanvasState
+
           this.currentScreenState = currentState
           this.$refs.destinationAsideDiv.open()
         }

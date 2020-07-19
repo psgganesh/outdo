@@ -16,7 +16,7 @@ class CreateWorkflowsTable extends Migration
         Schema::create('workflows', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('name')->nullable();
-            $table->bigInteger('screens_id')->nullable();
+            $table->string('workspace')->nullable();
             $table->bigInteger('user_id')->nullable();
             $table->string('created_by')->nullable()->comment('Username / email id of the user who created this record');
             $table->timestamps();

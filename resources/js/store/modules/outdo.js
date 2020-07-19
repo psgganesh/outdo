@@ -8,7 +8,8 @@ export const state = {
     workflow: null,
     screen: null
   },
-  putData: []
+  putData: [],
+  links: []
 }
 
 // getters
@@ -73,6 +74,10 @@ export const mutations = {
   },
   RESET_PUT_DATA (state) {
     state.putData = []
+    state.links = []
+  },
+  ADD_LINK (state, link) {
+    state.links[link.key] = link.value
   }
 }
 
@@ -84,6 +89,18 @@ export const actions = {
         params: {
           workspace: workspace
         }
+      })
+      commit('LOAD_WORKFLOWS', response.data.data)
+    } catch (e) {
+      console.log('Unable to fetch workflows')
+    }
+  },
+
+  async createWorkflow ({ commit }, workflow) {
+    try {
+      const response = await axios.post('/api/workflows', {
+        name: workflow.name,
+        workspace: workflow.space
       })
       commit('LOAD_WORKFLOWS', response.data.data)
     } catch (e) {
@@ -108,7 +125,8 @@ export const actions = {
       commit('PREPARE_PUT_DATA')
       console.log('about to send put')
       const { data } = await axios.put(`/api/workflows/${id}`, {
-        screens: state.putData
+        screens: state.putData,
+        links: state.links
       })
       console.log(data)
       commit('RESET_PUT_DATA')

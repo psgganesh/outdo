@@ -239,10 +239,16 @@ ul.vue-select-image__wrapper {
 }
 li.vue-select-image__item {
   list-style: none;
+  margin: 15px 0px;
 }
 .vue-select-image__img {
   width: 270px;
 }
+.vue-select-image__thumbnail {
+  width: 278px;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+}
 .vue-select-image__thumbnail.vue-select-image__thumbnail--selected {
-  border: 3px solid rgba(0, 0, 0, 0.3);
+  border: 3px solid #0847a6;
+  width: 278px;
 }
