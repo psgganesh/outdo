@@ -9,6 +9,7 @@
           <th>Width</th>
           <th>Height</th>
           <th>Angle</th>
+          <th>Location</th>
         </tr>
       </thead>
       <tbody>
@@ -19,6 +20,7 @@
           <td>{{ object.width }}</td>
           <td>{{ object.height }}</td>
           <td>{{ object.angle }}</td>
+          <td />
         </tr>
       </tbody>
     </table>

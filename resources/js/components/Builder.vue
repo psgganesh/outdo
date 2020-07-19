@@ -99,8 +99,8 @@ export default {
       canvasObjects: [],
       screensDropzoneUploadArea: {
         url: `${UPLOAD_URL}/api/media/upload/screen`,
-        thumbnailWidth: 240,
-        thumbnailHeight: 135,
+        thumbnailWidth: 120,
+        thumbnailHeight: 64.5,
         addRemoveLinks: true,
         headers: null
       }
@@ -124,9 +124,20 @@ export default {
     },
     currentScreenState: {
       get () {
-        return (!Object.is(this.$store.state.outdo.active.screen.canvasState, null))
-          ? JSON.parse(this.$store.state.outdo.active.screen.canvasState)
-          : null
+        console.log('passing')
+        // return (!Object.is(this.$store.state.outdo.active.screen.canvasState, null))
+        //   ? JSON.parse(this.$store.state.outdo.active.screen.canvasState)
+        //   : null
+
+        if (!Object.is(this.$store.state.outdo.active.screen.canvasState, null)) {
+          if (this.$store.state.outdo.active.screen.canvasState.constructor === Object) {
+            return this.$store.state.outdo.active.screen.canvasState
+          }
+          if (this.$store.state.outdo.active.screen.canvasState.constructor === String) {
+            return JSON.parse(this.$store.state.outdo.active.screen.canvasState)
+          }
+        }
+        return null
       },
       set (canvasState) {
         this.$store.commit('outdo/SET_CURRENT_CANVAS_STATE', canvasState)
@@ -214,6 +225,7 @@ export default {
         return false
       }
 
+      console.log('checking')
       let index = this.canvasObjects.findIndex((canvasObject) => canvasObject.id === this.rect.id)
       if (index === -1) {
         if (this.rect.width > 0 && this.rect.height > 0) {

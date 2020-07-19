@@ -56,14 +56,12 @@ export const mutations = {
   SET_ACTIVE_SCREEN (state, activescreen) {
     state.screens.map((screen) => {
       if (screen.id === activescreen.id) {
-        screen.canvasState = (!Object.is(screen.additional_data, null))
-          ? JSON.stringify(screen.additional_data)
-          : null
         state.active.screen = screen
       }
     })
   },
   SET_CURRENT_CANVAS_STATE (state, canvasState) {
+    console.log('setting canvas state')
     state.active.screen.canvasState = canvasState
   },
   PREPARE_PUT_DATA (state) {
