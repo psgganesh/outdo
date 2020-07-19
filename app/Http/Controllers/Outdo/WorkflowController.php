@@ -72,10 +72,12 @@ class WorkflowController
     {
         $workflow = $this->workflow->find($id);
         
-        foreach($request->screens as $screen) {
-            if(isset($screen->additional_data)) {
-                $screenToUpdate = $workflow->screens()->find($screen->id);
-                $screenToUpdate->additional_data = $screen->additional_data;
+        $screens = $request->screens;
+        
+        foreach($screens as $screen) {
+            if(isset($screen['additional_data'])) {
+                $screenToUpdate = $workflow->screens()->find($screen['id']);
+                $screenToUpdate->additional_data = $screen['additional_data'];
                 $screenToUpdate->save();
             } else {
                 logger()->notice('No additional_data');
