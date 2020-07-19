@@ -8946,6 +8946,13 @@ vue-router@^3.0.6:
   resolved "https://registry.yarnpkg.com/vue-router/-/vue-router-3.3.4.tgz#4e38abc34a11c41b6c3d8244449a2e363ba6250b"
   integrity sha512-SdKRBeoXUjaZ9R/8AyxsdTqkOfMcI5tWxPZOUX5Ie1BTL5rPSZ0O++pbiZCeYeythiZIdLEfkDiQPKIaWk5hDg==
 
+vue-select-image@^1.9.0:
+  version "1.9.0"
+  resolved "https://registry.yarnpkg.com/vue-select-image/-/vue-select-image-1.9.0.tgz#6a85d744d4d20ea122ce2905bc4ad0b69c09bbc7"
+  integrity sha512-oXIfpzawtTRwMGbaXLvG/4ktUgrpt6LZgcwK7WmXfodhuEKTZOKlpPxACFNAYJfqBlAQwloMdw/RJgpFY8XUKQ==
+  dependencies:
+    vue "^2.5.17"
+
 vue-style-loader@^4.1.0:
   version "4.1.2"
   resolved "https://registry.yarnpkg.com/vue-style-loader/-/vue-style-loader-4.1.2.tgz#dedf349806f25ceb4e64f3ad7c0a44fba735fcf8"
@@ -8974,7 +8981,7 @@ vue2-dropzone@^3.6.0:
   dependencies:
     dropzone "^5.5.1"
 
-vue@^2.5.22, vue@^2.6.10, vue@^2.6.6:
+vue@^2.5.17, vue@^2.5.22, vue@^2.6.10, vue@^2.6.6:
   version "2.6.11"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.11.tgz#76594d877d4b12234406e84e35275c6d514125c5"
   integrity sha512-VfPwgcGABbGAue9+sfrD4PuwFar7gPb1yl1UK1MwXoQPAw0BKSqWfoYCT/ThFrdEVWoI51dBuyCoiNU9bZDZxQ==

@@ -7,6 +7,7 @@
             id="screens-dropzone"
             ref="screensDropzone"
             :options="screensDropzoneUploadArea"
+            @vdropzone-duplicate-file="fileDuplicateFile"
             @vdropzone-success="fileUploadSuccess"
             @vdropzone-sending="fileUploadingEvent"
           />
@@ -49,11 +50,48 @@
         </div>
         <va-row>
           <va-column :xs="12" :sm="12" :md="12" :lg="12" style="border-top:3px solid rgba(200,200,200,1);">
-            <hotspot-inspector />
+            <va-table :hover="table.hover" :size="table.size">
+              <table>
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Left</th>
+                    <th>Top</th>
+                    <th>Width</th>
+                    <th>Height</th>
+                    <th>Angle</th>
+                    <th>Location</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(spot, index) in canvasObjects"
+                      :key="index"
+                  >
+                    <td>{{ index }}</td>
+                    <td>{{ spot.left }}</td>
+                    <td>{{ spot.top }}</td>
+                    <td>{{ spot.width }}</td>
+                    <td>{{ spot.height }}</td>
+                    <td>{{ spot.angle }}</td>
+                    <td>{{ spot.destination }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </va-table>
           </va-column>
         </va-row>
       </va-column>
     </va-row>
+
+    <va-aside ref="destinationAsideDiv" :placement="aside.placement" :width="aside.width">
+      <div style="padding:20px;">
+        <h2>Choose hotspot destination</h2>
+        <vue-select-image
+          :dataImages="uploadedImagesList"
+          @onselectimage="onSelectImage"
+        />
+      </div>
+    </va-aside>
   </div>
 </template>
 
@@ -61,7 +99,7 @@
 import { fabric } from 'fabric'
 import { v4 as uuidv4 } from 'uuid'
 import vue2Dropzone from 'vue2-dropzone'
-import HotspotInspector from '~/components/HotspotInspector'
+import VueSelectImage from 'vue-select-image'
 
 const UPLOAD_URL = process.env.MIX_APP_URL
 
@@ -69,7 +107,7 @@ export default {
   name: 'Builder',
 
   components: {
-    HotspotInspector,
+    VueSelectImage,
     'vueDropzone': vue2Dropzone
   },
 
@@ -79,6 +117,10 @@ export default {
 
   data () {
     return {
+      table: {
+        hover: true,
+        size: 'lg'
+      },
       avatar: {
         rounded: false
       },
@@ -103,13 +145,30 @@ export default {
         thumbnailHeight: 64.5,
         addRemoveLinks: true,
         headers: null
+      },
+      aside: {
+        width: '350px',
+        placement: 'right',
+        imageSelected: {
+          id: '',
+          src: '',
+          alt: ''
+        }
       }
     }
   },
 
   computed: {
     uploadedImagesList () {
-      return this.$store.state.outdo.screens
+      let selectableImages = []
+      this.$store.state.outdo.screens.map((image) => {
+        selectableImages.push({
+          id: image.id,
+          src: `${UPLOAD_URL}/${image.path}`,
+          alt: image.name
+        })
+      })
+      return selectableImages
     },
     currentActiveScreen: {
       get () {
@@ -157,6 +216,11 @@ export default {
   },
 
   methods: {
+    onSelectImage (data) {
+      console.log('fire event onSelectImage: ', data)
+      this.aside.imageSelected = data
+      // this.$refs.destinationAsideDiv.close()
+    },
     computedCurrentActiveScreenElevation (image) {
       if (typeof this.currentActiveScreen !== 'undefined' && this.currentActiveScreen !== null) {
         if (this.currentActiveScreen.id === image.id) {
@@ -221,7 +285,6 @@ export default {
         return false
       }
 
-      console.log('checking')
       let index = this.canvasObjects.findIndex((canvasObject) => canvasObject.id === this.rect.id)
       if (index === -1) {
         if (this.rect.width > 0 && this.rect.height > 0) {
@@ -233,8 +296,12 @@ export default {
           currentState.objects = null
           currentState.objects = filteredCanvasState
           this.currentScreenState = currentState
+          this.$refs.destinationAsideDiv.open()
         }
       }
+    },
+    fileDuplicateFile (file) {
+      console.log(file.name)
     },
     fileUploadingEvent (file, xhr, formData) {
       formData.append('name', file.name)

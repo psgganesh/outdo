@@ -75,13 +75,9 @@ class WorkflowController
         $screens = $request->screens;
         
         foreach($screens as $screen) {
-            if(isset($screen['additional_data'])) {
-                $screenToUpdate = $workflow->screens()->find($screen['id']);
-                $screenToUpdate->additional_data = $screen['additional_data'];
-                $screenToUpdate->save();
-            } else {
-                logger()->notice('No additional_data');
-            }
+            $screenToUpdate = $workflow->screens()->find($screen['id']);
+            $screenToUpdate->additional_data = $screen['additional_data'];
+            $screenToUpdate->save();
         }
         return new WorkflowResource($workflow);
     }

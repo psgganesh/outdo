@@ -232,3 +232,17 @@ body {
   width: 100%;
   border: 1px solid rgba(0, 0, 0, 0.3);
 }
+
+ul.vue-select-image__wrapper {
+  padding: 20px;
+  margin: 0px;
+}
+li.vue-select-image__item {
+  list-style: none;
+}
+.vue-select-image__img {
+  width: 270px;
+}
+.vue-select-image__thumbnail.vue-select-image__thumbnail--selected {
+  border: 3px solid rgba(0, 0, 0, 0.3);
+}
