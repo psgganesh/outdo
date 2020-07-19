@@ -54,7 +54,7 @@
                 <h1>Test</h1>
               </va-tab>
               <va-tab name="Debugger">
-                <hotspot-inspector :spots="canvasObjects" />
+                <hotspot-inspector />
               </va-tab>
             </va-tabs>
           </va-column>
@@ -131,7 +131,9 @@ export default {
     },
     currentScreenState: {
       get () {
-        return this.$store.state.outdo.active.screen.canvasState
+        return (!Object.is(this.$store.state.outdo.active.screen.canvasState, null))
+          ? JSON.parse(this.$store.state.outdo.active.screen.canvasState)
+          : null
       },
       set (canvasState) {
         this.$store.commit('outdo/SET_CURRENT_CANVAS_STATE', canvasState)
@@ -156,7 +158,7 @@ export default {
 
   methods: {
     computedCurrentActiveScreenElevation (image) {
-      if (typeof this.currentActiveScreen !== 'undefined') {
+      if (typeof this.currentActiveScreen !== 'undefined' && this.currentActiveScreen !== null) {
         if (this.currentActiveScreen.id === image.id) {
           return `3`
         }

@@ -5,6 +5,7 @@ export const state = {
   workflows: [],
   screens: [],
   active: {
+    canvasState: null,
     workflow: null,
     screen: null
   },
@@ -13,7 +14,15 @@ export const state = {
 
 // getters
 export const getters = {
-
+  hotspots: (state) => {
+    if ((!Object.is(state.active.screen, null)) && (!Object.is(state.active.screen.canvasState, null))) {
+      let canvasObjects = JSON.parse(state.active.screen.canvasState)
+      if ((!Object.is(canvasObjects.objects, null)) && (canvasObjects.objects.length > 0)) {
+        return canvasObjects.objects
+      }
+    }
+    return []
+  }
 }
 
 // mutations
@@ -25,11 +34,12 @@ export const mutations = {
     state.workflows = workflows
   },
   LOAD_SCREENS (state, screens) {
+    screens.map((screen) => {
+      screen.canvasState = (!Object.is(screen.additional_data, null))
+        ? JSON.stringify(screen.additional_data)
+        : null
+    })
     state.screens = screens
-    if ((!Object.is(screens, null)) && (Object.is(state.active.screen, null))) {
-      let [ activeScreen ] = state.screens
-      state.active.screen = activeScreen
-    }
   },
   PUSH_SCREEN (state, screen) {
     screen.canvasState = null
@@ -38,7 +48,9 @@ export const mutations = {
   SET_ACTIVE_SCREEN (state, activescreen) {
     state.screens.map((screen) => {
       if (screen.id === activescreen.id) {
-        screen.canvasState = JSON.stringify(screen.additional_data)
+        screen.canvasState = (!Object.is(screen.additional_data, null))
+          ? JSON.stringify(screen.additional_data)
+          : null
         state.active.screen = screen
       }
     })

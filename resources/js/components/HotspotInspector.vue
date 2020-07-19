@@ -12,7 +12,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(object, index) in spots" :key="index" class="space">
+        <tr v-for="(object, index) in hotspots" :key="index" class="space">
           <td>{{ index }}</td>
           <td>{{ object.left }}</td>
           <td>{{ object.top }}</td>
@@ -26,12 +26,10 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'HotspotInspector',
-
-  props: {
-    spots: { type: Array, default: () => [] }
-  },
 
   data () {
     return {
@@ -40,6 +38,13 @@ export default {
         size: 'lg'
       }
     }
+  },
+
+  computed: {
+    ...mapGetters({
+      hotspots: 'outdo/hotspots'
+    })
   }
+
 }
 </script>
