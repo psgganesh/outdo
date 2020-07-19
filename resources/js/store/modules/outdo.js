@@ -16,9 +16,17 @@ export const state = {
 export const getters = {
   hotspots: (state) => {
     if ((!Object.is(state.active.screen, null)) && (!Object.is(state.active.screen.canvasState, null))) {
-      let canvasObjects = JSON.parse(state.active.screen.canvasState)
-      if ((!Object.is(canvasObjects.objects, null)) && (canvasObjects.objects.length > 0)) {
-        return canvasObjects.objects
+      let canvasObjects = null
+      if (state.active.screen.canvasState.constructor === Object) {
+        canvasObjects = state.active.screen.canvasState
+      }
+      if (state.active.screen.canvasState.constructor === String) {
+        canvasObjects = JSON.parse(state.active.screen.canvasState)
+      }
+      if (!Object.is(canvasObjects, null)) {
+        if ((!Object.is(canvasObjects.objects, null)) && (canvasObjects.objects.length > 0)) {
+          return canvasObjects.objects
+        }
       }
     }
     return []

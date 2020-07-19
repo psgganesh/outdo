@@ -49,14 +49,7 @@
         </div>
         <va-row>
           <va-column :xs="12" :sm="12" :md="12" :lg="12" style="border-top:3px solid rgba(200,200,200,1);">
-            <va-tabs style="margin:10px;">
-              <va-tab name="Actions">
-                <h1>Test</h1>
-              </va-tab>
-              <va-tab name="Debugger">
-                <hotspot-inspector />
-              </va-tab>
-            </va-tabs>
+            <hotspot-inspector />
           </va-column>
         </va-row>
       </va-column>
@@ -213,14 +206,26 @@ export default {
       }
 
       var square = this.canvas.getActiveObject()
-      if (!Object.is(square, null)) {
+      if ((typeof square !== 'undefined') && (!Object.is(square, null))) {
         square.setCoords()
+      }
+
+      if (Object.is(this.rect, null)) {
+        return false
       }
 
       let index = this.canvasObjects.findIndex((canvasObject) => canvasObject.id === this.rect.id)
       if (index === -1) {
-        this.canvasObjects.push(this.rect)
-        this.currentScreenState = this.canvas.toJSON()
+        if (this.rect.width > 0 && this.rect.height > 0) {
+          this.canvasObjects.push(this.rect)
+          let filteredCanvasState = this.canvas.toJSON().objects.filter((element) => {
+            return (element.width > 0 && element.height > 0)
+          })
+          let currentState = this.canvas.toJSON()
+          currentState.objects = null
+          currentState.objects = filteredCanvasState
+          this.currentScreenState = currentState
+        }
       }
     },
     fileUploadingEvent (file, xhr, formData) {
@@ -228,7 +233,6 @@ export default {
       formData.append('workflow_id', this.workflow)
     },
     fileUploadSuccess (file, response) {
-      console.log(response)
       const payload = {
         id: uuidv4(),
         src: response.url.replace('/storage', UPLOAD_URL),
@@ -238,6 +242,7 @@ export default {
       this.$refs.screensDropzone.removeFile(file)
     },
     applyImageOnCanvas (image) {
+      this.canvasObjects = []
       this.currentActiveScreen = image
       this.canvas.clear()
 
