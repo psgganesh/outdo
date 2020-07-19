@@ -5,7 +5,6 @@ export const state = {
   workflows: [],
   screens: [],
   active: {
-    canvasState: null,
     workflow: null,
     screen: null
   },

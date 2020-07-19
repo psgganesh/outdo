@@ -125,10 +125,6 @@ export default {
     currentScreenState: {
       get () {
         console.log('passing')
-        // return (!Object.is(this.$store.state.outdo.active.screen.canvasState, null))
-        //   ? JSON.parse(this.$store.state.outdo.active.screen.canvasState)
-        //   : null
-
         if (!Object.is(this.$store.state.outdo.active.screen.canvasState, null)) {
           if (this.$store.state.outdo.active.screen.canvasState.constructor === Object) {
             return this.$store.state.outdo.active.screen.canvasState

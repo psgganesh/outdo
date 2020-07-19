@@ -20,7 +20,7 @@
           <td>{{ object.width }}</td>
           <td>{{ object.height }}</td>
           <td>{{ object.angle }}</td>
-          <td />
+          <td>{{ object.destination }}</td>
         </tr>
       </tbody>
     </table>
@@ -28,8 +28,6 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-
 export default {
   name: 'HotspotInspector',
 
@@ -43,9 +41,14 @@ export default {
   },
 
   computed: {
-    ...mapGetters({
-      hotspots: 'outdo/hotspots'
-    })
+    hotspots: {
+      get () {
+        return this.$store.getters['outdo/hotspots']
+      },
+      set (value) {
+        console.log(value)
+      }
+    }
   }
 
 }
