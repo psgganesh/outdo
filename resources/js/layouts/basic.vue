@@ -15,7 +15,7 @@
     :rtl="rtl"
   >
     <topbar />
-    <div class="container-fluid full-height white-section">
+    <div class="container-fluid full-height grey-section">
       <child />
       <div class="footer" />
     </div>
@@ -36,7 +36,7 @@ export default {
     return {
       desktopSidebarWidth: 0,
       desktopMinibarWidth: 0,
-      desktopTopbarHeight: 100,
+      desktopTopbarHeight: 60,
 
       mobileSidebarWidth: 0,
       mobileMinibarWidth: 0,
@@ -58,6 +58,9 @@ export default {
 }
 .white-section {
   background: #FFF;
+}
+.grey-section {
+  background: #f4f5f7;
 }
 .footer {
   position: absolute;

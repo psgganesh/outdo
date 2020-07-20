@@ -1,5 +1,5 @@
 <template>
-  <va-button v-if="bitbucketAuth" type="primary" size="md" @click="login">
+  <va-button v-if="bitbucketAuth" type="primary" size="lg" @click="login">
     {{ $t('login_with') }} Bitbucket &nbsp;<va-icon icon-style="brands" type="bitbucket" />
   </va-button>
 </template>
