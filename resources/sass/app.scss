@@ -242,13 +242,14 @@ li.vue-select-image__item {
   margin: 15px 0px;
 }
 .vue-select-image__img {
-  width: 270px;
+  width: 258px;
 }
 .vue-select-image__thumbnail {
   width: 278px;
   border: 1px solid rgba(0, 0, 0, 0.3);
 }
 .vue-select-image__thumbnail.vue-select-image__thumbnail--selected {
-  border: 3px solid #0847a6;
+  border: 5px solid #50af2b;
+  border-radius: 4px;
   width: 278px;
 }

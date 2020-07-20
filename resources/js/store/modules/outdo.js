@@ -5,6 +5,8 @@ export const state = {
   workflows: [],
   screens: [],
   active: {
+    currentHotspot: null,
+    hotspots: null,
     workflow: null,
     screen: null
   },
@@ -14,23 +16,23 @@ export const state = {
 
 // getters
 export const getters = {
-  hotspots: (state) => {
-    if ((!Object.is(state.active.screen, null)) && (!Object.is(state.active.screen.canvasState, null))) {
-      let canvasObjects = null
-      if (state.active.screen.canvasState.constructor === Object) {
-        canvasObjects = state.active.screen.canvasState
-      }
-      if (state.active.screen.canvasState.constructor === String) {
-        canvasObjects = JSON.parse(state.active.screen.canvasState)
-      }
-      if (!Object.is(canvasObjects, null)) {
-        if ((!Object.is(canvasObjects.objects, null)) && (canvasObjects.objects.length > 0)) {
-          return canvasObjects.objects
-        }
-      }
-    }
-    return []
-  }
+  // hotspots: (state) => {
+  //   if ((!Object.is(state.active.screen, null)) && (!Object.is(state.active.screen.canvasState, null))) {
+  //     let canvasObjects = null
+  //     if (state.active.screen.canvasState.constructor === Object) {
+  //       canvasObjects = state.active.screen.canvasState
+  //     }
+  //     if (state.active.screen.canvasState.constructor === String) {
+  //       canvasObjects = JSON.parse(state.active.screen.canvasState)
+  //     }
+  //     if (!Object.is(canvasObjects, null)) {
+  //       if ((!Object.is(canvasObjects.objects, null)) && (canvasObjects.objects.length > 0)) {
+  //         return canvasObjects.objects
+  //       }
+  //     }
+  //   }
+  //   return []
+  // }
 }
 
 // mutations
@@ -61,7 +63,6 @@ export const mutations = {
     })
   },
   SET_CURRENT_CANVAS_STATE (state, canvasState) {
-    console.log('setting canvas state')
     state.active.screen.canvasState = canvasState
   },
   PREPARE_PUT_DATA (state) {
@@ -74,10 +75,18 @@ export const mutations = {
   },
   RESET_PUT_DATA (state) {
     state.putData = []
-    state.links = []
+    state.active.hotspots = []
+    state.active.currentHotspot = null
   },
-  ADD_LINK (state, link) {
-    state.links[link.key] = link.value
+  CURRENT_HOTSPOT (state, spot) {
+    state.active.currentHotspot = spot
+  },
+  SET_CURRENT_HOTSPOT_DESTINATION (state, destination) {
+    state.active.currentHotspot.destination = destination
+  },
+  ADD_CURRENT_DESTINATION_TO_HOTSPOTS (state) {
+    state.active.hotspots.push(state.active.currentHotspot)
+    state.active.currentHotspot = null
   }
 }
 

@@ -151,9 +151,9 @@ export default {
         placement: 'right',
         currentActiveObjectIndex: null,
         imageSelected: {
-          id: '',
-          src: '',
-          alt: ''
+          id: null,
+          src: null,
+          alt: null
         }
       }
     }
@@ -166,7 +166,6 @@ export default {
     uploadedImagesList () {
       let selectableImages = []
       this.$store.state.outdo.screens.map((image) => {
-        console.log(image)
         let screenSrc = (typeof image.response !== 'undefined')
           ? image.response.path
           : image.path
@@ -224,11 +223,6 @@ export default {
   },
 
   methods: {
-    onSelectImage (data) {
-      console.log('fire event onSelectImage: ', data)
-      this.aside.imageSelected = data
-      // this.$refs.destinationAsideDiv.close()
-    },
     computedCurrentActiveScreenElevation (image) {
       if (typeof this.currentActiveScreen !== 'undefined' && this.currentActiveScreen !== null) {
         if (this.currentActiveScreen.id === image.id) {
@@ -307,7 +301,7 @@ export default {
           currentState.objects = filteredCanvasState
 
           this.currentScreenState = currentState
-          this.$refs.destinationAsideDiv.open()
+          this.addHotSpot(this.rect)
         }
       }
     },
@@ -348,6 +342,20 @@ export default {
       if (!Object.is(this.currentScreenState, null)) {
         let json = this.currentScreenState
         this.canvas.loadFromJSON(json, this.canvas.renderAll.bind(this.canvas))
+      }
+    },
+    addHotSpot (canvasItem) {
+      this.$store.commit('outdo/CURRENT_HOTSPOT', canvasItem)
+      this.$refs.destinationAsideDiv.open()
+    },
+    onSelectImage (data) {
+      this.aside.imageSelected = data
+      if (Object.is(this.aside.imageSelected.id, null)) {
+        this.$refs.destinationAsideDiv.open()
+      } else {
+        this.$store.commit('outdo/SET_CURRENT_HOTSPOT_DESTINATION', data)
+        this.$refs.destinationAsideDiv.close()
+        this.$store.commit('outdo/ADD_CURRENT_DESTINATION_TO_HOTSPOTS')
       }
     }
   }
