@@ -78,6 +78,7 @@ class WorkflowController
         $screens = $request->screens;
         
         foreach($screens as $screen) {
+            logger()->notice($screen['id']);
             $screenToUpdate = $workflow->screens()->find($screen['id']);
             
             // Resetting to avoid dirty data
@@ -86,6 +87,11 @@ class WorkflowController
 
             // Adding data
             $screenToUpdate->additional_data = $screen['additional_data'];
+            if(empty($screenToUpdate->hotspots)) {
+                $screenToUpdate->hotspots = $screen['hotspots'];
+            } else {
+                $screenToUpdate->hotspots = array_merge($screenToUpdate->hotspots, $screen['hotspots']);
+            }
             $screenToUpdate->save();
         }
         return new WorkflowResource($workflow);

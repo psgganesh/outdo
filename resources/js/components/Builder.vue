@@ -117,6 +117,7 @@ export default {
 
   data () {
     return {
+      id: null,
       table: {
         hover: true,
         size: 'lg'
@@ -220,6 +221,7 @@ export default {
       Authorization: `Bearer ${token}`
     }
     this.screensDropzoneUploadArea.headers = headers
+    this.id = this.$route.params.id
   },
 
   methods: {
@@ -356,6 +358,7 @@ export default {
         this.$store.commit('outdo/SET_CURRENT_HOTSPOT_DESTINATION', data)
         this.$refs.destinationAsideDiv.close()
         this.$store.commit('outdo/ADD_CURRENT_DESTINATION_TO_HOTSPOTS')
+        this.$store.dispatch('outdo/save', this.id)
       }
     }
   }

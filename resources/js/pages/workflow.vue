@@ -1,6 +1,5 @@
 <template>
-  <va-loading v-if="loading" size="lg" color="blue" center />
-  <div v-else>
+  <div>
     <va-page-header>
       <div slot="breadcrumb">
         <va-breadcrumb separator="/">
@@ -19,8 +18,8 @@
         <span>{{ `${currentWorkflow.screens_count} screens` }}</span>
       </div>
       <div slot="actions">
-        <va-button type="primary" icon-before="save" @click.stop="save">
-          Save changes
+        <va-button type="success" icon-before="eye" @click.stop="viewFlow">
+          View flow
         </va-button>
       </div>
     </va-page-header>
@@ -87,11 +86,12 @@ export default {
       'START_AUI_LOADING',
       'STOP_AUI_LOADING'
     ]),
-    save () {
-      this.START_AUI_LOADING()
-      this.$store.dispatch('outdo/save', this.id).then(() => {
-        this.STOP_AUI_LOADING()
-        console.log('Saved!')
+    viewFlow () {
+      this.$router.push({ name: 'flow',
+        params: {
+          id: this.$route.params.id,
+          screen: this.$store.state.outdo.screens[0].id
+        }
       })
     }
   }

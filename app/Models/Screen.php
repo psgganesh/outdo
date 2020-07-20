@@ -42,9 +42,7 @@ class Screen extends Model
      */
     protected $casts = [
         'additional_data' => 'array',
-        'default_images' => 'array',
-        'seo' => 'array',
-        'product_attributes' => 'array'
+        'hotspots' => 'array'
     ];
 
     /**
@@ -100,6 +98,21 @@ class Screen extends Model
      * @return void
      */
     public function getAdditionalDataAttribute($value)
+    {
+        if (filled($value)) {
+            return json_decode($value);
+        }
+
+        return null;
+    }
+
+    /**
+     * Get the additional_data value.
+     *
+     * @param  string  $value
+     * @return void
+     */
+    public function getHotspotsAttribute($value)
     {
         if (filled($value)) {
             return json_decode($value);

@@ -2,11 +2,12 @@ import axios from 'axios'
 
 // state
 export const state = {
+  flow: [],
   workflows: [],
   screens: [],
   active: {
-    currentHotspot: null,
-    hotspots: null,
+    currentHotspot: {},
+    hotspots: [],
     workflow: null,
     screen: null
   },
@@ -62,15 +63,25 @@ export const mutations = {
       }
     })
   },
+  SET_CURRENT_FLOW_VIEW (state, screenId) {
+    state.screens.map((screen) => {
+      if (screen.id === screenId) {
+        state.active.screen = screen
+      }
+    })
+  },
   SET_CURRENT_CANVAS_STATE (state, canvasState) {
     state.active.screen.canvasState = canvasState
   },
   PREPARE_PUT_DATA (state) {
     state.screens.map((canvasScreens) => {
-      state.putData.push({
-        id: canvasScreens.id,
-        additional_data: canvasScreens.canvasState
-      })
+      if (canvasScreens.id === state.active.screen.id) {
+        state.putData.push({
+          id: canvasScreens.id,
+          additional_data: canvasScreens.canvasState,
+          hotspots: state.active.hotspots
+        })
+      }
     })
   },
   RESET_PUT_DATA (state) {
@@ -79,14 +90,14 @@ export const mutations = {
     state.active.currentHotspot = null
   },
   CURRENT_HOTSPOT (state, spot) {
-    state.active.currentHotspot = spot
+    state.active.currentHotspot['spot'] = spot
   },
   SET_CURRENT_HOTSPOT_DESTINATION (state, destination) {
-    state.active.currentHotspot.destination = destination
+    state.active.currentHotspot['destination'] = destination
   },
   ADD_CURRENT_DESTINATION_TO_HOTSPOTS (state) {
     state.active.hotspots.push(state.active.currentHotspot)
-    state.active.currentHotspot = null
+    state.active.currentHotspot = {}
   }
 }
 
@@ -135,14 +146,23 @@ export const actions = {
       commit('PREPARE_PUT_DATA')
       console.log('about to send put')
       const { data } = await axios.put(`/api/workflows/${id}`, {
-        screens: state.putData,
-        links: state.links
+        screens: state.putData
       })
       console.log(data)
       commit('RESET_PUT_DATA')
     } catch (e) {
       console.log('Unable to save workflow')
     }
-  }
+  },
 
+  async view ({ commit }, id) {
+    try {
+      const response = await axios.get(`/api/workflows/${id}`)
+      const { screens } = response.data.data
+      const flow = screens
+      commit('LOAD_FLOW', flow)
+    } catch (e) {
+      console.log('Unable to fetch flow screens')
+    }
+  }
 }
