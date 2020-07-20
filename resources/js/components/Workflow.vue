@@ -10,7 +10,7 @@
           </div>
         </va-card>
       </va-column>
-      <va-column v-for="workflow in workflows" :key="workflow.id" :xs="12" :sm="3" :md="2" :lg="2">
+      <va-column v-for="workflow in workflows" :key="workflow.id" :xs="12" :sm="3" :md="2" :lg="2" style="padding-left:0px; padding-right:0px;">
         <va-card class="workflow card m-b-10" :elevation="elevation" :padding="padding" @click.stop="openWorkflow(workflow)">
           <div slot="topLeft" class="workflow-title">
             {{ workflow.name }}
@@ -111,7 +111,7 @@ export default {
       }
       this.$store.dispatch('outdo/createWorkflow', workflowData).then(() => {
         this.$refs.createWorkflowModal.close()
-        this.$store.dispatch('outdo/workflows', this.$route.params.workspace)
+        this.openWorkflow(this.$store.state.outdo.active.workflow)
       })
     },
     openWorkflow (workflow) {

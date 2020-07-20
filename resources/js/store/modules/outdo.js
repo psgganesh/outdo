@@ -102,7 +102,8 @@ export const actions = {
         name: workflow.name,
         workspace: workflow.space
       })
-      commit('LOAD_WORKFLOWS', response.data.data)
+      // commit('LOAD_WORKFLOWS', response.data.data)
+      commit('SET_ACTIVE_WORKFLOW', response.data)
     } catch (e) {
       console.log('Unable to fetch workflows')
     }

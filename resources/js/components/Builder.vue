@@ -21,7 +21,7 @@
             :padding="thumbnail.padding"
           >
             <img
-              :src="(typeof image.src === 'undefined') ? image.url : image.src"
+              :src="image.src"
               aspect-ratio="1"
               class="screen-thumbnail"
               @click.stop="applyImageOnCanvas(image)"
@@ -166,9 +166,13 @@ export default {
     uploadedImagesList () {
       let selectableImages = []
       this.$store.state.outdo.screens.map((image) => {
+        console.log(image)
+        let screenSrc = (typeof image.response !== 'undefined')
+          ? image.response.path
+          : image.path
         selectableImages.push({
           id: image.id,
-          src: `${UPLOAD_URL}/${image.path}`,
+          src: `${UPLOAD_URL}/${screenSrc}`,
           alt: image.name
         })
       })
@@ -315,9 +319,10 @@ export default {
       formData.append('workflow_id', this.workflow)
     },
     fileUploadSuccess (file, response) {
+      console.log(response)
       const payload = {
         id: uuidv4(),
-        src: response.url.replace('/storage', UPLOAD_URL),
+        src: response.url.replace('/storage', ''),
         response: response
       }
       this.$store.commit('outdo/PUSH_SCREEN', payload)
