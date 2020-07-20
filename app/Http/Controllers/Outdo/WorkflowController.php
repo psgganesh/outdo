@@ -82,14 +82,14 @@ class WorkflowController
             $screenToUpdate = $workflow->screens()->find($screen['id']);
             
             // Resetting to avoid dirty data
-            if (!empty($screenToUpdate->additional_data)) {
+            if (!empty($screenToUpdate['additional_data'])) {
                 $screenToUpdate->additional_data = null;
                 $screenToUpdate->save();
             }
 
             // Adding data
             $screenToUpdate->additional_data = $screen['additional_data'];
-            if(empty($screenToUpdate->hotspots)) {
+            if(empty($screenToUpdate['hotspots'])) {
                 $screenToUpdate->hotspots = $screen['hotspots'];
             } else {
                 $screenToUpdate->hotspots = array_merge($screenToUpdate->hotspots, $screen['hotspots']);
