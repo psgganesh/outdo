@@ -172,7 +172,7 @@ export default {
           : image.path
         selectableImages.push({
           id: image.id,
-          src: `${UPLOAD_URL}/${screenSrc}`,
+          src: `${UPLOAD_URL}/storage/${screenSrc}`,
           alt: image.name
         })
       })
@@ -318,7 +318,7 @@ export default {
       console.log(response)
       const payload = {
         id: uuidv4(),
-        src: response.url.replace('/storage', ''),
+        src: response.url,
         response: response
       }
       this.$store.commit('outdo/PUSH_SCREEN', payload)

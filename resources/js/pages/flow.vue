@@ -40,7 +40,7 @@
         v-for="(hotspot, index) in screen.hotspots"
         :key="index"
         shape="rect"
-        coords="860,283,191,58"
+        coords="10,10,10,10"
         :alt="hotspot.destination.alt"
         :href="setDestination(hotspot.destination)"
       >
