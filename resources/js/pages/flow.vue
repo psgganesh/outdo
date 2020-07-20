@@ -90,13 +90,9 @@ export default {
 
   methods: {
     calculateCoOrdinates (spot) {
-      // return '860,283,191,58'
-      // return '578,188,137,51'
-      // return `${spot.width},${spot.height},${spot.left},${spot.top}`
       return `${spot.left},${spot.top},${spot.width},${spot.height}`
     },
     setDestination (destination) {
-      // workspaces/:workspace/workflows/:id/view/:screen
       const destinationURL = [
         UPLOAD_URL,
         'workspaces',
