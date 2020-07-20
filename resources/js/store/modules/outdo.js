@@ -87,7 +87,7 @@ export const mutations = {
   RESET_PUT_DATA (state) {
     state.putData = []
     state.active.hotspots = []
-    state.active.currentHotspot = null
+    state.active.currentHotspot = {}
   },
   CURRENT_HOTSPOT (state, spot) {
     state.active.currentHotspot['spot'] = spot

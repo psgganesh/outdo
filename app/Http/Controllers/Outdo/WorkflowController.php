@@ -30,7 +30,7 @@ class WorkflowController
     public function index(Request $request)
     {
         $workspace = $request->workspace;
-        $records = $this->workflow->of($workspace)->get();
+        $records = $this->workflow->of($workspace)->oldest()->get();
 
         return new WorkflowCollection($records);
     }
