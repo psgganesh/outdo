@@ -7,6 +7,7 @@ require('laravel-mix-versionhash')
 mix
   .js('resources/js/app.js', 'public/dist/js')
   .sass('resources/sass/app.scss', 'public/dist/css')
+  .copyDirectory('resources/images', 'public/images')
   .copyDirectory('resources/fonts', 'public/fonts')
   .copyDirectory('node_modules/vue-atlas/dist/fonts', 'public/fonts/vendor/vue-atlas/dist')
   .disableNotifications()
