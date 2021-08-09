@@ -1,6 +1,14 @@
 # Outdo.app
 > https://www.outdo.app
 
+## Purpose
+Hackathon project submitted for [Codegiest 2020](https://devpost.com/software/outdo). 
+
+Feel free to fork it if you feel useful / star if you like it 😄
+
+## Site
+[outdo.app](https://devpost.com/software/outdo)
+
 ## Inspiration
 Often as developers we tend to switch between different apps on our daily work. Our managers use Jira, the whole team
 uses Skype / Google meet / Slack / Hipchat for communication. Trello to manage any in-house work. There was a lack of a tool which combines
